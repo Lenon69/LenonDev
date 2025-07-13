@@ -1,18 +1,39 @@
 // src/main.rs
+mod appstate;
 mod components;
 mod handlers;
+mod models;
 
+use axum::routing::post;
 use axum::{Router, routing::get};
 use axum_server::tls_rustls::RustlsConfig;
-use handlers::htmx::get_main_content;
+use sqlx::PgPool;
 use std::net::SocketAddr;
 use tower_http::services::ServeDir;
 
+use crate::appstate::AppState;
+use crate::handlers::contact::handle_contact_form;
+use crate::handlers::htmx::get_main_content;
+
 #[tokio::main]
 async fn main() {
+    // Ładowanie zmiennych środowiskowych z pliku .env
+    dotenvy::dotenv().expect("Failed to load .env file");
+
+    // Tworzenie puli połączeń do bazy danych
+    let db_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let db_pool = PgPool::connect(&db_url)
+        .await
+        .expect("Failed to connect to database");
+
+    // Tworzenie stanu aplikacji
+    let app_state = AppState { db_pool };
+
     let app = Router::new()
         .route("/content", get(get_main_content))
-        .fallback_service(ServeDir::new("static"));
+        .route("/contact", post(handle_contact_form))
+        .fallback_service(ServeDir::new("static"))
+        .with_state(app_state);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     println!("🚀 Serwer nasłuchuje na https://{}", addr);
