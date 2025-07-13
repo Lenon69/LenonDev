@@ -1,24 +1,30 @@
 // src/main.rs
-use axum::Router;
-use axum::routing::{delete, get, patch, post};
+mod components;
+mod handlers;
+
+use axum::{Router, routing::get};
+use axum_server::tls_rustls::RustlsConfig;
 use handlers::htmx::get_main_content;
 use std::net::SocketAddr;
 use tower_http::services::ServeDir;
 
-mod components;
-mod handlers;
-
 #[tokio::main]
 async fn main() {
-    // Serwer, który serwuje wszystko z folderu `static`
-    // Axum jest na tyle mądry, że automatycznie poszuka pliku `index.html`
     let app = Router::new()
         .route("/content", get(get_main_content))
         .fallback_service(ServeDir::new("static"));
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    println!("🚀 Serwer nasłuchuje na http://{}", addr);
+    println!("🚀 Serwer nasłuchuje na https://{}", addr);
 
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    // Konfiguracja TLS
+    let config = RustlsConfig::from_pem_file("localhost.pem", "localhost-key.pem")
+        .await
+        .unwrap();
+
+    // Uruchomienie serwera z obsługą HTTP/1.1, HTTP/2 i HTTP/3
+    axum_server::bind_rustls(addr, config)
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
 }

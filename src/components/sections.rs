@@ -37,7 +37,7 @@ pub fn projects_section() -> Markup {
                         h3 class="text-xl font-bold text-brand-cyan" { "Sklep internetowy vintage online" }
                         p class="text-slate-400 mt-2" { "Nowoczesny, minimalistyczny sklep vintage do sprzedaży produktów, zoptymalizowany pod kątem szybkości ładowania i SEO." }
                         div class="mt-4 text-sm text-slate-500" {
-                            span class="font-semibold" { "Technologie:" } {" Axum, Maud, Tailwind CSS"}
+                            span class="font-semibold" { "Technologie:" } {" Rust, Axum, Maud, Tailwind CSS"}
                         }
                     }
                     // Projekt 2
