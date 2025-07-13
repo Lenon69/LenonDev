@@ -6,7 +6,7 @@ fn header_component() -> Markup {
         header class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-10 border-b border-slate-800/50" {
             nav class="container mx-auto px-4 py-4 flex justify-between items-center" {
                 a href="/" {
-                    img class="h-10 w-auto" src="/static/LenonDev.png" alt="LenonDev Logo";
+                    img class="h-10 w-auto" src="./static/LenonDevLogo.png" alt="LenonDev Logo";
                 }
                 div class="text-slate-200 flex items-center space-x-6" {
                     a href="#projekty" class="text-sm hover:text-brand-cyan transition-colors duration-300" { "Projekty" }

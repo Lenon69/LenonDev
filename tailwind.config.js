@@ -2,11 +2,7 @@
 module.exports = {
   content: ["./src/**/*.rs"],
 
-  // --- NOWA SEKCJA ---
-  // Ta opcja gwarantuje, że podane klasy zawsze znajdą się w finalnym pliku CSS,
-  // omijając problem z ich ewentualnym nieodnalezieniem w plikach .rs
   safelist: ["bg-brand-dark", "text-slate-200", "text-slate-400"],
-  // --- KONIEC NOWEJ SEKCJI ---
 
   theme: {
     extend: {
