@@ -20,6 +20,17 @@ async fn main() {
     // Ładowanie zmiennych środowiskowych z pliku .env
     dotenvy::dotenv().expect("Failed to load .env file");
 
+    let provider = rustls::crypto::aws_lc_rs::default_provider();
+    if let Err(e) = provider.install_default() {
+        tracing::error!(
+            "Błąd podczas instalacji domyślnego dostawcy kryptograficznego: {:?}",
+            e
+        );
+        std::process::exit(1);
+    }
+
+    tracing::info!("Inicjalizacja serwera...");
+
     // Tworzenie puli połączeń do bazy danych
     let db_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let db_pool = PgPool::connect(&db_url)
