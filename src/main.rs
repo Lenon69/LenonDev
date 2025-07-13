@@ -1,5 +1,6 @@
 // src/main.rs
 
+// Deklarujemy nasze nowe moduły
 mod components;
 mod routes;
 
