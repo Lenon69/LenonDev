@@ -1,22 +1,20 @@
 // src/main.rs
-
-// Deklarujemy nasze nowe moduły
-mod components;
-mod routes;
-
-use axum::{Router, routing::get};
+use axum::Router;
+use axum::routing::{delete, get, patch, post};
+use handlers::htmx::get_main_content;
 use std::net::SocketAddr;
 use tower_http::services::ServeDir;
-// Importujemy nasz handler z nowego modułu
-use routes::home::root_handler;
+
+mod components;
+mod handlers;
 
 #[tokio::main]
 async fn main() {
-    let static_service = ServeDir::new("static");
-
+    // Serwer, który serwuje wszystko z folderu `static`
+    // Axum jest na tyle mądry, że automatycznie poszuka pliku `index.html`
     let app = Router::new()
-        .route("/", get(root_handler)) // Używamy zaimportowanego handlera
-        .nest_service("/static", static_service);
+        .route("/content", get(get_main_content))
+        .fallback_service(ServeDir::new("static"));
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     println!("🚀 Serwer nasłuchuje na http://{}", addr);
