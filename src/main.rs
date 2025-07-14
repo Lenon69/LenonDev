@@ -7,6 +7,8 @@ mod models;
 use axum::routing::post;
 use axum::{Router, routing::get};
 use axum_server::tls_rustls::RustlsConfig;
+use handlers::projects::get_project_detail;
+use resend_rs::Resend;
 use sqlx::PgPool;
 use std::net::SocketAddr;
 use tower_http::services::ServeDir;
@@ -37,12 +39,20 @@ async fn main() {
         .await
         .expect("Failed to connect to database");
 
+    // Inicjalizacja klienta Resend
+    let resend_api_key = std::env::var("RESEND_API_KEY").expect("RESEND_API_KEY must be set");
+    let resend_client = Resend::new(&resend_api_key);
+
     // Tworzenie stanu aplikacji
-    let app_state = AppState { db_pool };
+    let app_state = AppState {
+        db_pool,
+        resend_client,
+    };
 
     let app = Router::new()
         .route("/content", get(get_main_content))
         .route("/contact", post(handle_contact_form))
+        .route("/project/{id}", get(get_project_detail))
         .fallback_service(ServeDir::new("static"))
         .with_state(app_state);
 

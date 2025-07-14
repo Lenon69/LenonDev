@@ -8,6 +8,7 @@ axum = { version = "0.8.4", features = ["http2", "macros"] }
 axum-server = { version = "0.7.2", features = ["tls-rustls"] }
 dotenvy = "0.15.7"
 maud = { version = "0.27.0", features = ["axum"] }
+resend-rs = { version = "0.15.0", features = ["rustls-tls"] }
 rustls = { version = "0.23.29", features = ["aws_lc_rs", "ring"] }
 serde = { version = "1.0.219", features = ["derive", "serde_derive"] }
 sqlx = { version = "0.8.6", features = ["runtime-tokio-rustls", "postgres"] }

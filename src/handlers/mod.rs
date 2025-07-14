@@ -1,2 +1,4 @@
-pub(crate) mod contact;
-pub(crate) mod htmx;
+pub mod contact;
+pub mod htmx;
+pub mod projects;
+// pub mod static_pages;
