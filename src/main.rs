@@ -4,18 +4,24 @@ mod components;
 mod handlers;
 mod models;
 
+use axum::middleware;
 use axum::routing::post;
 use axum::{Router, routing::get};
 use axum_server::tls_rustls::RustlsConfig;
+use handlers::blog::{blog_index, show_article};
 use handlers::projects::get_project_detail;
 use resend_rs::Resend;
 use sqlx::PgPool;
 use std::net::SocketAddr;
-use tower_http::services::ServeDir;
+use tower_http::services::ServeDir; // <-- DODAJ TEN IMPORT
 
 use crate::appstate::AppState;
+use crate::handlers::admin::{auth_middleware, protected_admin_routes, public_admin_routes};
 use crate::handlers::contact::handle_contact_form;
 use crate::handlers::htmx::get_main_content;
+
+use tower_cookies::CookieManagerLayer; // Import do obsługi ciasteczek
+use tower_sessions::{MemoryStore, SessionManagerLayer}; // Import do obsługi sesji
 
 #[tokio::main]
 async fn main() {
@@ -43,6 +49,15 @@ async fn main() {
     let resend_api_key = std::env::var("RESEND_API_KEY").expect("RESEND_API_KEY must be set");
     let resend_client = Resend::new(&resend_api_key);
 
+    // --- NOWA KONFIGURACJA SESJI ---
+    // Tworzymy magazyn sesji w pamięci.
+    let session_store = MemoryStore::default();
+    // Tworzymy warstwę sesji.
+    // Klucz sesji jest generowany losowo, co jest w porządku dla deweloperki.
+    // W produkcji warto ustawić go na stałe z pliku .env.
+    let session_layer = SessionManagerLayer::new(session_store).with_secure(false);
+    // ---------------------------------
+
     // Tworzenie stanu aplikacji
     let app_state = AppState {
         db_pool,
@@ -53,8 +68,23 @@ async fn main() {
         .route("/content", get(get_main_content))
         .route("/contact", post(handle_contact_form))
         .route("/project/{id}", get(get_project_detail))
+        .route("/blog", get(blog_index))
+        .route("/blog/{slug}", get(show_article))
+        .nest(
+            "/admin",
+            // Najpierw łączymy trasy chronione z ich warstwą middleware
+            protected_admin_routes()
+                .route_layer(middleware::from_fn_with_state(
+                    app_state.clone(),
+                    auth_middleware,
+                ))
+                // Następnie dołączamy trasy publiczne, które nie mają tej warstwy
+                .merge(public_admin_routes()),
+        )
         .fallback_service(ServeDir::new("static"))
-        .with_state(app_state);
+        .with_state(app_state)
+        .layer(session_layer)
+        .layer(CookieManagerLayer::new());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     println!("🚀 Serwer nasłuchuje na https://{}", addr);
