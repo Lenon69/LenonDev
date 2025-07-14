@@ -74,12 +74,13 @@
 
       </header>
 
-      <main>
-        <section
-          class="flex flex-col items-center justify-center text-center px-4 pt-20"
-        ></section>
-
-        <div hx-get="content" hx-trigger="load" hx-swap="outerHTML"></div>
+      <main 
+        id="content-area" 
+        hx-get="/content" 
+        hx-trigger="load" 
+        hx-swap="innerHTML"
+        class="flex flex-col items-center justify-center text-center px-4 pt-20"
+      >
       </main>
 
       <footer class="relative">

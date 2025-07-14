@@ -16,11 +16,12 @@ use handlers::{
 use resend_rs::Resend;
 use sqlx::PgPool;
 use std::net::SocketAddr;
-use tower_http::services::ServeDir; // <-- DODAJ TEN IMPORT
+use tower_http::services::ServeDir;
 
 use crate::appstate::AppState;
 use crate::handlers::admin::{auth_middleware, protected_admin_routes, public_admin_routes};
 use crate::handlers::htmx::get_main_content;
+use crate::handlers::uses::get_uses_content;
 
 use tower_cookies::CookieManagerLayer; // Import do obsługi ciasteczek
 use tower_sessions::{MemoryStore, SessionManagerLayer}; // Import do obsługi sesji
@@ -71,6 +72,7 @@ async fn main() {
         .route("/contact", post(handle_contact_form))
         .route("/project/{id}", get(get_project_detail))
         .route("/blog", get(blog_index))
+        .route("/uses", get(get_uses_content))
         .route("/blog/{slug}", get(show_article))
         .nest(
             "/admin",

@@ -1,6 +1,6 @@
 // src/components/blog.rs
 use crate::models::Article;
-use maud::{Markup, PreEscaped, html};
+use maud::{Markup, html};
 
 // Komponent dla strony /blog (lista artykułów)
 pub fn blog_index_view(articles: Vec<Article>) -> Markup {
@@ -14,8 +14,10 @@ pub fn blog_index_view(articles: Vec<Article>) -> Markup {
 
                 div class="max-w-4xl mx-auto space-y-12" {
                     @for article in articles {
-                        a href=(format!("/blog/{}", article.slug)) class="block group" {
-                            article class="bg-slate-800/40 hover:bg-slate-800/80 p-6 rounded-lg border border-slate-700/50 transition-colors duration-300" {
+                        // Ten link używa HTMX, aby dynamicznie załadować treść artykułu
+                        a hx-get=(format!("/blog/{}", article.slug)) hx-target="#content-area" hx-push-url=(format!("/blog/{}", article.slug))
+                          class="block group cursor-pointer" {
+                            article class="bg-slate-800/40 hover:bg-slate-800/80 p-6 rounded-lg border border-slate-700/50 transition-all duration-300 hover:shadow-cyan-glow hover:-translate-y-1" {
                                 // Data publikacji
                                 @if let Some(published_at) = article.published_at {
                                     p class="text-sm text-slate-400 mb-2" { (published_at.format("%d %B %Y")) }
@@ -29,34 +31,6 @@ pub fn blog_index_view(articles: Vec<Article>) -> Markup {
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-}
-
-// Komponent dla strony /blog/{slug} (pojedynczy artykuł)
-pub fn article_detail_view(article: Article, content_html: String) -> Markup {
-    html! {
-        div class="bg-brand-dark py-20 lg:py-24" {
-            // Używamy klas `prose` od Tailwind Typography do stylowania treści
-            article class="prose prose-invert prose-lg lg:prose-xl mx-auto px-4" {
-                // Tytuł
-                h1 { (article.title) }
-                // Data
-                @if let Some(published_at) = article.published_at {
-                    p class="text-base text-slate-400 !mt-2" { (format!("Opublikowano: {}", published_at.format("%d %B %Y"))) }
-                }
-
-                // Właściwa treść artykułu (przetworzona z Markdown)
-                div class="mt-8 border-t border-slate-700/50 pt-8" {
-                    (PreEscaped(content_html))
-                }
-            }
-            // Link powrotny
-            div class="text-center mt-16" {
-                a href="/blog" class="inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
-                    "← Wróć na bloga"
                 }
             }
         }
