@@ -24,3 +24,12 @@ pub struct Article {
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
+
+#[derive(sqlx::FromRow, serde::Serialize)]
+pub struct Post {
+    pub id: i32,
+    pub title: String,
+    pub slug: String,
+    pub content: String,
+    pub published_date: String, // Dla uproszczenia jako String
+}

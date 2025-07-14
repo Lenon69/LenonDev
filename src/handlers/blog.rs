@@ -1,8 +1,8 @@
 // src/handlers/blog.rs
 use crate::{
     AppState,
-    components::{blog, layout}, // Importujemy nowe komponenty
-    models::Article,
+    components::{blog, layout, post_page},
+    models::{Article, Post},
 };
 use axum::{
     extract::{Path, State},
@@ -56,4 +56,19 @@ pub async fn show_article(State(state): State<AppState>, Path(slug): Path<String
             },
         ))
     }
+}
+
+pub async fn get_post_content(
+    State(state): State<AppState>,
+    Path(slug): Path<String>,
+) -> Html<Markup> {
+    // Pobieramy post z bazy danych po jego "slugu" (np. "dlaczego-strona-internetowa")
+    let post = sqlx::query_as::<_, Post>("SELECT * FROM posts WHERE slug = $1")
+        .bind(slug)
+        .fetch_one(&state.db_pool)
+        .await
+        .unwrap(); // W prawdziwej aplikacji obsłuż błąd!
+
+    // Renderujemy treść posta używając naszego nowego komponentu
+    Html(post_page::content(post))
 }

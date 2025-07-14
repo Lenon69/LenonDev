@@ -5,7 +5,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>LenonDev</title>
 
-      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography"></script>
       <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
       <script
         defer
@@ -22,6 +22,9 @@
             0 0 15px rgba(45, 212, 191, 0.4), 0 0 25px rgba(45, 212, 191, 0.1);
         }
       </style>
+
+
+
 
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -59,19 +62,14 @@
               alt="LenonDev Logo"
             />
           </a>
-          <div class="text-slate-200 flex items-center space-x-6">
-            <a
-              href="/#projekty"
-              class="text-sm hover:text-brand-cyan transition-colors duration-300"
-              >Projekty</a
-            >
-            <a
-              href="/#kontakt"
-              class="text-sm hover:text-brand-cyan transition-colors duration-300"
-              >Kontakt</a
-            >
-          </div>
+        <div class="text-slate-200 flex items-center space-x-6">
+            <a href="/uses" class="text-sm hover:text-brand-cyan transition-colors duration-300">Uses</a>
+            <a href="/blog" class="text-sm hover:text-brand-cyan transition-colors duration-300">Blog</a>
+            <a href="/#projekty" class="text-sm hover:text-brand-cyan transition-colors duration-300">Projekty</a>
+            <a href="/#kontakt" class="text-sm hover:text-brand-cyan transition-colors duration-300">Kontakt</a>
+        </div>
         </nav>
+
       </header>
 
       <main>
@@ -87,7 +85,9 @@
           class="absolute top-0 h-px w-full bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent"
         ></div>
         <div class="container mx-auto px-4 py-6 text-center text-slate-400">
-          <p>© 2025 LenonDev</p>
+          <a href="/admin/dashboard" class="hover:text-brand-cyan transition-colors">
+            <p>© 2025 LenonDev</p>
+          </a>
         </div>
       </footer>
 
