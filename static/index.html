@@ -36,7 +36,13 @@
       </style>
     </head>
 
-    <body class="bg-brand-dark text-slate-200 antialiased">
+    <body
+      class="bg-brand-dark text-slate-200 antialiased"
+      x-data="scrollIndicator"
+      @scroll.window="update"
+    >
+    <div class="fixed top-0 left-0 h-1 bg-brand-cyan z-50" :style="`width: ${width}%`"></div>
+
       <header
         class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50"
       >
@@ -83,6 +89,20 @@
       </footer>
 
       <div id="modal-container"></div>
+
+      <script>
+        document.addEventListener('alpine:init', () => {
+          Alpine.data('scrollIndicator', {
+            width: 0,
+            update() {
+              let scrollTop = window.scrollY;
+              let docHeight = document.documentElement.scrollHeight - window.innerHeight;
+              this.width = (scrollTop / docHeight) * 100;
+            }
+          });
+        });
+      </script>
+
     </body>
   </html>
 </html>

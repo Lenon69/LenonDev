@@ -73,11 +73,10 @@ pub fn projects_section(projects: Vec<Project>) -> Markup {
                     @for project in projects {
                         // Zmieniamy <a> na <div> i dodajemy atrybuty HTMX
                         div
-                            class="cursor-pointer group bg-slate-800/50 hover:bg-slate-700/50 transition-colors p-6 rounded-lg border border-slate-700/50"
-                            hx-get=(format!("/project/{}", project.id)) // Dynamiczny URL z ID projektu
-                            hx-target="#modal-container" // Cel - nasz nowy kontener
-                            hx-swap="innerHTML" // Wstaw HTML do celu
-                        {
+                            class="cursor-pointer group bg-slate-800/50 hover:bg-slate-700/50 p-6 rounded-lg border border-slate-700/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-glow"
+                            hx-get=(format!("/project/{}", project.id))
+                            hx-target="#modal-container"
+                            hx-swap="innerHTML"                        {
                             @if let Some(image_url) = &project.image_url {
                                 img class="w-full h-48 object-cover rounded-md mb-4 group-hover:opacity-80 transition-opacity" src=(image_url) alt=(project.title);
                             }

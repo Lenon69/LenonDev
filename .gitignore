@@ -3,3 +3,7 @@
 ./node_modules
 /node_modules
 
+# Lokalne certyfikaty TLS
+localhost.pem
+localhost-key.pem
+
