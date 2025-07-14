@@ -62,13 +62,10 @@ pub async fn get_post_content(
     State(state): State<AppState>,
     Path(slug): Path<String>,
 ) -> Html<Markup> {
-    // Pobieramy post z bazy danych po jego "slugu" (np. "dlaczego-strona-internetowa")
     let post = sqlx::query_as::<_, Post>("SELECT * FROM posts WHERE slug = $1")
         .bind(slug)
         .fetch_one(&state.db_pool)
         .await
-        .unwrap(); // W prawdziwej aplikacji obsłuż błąd!
-
-    // Renderujemy treść posta używając naszego nowego komponentu
+        .unwrap();
     Html(post_page::content(post))
 }
