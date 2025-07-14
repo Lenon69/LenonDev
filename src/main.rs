@@ -8,8 +8,11 @@ use axum::middleware;
 use axum::routing::post;
 use axum::{Router, routing::get};
 use axum_server::tls_rustls::RustlsConfig;
-use handlers::blog::{blog_index, get_post_content, show_article};
-use handlers::projects::get_project_detail;
+use handlers::{
+    blog::{blog_index, show_article},
+    contact::handle_contact_form,
+    projects::get_project_detail,
+};
 use resend_rs::Resend;
 use sqlx::PgPool;
 use std::net::SocketAddr;
@@ -17,7 +20,6 @@ use tower_http::services::ServeDir; // <-- DODAJ TEN IMPORT
 
 use crate::appstate::AppState;
 use crate::handlers::admin::{auth_middleware, protected_admin_routes, public_admin_routes};
-use crate::handlers::contact::handle_contact_form;
 use crate::handlers::htmx::get_main_content;
 
 use tower_cookies::CookieManagerLayer; // Import do obsługi ciasteczek
@@ -69,7 +71,7 @@ async fn main() {
         .route("/contact", post(handle_contact_form))
         .route("/project/{id}", get(get_project_detail))
         .route("/blog", get(blog_index))
-        .route("/blog/{slug}", get(get_post_content))
+        .route("/blog/{slug}", get(show_article))
         .nest(
             "/admin",
             // Najpierw łączymy trasy chronione z ich warstwą middleware

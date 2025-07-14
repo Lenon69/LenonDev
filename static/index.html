@@ -62,12 +62,14 @@
               alt="LenonDev Logo"
             />
           </a>
-        <div class="text-slate-200 flex items-center space-x-6">
-            <a href="/uses" class="text-sm hover:text-brand-cyan transition-colors duration-300">Uses</a>
-            <a href="/blog" class="text-sm hover:text-brand-cyan transition-colors duration-300">Blog</a>
-            <a href="/#projekty" class="text-sm hover:text-brand-cyan transition-colors duration-300">Projekty</a>
-            <a href="/#kontakt" class="text-sm hover:text-brand-cyan transition-colors duration-300">Kontakt</a>
-        </div>
+
+          <div class="text-slate-200 flex items-center space-x-6">
+              <a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/uses" hx-target="#content-area" hx-push-url="/uses">Uses</a>
+              <a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/blog" hx-target="#content-area" hx-push-url="/blog">Blog</a>
+              <a class="cursor-pointer text-sm hover:text-brand-cyan" href="/#projekty">Projekty</a>
+              <a class="cursor-pointer text-sm hover:text-brand-cyan" href="/#kontakt">Kontakt</a>
+          </div>
+
         </nav>
 
       </header>
