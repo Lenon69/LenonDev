@@ -1,10 +1,12 @@
 // src/handlers/uses.rs
-use axum::response::Html;
+use axum::{http::HeaderMap, response::Html};
 use maud::{Markup, html};
 
+use crate::components::layout;
+
 /// Kompletna, zoptymalizowana funkcja renderująca zawartość strony /uses.
-pub async fn get_uses_content() -> Html<Markup> {
-    let markup = html! {
+pub async fn get_uses_content(headers: HeaderMap) -> Html<Markup> {
+    let content_fragment = html! {
         // Główny kontener zapewniający odpowiednie marginesy i wyśrodkowanie.
         div class="container mx-auto px-4 py-16 lg:py-24" {
 
@@ -22,7 +24,7 @@ pub async fn get_uses_content() -> Html<Markup> {
                     h2 class="text-2xl font-bold text-slate-200 mb-6 border-b border-slate-700 pb-3" {"Hardware"}
                     ul class="space-y-4 text-slate-300" {
                         li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Komputer:"} span {"ASUS ROG Strix G531GW"}}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Monitor:"} span {"ASUS 24\" Full HD"}}
+                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Monitor:"} span {"15' Full HD" }}
                         li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Klawiatura:"} span {"ASUS ROG Keyboard"}}
                         li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Mysz:"} span {"Logitech G502"}}
                     }
@@ -52,5 +54,12 @@ pub async fn get_uses_content() -> Html<Markup> {
             }
         }
     };
-    Html(markup)
+
+    // Sprawdzamy, czy to zapytanie od HTMX
+    if headers.contains_key("HX-Request") {
+        Html(content_fragment)
+    } else {
+        // Jeśli nie, serwujemy pełną stronę
+        Html(layout::base_layout("LenonDev - Uses", content_fragment))
+    }
 }
