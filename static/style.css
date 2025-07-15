@@ -1,0 +1,20 @@
+article h1,
+article h2,
+article h3 {
+  color: #e2e8f0; /* jasny tekst */
+  font-family: "Segoe UI", sans-serif;
+}
+
+article p {
+  color: #cbd5e1;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+article blockquote {
+  border-left: 4px solid #4fd1c5;
+  background-color: #0f172a;
+  padding: 1em;
+  font-style: italic;
+  margin: 1.5em 0;
+}

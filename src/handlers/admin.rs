@@ -1,14 +1,17 @@
 // src/handlers/admin.rs
-use crate::{AppState, components, models::Article, models::User};
+use crate::{
+    AppState,
+    components::{self},
+    models::Article,
+};
 use axum::{
-    Form,
-    Router,
-    extract::{Request, State},
+    Form, Router,
+    extract::{Path, Request, State},
     middleware::Next,
     response::{Html, IntoResponse, Redirect, Response},
-    routing::get, // 'post' jest teraz poprawnie używany
+    routing::{get, post},
 };
-use bcrypt::verify;
+use maud::Markup;
 use serde::Deserialize;
 use slug; // Upewnij się, że ten import jest
 use tower_sessions::Session;
@@ -31,34 +34,19 @@ async fn get_login_form() -> Html<maud::Markup> {
     Html(components::admin::login_form())
 }
 
-// Zastąp całą funkcję post_login
-async fn post_login(
-    State(state): State<AppState>,
-    session: Session,
-    Form(form): Form<LoginForm>,
-) -> impl IntoResponse {
-    // Szukamy użytkownika 'admin' w bazie danych
-    let user_result = sqlx::query_as::<_, User>("SELECT * FROM users WHERE username = 'admin'")
-        .fetch_optional(&state.db_pool)
-        .await;
+async fn post_login(session: Session, Form(form): Form<LoginForm>) -> impl IntoResponse {
+    // Odczytujemy hasło ze zmiennej środowiskowej (z pliku .env)
+    let admin_password =
+        std::env::var("ADMIN_PASSWORD").expect("ADMIN_PASSWORD musi być ustawione w pliku .env");
 
-    match user_result {
-        Ok(Some(user)) => {
-            // Weryfikujemy, czy podane hasło pasuje do hasha w bazie
-            if verify(&form.password, &user.password_hash).unwrap_or(false) {
-                // Hasło poprawne - logujemy
-                session.insert("user_id", user.id).await.unwrap();
-                Redirect::to("/admin/dashboard")
-            } else {
-                // Hasło niepoprawne
-                Redirect::to("/admin/login")
-            }
-        }
-        _ => {
-            // Użytkownik 'admin' nie istnieje lub wystąpił błąd bazy
-            eprintln!("Logowanie nieudane: nie znaleziono użytkownika 'admin' lub błąd bazy.");
-            Redirect::to("/admin/login")
-        }
+    // Porównujemy hasło z formularza z tym z .env
+    if form.password == admin_password {
+        // Hasło poprawne - logujemy, wstawiając do sesji prosty identyfikator
+        session.insert("user_id", "admin").await.unwrap();
+        Redirect::to("/admin/dashboard")
+    } else {
+        // Hasło niepoprawne
+        Redirect::to("/admin/login")
     }
 }
 
@@ -150,4 +138,65 @@ pub fn protected_admin_routes() -> Router<AppState> {
             "/articles/new",
             get(get_new_article_form).post(post_new_article),
         )
+        .route(
+            "/articles/edit/{id}",
+            get(get_edit_article_form).post(post_update_article),
+        )
+        .route("/articles/delete/{id}", post(post_delete_article))
+}
+
+// Handler GET /admin/articles/edit/{id} - wyświetla formularz edycji
+async fn get_edit_article_form(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Markup, Redirect> {
+    match sqlx::query_as::<_, Article>("SELECT * FROM articles WHERE id = $1")
+        .bind(id)
+        .fetch_one(&state.db_pool)
+        .await
+    {
+        Ok(article) => Ok(components::admin::edit_article_form(&article)),
+        Err(_) => Err(Redirect::to("/admin/dashboard")), // Jeśli nie ma artykułu, przekieruj
+    }
+}
+
+// Handler POST /admin/articles/edit/{id} - zapisuje zmiany
+async fn post_update_article(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+    Form(form): Form<ArticleForm>,
+) -> impl IntoResponse {
+    let slug = slug::slugify(&form.title);
+
+    let query_result = sqlx::query(
+        "UPDATE articles SET title = $1, slug = $2, excerpt = $3, content = $4, updated_at = NOW() WHERE id = $5",
+    )
+    .bind(form.title)
+    .bind(slug)
+    .bind(form.excerpt)
+    .bind(form.content)
+    .bind(id)
+    .execute(&state.db_pool)
+    .await;
+
+    if query_result.is_ok() {
+        Redirect::to("/admin/dashboard")
+    } else {
+        // W przyszłości można tu dodać lepszą obsługę błędów
+        Redirect::to("/admin/dashboard")
+    }
+}
+
+// Handler POST /admin/articles/delete/{id} - usuwa artykuł
+async fn post_delete_article(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> impl IntoResponse {
+    sqlx::query("DELETE FROM articles WHERE id = $1")
+        .bind(id)
+        .execute(&state.db_pool)
+        .await
+        .ok(); // Ignorujemy błąd, jeśli np. artykuł został już usunięty
+
+    Redirect::to("/admin/dashboard")
 }

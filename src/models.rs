@@ -34,10 +34,3 @@ pub struct ProjectWithImages {
     pub project_url: Option<String>,
     pub images: Vec<String>, // Lista dodatkowych URL-i zdjęć
 }
-
-#[derive(sqlx::FromRow)]
-pub struct User {
-    pub id: i32,
-    pub username: String,
-    pub password_hash: String,
-}
