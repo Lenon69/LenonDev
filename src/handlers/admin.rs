@@ -1,5 +1,5 @@
 // src/handlers/admin.rs
-use crate::{AppState, components, models::User};
+use crate::{AppState, components, models::Article, models::User};
 use axum::{
     Form,
     Router,
@@ -67,23 +67,19 @@ async fn logout(session: Session) -> impl IntoResponse {
     Redirect::to("/")
 }
 
-async fn dashboard() -> Html<maud::Markup> {
-    Html(components::admin::admin_layout(
-        "Dashboard",
-        maud::html! {
-            div class="w-full max-w-4xl bg-slate-900 p-8 rounded-lg shadow-lg text-center" {
-                h1 class="text-2xl font-bold mb-6" { "Witaj w panelu admina!" }
-                div class="flex flex-col sm:flex-row justify-center items-center gap-6" {
-                    a href="/admin/articles/new" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg" {
-                        "✍️ Utwórz nowy artykuł"
-                    }
-                    a href="/admin/logout" class="inline-block bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg transition-colors" {
-                        "Wyloguj"
-                    }
-                }
-            }
-        },
-    ))
+async fn dashboard(State(state): State<AppState>) -> Html<maud::Markup> {
+    // Pobieramy wszystkie artykuły z bazy danych, sortując od najnowszych
+    let articles = sqlx::query_as::<_, Article>("SELECT * FROM articles ORDER BY created_at DESC")
+        .fetch_all(&state.db_pool)
+        .await
+        .unwrap_or_else(|e| {
+            // W przypadku błędu, logujemy go i zwracamy pustą listę
+            eprintln!("Błąd podczas pobierania artykułów: {}", e);
+            vec![]
+        });
+
+    // Przekazujemy pobrane artykuły do nowego komponentu widoku, który zaraz stworzymy
+    Html(components::admin::dashboard_view(articles))
 }
 
 // Handler GET /admin/articles/new
