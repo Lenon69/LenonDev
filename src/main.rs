@@ -1,5 +1,6 @@
 // src/main.rs
 mod appstate;
+pub mod bin;
 mod components;
 mod handlers;
 mod models;

@@ -23,3 +23,21 @@ pub struct Article {
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
+
+#[derive(serde::Serialize)]
+pub struct ProjectWithImages {
+    pub id: i32,
+    pub title: String,
+    pub description: String,
+    pub technologies: String,
+    pub image_url: Option<String>,
+    pub project_url: Option<String>,
+    pub images: Vec<String>, // Lista dodatkowych URL-i zdjęć
+}
+
+#[derive(sqlx::FromRow)]
+pub struct User {
+    pub id: i32,
+    pub username: String,
+    pub password_hash: String,
+}

@@ -5,7 +5,7 @@ use axum::{
     http::HeaderMap,
     response::{Html, IntoResponse},
 };
-use maud::{Markup, html};
+use maud::html;
 use serde::Deserialize;
 
 // Struktura do odczytania parametru ?scroll_to=...

@@ -1,5 +1,5 @@
 // src/components/sections.rs
-use crate::models::Project;
+use crate::models::{Project, ProjectWithImages};
 use maud::{Markup, html};
 
 pub fn about_section() -> Markup {
@@ -159,38 +159,65 @@ pub fn contact_section() -> Markup {
     }
 }
 
-pub fn project_detail_modal(project: Project) -> Markup {
+pub fn project_detail_modal(project: ProjectWithImages) -> Markup {
+    // Tworzymy jedną, kompletną listę wszystkich zdjęć
+    let mut all_images = vec![];
+    if let Some(main_image) = &project.image_url {
+        all_images.push(main_image.clone());
+    }
+    all_images.extend(project.images.clone());
+    let all_images_json = serde_json::to_string(&all_images).unwrap_or_else(|_| "[]".to_string());
+
     html! {
-        // Używamy Alpine.js do prostego zarządzania stanem widoczności modala
-        div x-data="{ open: true }" x-show="open"
-            "@keydown.escape.window"="open = false" // Zamykanie klawiszem Escape
+        // Inicjalizujemy stan galerii za pomocą Alpine.js
+        div x-data=(&format!(
+                "{{ open: true, mainImage: '{}', allImages: {} }}",
+                all_images.get(0).cloned().unwrap_or_default(),
+                all_images_json
+            ))
+            x-show="open"
+            "@keydown.escape.window"="open = false"
             class="fixed inset-0 bg-brand-dark/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            style="display: none;" // Ukrywamy na starcie, Alpine.js to pokaże
+            style="display: none;"
         {
-            // Tło modala, kliknięcie go zamknie okno
+            // Tło modala (bez zmian)
             div "@click"="open = false" class="absolute inset-0" {}
 
-            // Właściwa treść modala
+            // Nowa treść modala z galerią
             div class="relative w-full max-w-4xl bg-slate-800/50 border border-slate-700/50 rounded-lg shadow-2xl flex flex-col md:flex-row overflow-hidden" {
-                // Obrazek projektu
-                div class="w-full md:w-1/2" {
-                    @if let Some(image_url) = &project.image_url {
-                        img class="h-full w-full object-cover" src=(image_url) alt=(project.title);
+
+                // === SEKCJA GALERII (LEWA STRONA) ===
+                div class="w-full md:w-1/2 flex flex-col bg-brand-dark" {
+                    // Główny obraz
+                    div class="flex-grow h-64 md:h-auto" {
+                        img class="h-full w-full object-cover" x-bind:src="mainImage" alt=(project.title);
+                    }
+                    // Miniatury (jeśli jest więcej niż 1 zdjęcie)
+                    @if all_images.len() > 1 {
+                        div class="flex-shrink-0 bg-slate-900/50 p-2" {
+                            div class="flex items-center justify-center space-x-2" {
+                                template x-for="image in allImages" {
+                                    div class="w-16 h-16 flex-shrink-0 rounded-md overflow-hidden cursor-pointer transition-all duration-200"
+                                        x-on:click="mainImage = image"
+                                        // Dynamiczne podświetlenie aktywnej miniatury
+                                        x-bind:class="{ 'border-2 border-brand-cyan scale-110': mainImage === image, 'opacity-60 hover:opacity-100': mainImage !== image }"
+                                    {
+                                        img class="h-full w-full object-cover" x-bind:src="image" alt="Thumbnail";
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
-                // Szczegóły projektu
+                // === SEKCJA SZCZEGÓŁÓW (PRAWA STRONA - BEZ ZMIAN) ===
                 div class="w-full md:w-1/2 p-6 lg:p-8 flex flex-col" {
                     h2 class="text-2xl lg:text-3xl font-bold text-brand-cyan" { (project.title) }
                     p class="text-slate-300 mt-4 flex-grow" { (project.description) }
-
-                    // Technologie
                     div class="mt-6 border-t border-slate-700 pt-4" {
-                        h4 class="text-sm font-semibold text-slate-400 mb-2" {{"Użyte technologie:"}}
-                        p class="text-slate-200" {(project.technologies)}
+                        h4 class="text-sm font-semibold text-slate-400 mb-2" { "Użyte technologie:" }
+                        p class="text-slate-200" { (project.technologies) }
                     }
-
-                    // Linki
                     div class="mt-6 flex gap-4" {
                         @if let Some(project_url) = &project.project_url {
                             @if project_url != "#" {

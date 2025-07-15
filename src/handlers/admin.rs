@@ -1,5 +1,5 @@
 // src/handlers/admin.rs
-use crate::{AppState, components};
+use crate::{AppState, components, models::User};
 use axum::{
     Form,
     Router,
@@ -8,6 +8,7 @@ use axum::{
     response::{Html, IntoResponse, Redirect, Response},
     routing::get, // 'post' jest teraz poprawnie używany
 };
+use bcrypt::verify;
 use serde::Deserialize;
 use slug; // Upewnij się, że ten import jest
 use tower_sessions::Session;
@@ -30,13 +31,34 @@ async fn get_login_form() -> Html<maud::Markup> {
     Html(components::admin::login_form())
 }
 
-async fn post_login(session: Session, Form(form): Form<LoginForm>) -> impl IntoResponse {
-    let admin_password = std::env::var("ADMIN_PASSWORD").expect("ADMIN_PASSWORD must be set");
-    if form.password == admin_password {
-        session.insert("user_id", "admin").await.unwrap();
-        Redirect::to("/admin/dashboard")
-    } else {
-        Redirect::to("/admin/login")
+// Zastąp całą funkcję post_login
+async fn post_login(
+    State(state): State<AppState>,
+    session: Session,
+    Form(form): Form<LoginForm>,
+) -> impl IntoResponse {
+    // Szukamy użytkownika 'admin' w bazie danych
+    let user_result = sqlx::query_as::<_, User>("SELECT * FROM users WHERE username = 'admin'")
+        .fetch_optional(&state.db_pool)
+        .await;
+
+    match user_result {
+        Ok(Some(user)) => {
+            // Weryfikujemy, czy podane hasło pasuje do hasha w bazie
+            if verify(&form.password, &user.password_hash).unwrap_or(false) {
+                // Hasło poprawne - logujemy
+                session.insert("user_id", user.id).await.unwrap();
+                Redirect::to("/admin/dashboard")
+            } else {
+                // Hasło niepoprawne
+                Redirect::to("/admin/login")
+            }
+        }
+        _ => {
+            // Użytkownik 'admin' nie istnieje lub wystąpił błąd bazy
+            eprintln!("Logowanie nieudane: nie znaleziono użytkownika 'admin' lub błąd bazy.");
+            Redirect::to("/admin/login")
+        }
     }
 }
 
