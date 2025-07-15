@@ -10,6 +10,20 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 meta charset="UTF-8";
                 meta name="viewport" content="width=device-width, initial-scale=1.0";
                 title { (title) }
+
+                  script {
+                    (maud::PreEscaped(r#"
+                      tailwind.config = {
+                        safelist: [
+                          'hover:shadow-cyan-glow',
+                          'hover:-translate-y-1',
+                          'group-hover:text-brand-cyan',
+                          'hover:bg-slate-800/80',
+                        ]
+                      }
+                    "#))
+                  }
+
                 script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography" {}
                 script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" {}
                 script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" {}
@@ -47,8 +61,10 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
                         div class="text-slate-200 flex flex-wrap justify-center items-center space-x-4 md:space-x-6 mt-4 md:mt-0" {
-                            a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/uses" hx-target="#content-area" hx-push-url="/uses" { "Uses" }
-                            a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" { "Blog" }
+
+                            a href="/uses" class="cursor-pointer text-sm hover:text-brand-cyan" { "Uses" }
+                            a href="/blog" class="cursor-pointer text-sm hover:text-brand-cyan" { "Blog" }
+
                             a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" { "Projekty" }
                             a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/content?scroll_to=kontakt" hx-target="#content-area" hx-push-url="/" { "Kontakt" }
                         }

@@ -1,100 +1,121 @@
 <!doctype html>
-  <html lang="pl" class="scroll-smooth">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>LenonDev</title>
+<html lang="pl" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LenonDev</title>
 
-      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography"></script>
-      <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
-      <script
-        defer
-        src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-      ></script>
+    <script>
+      tailwind.config = {
+        safelist: [
+          "hover:shadow-cyan-glow",
+          "hover:-translate-y-1",
+          "group-hover:text-brand-cyan",
+          "hover:bg-slate-800/80",
+        ],
+      };
+    </script>
 
-      <style type="text/tailwindcss">
-        @theme {
-          --color-brand-dark: #101014;
-          --color-brand-purple: #8b5cf6;
-          --color-brand-cyan: #2dd4bf;
-          --color-brand-green: #a3e635;
-          --shadow-cyan-glow:
-            0 0 15px rgba(45, 212, 191, 0.4), 0 0 25px rgba(45, 212, 191, 0.1);
-        }
-      </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
 
+    <style type="text/tailwindcss">
+      @theme {
+        --color-brand-dark: #101014;
+        --color-brand-purple: #8b5cf6;
+        --color-brand-cyan: #2dd4bf;
+        --color-brand-green: #a3e635;
+        --shadow-cyan-glow:
+          0 0 15px rgba(45, 212, 191, 0.4), 0 0 25px rgba(45, 212, 191, 0.1);
+      }
+    </style>
 
-      <link rel="stylesheet" href="/style.css" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap"
-        rel="stylesheet"
-      />
-      <style>
-        html {
-          font-family: "Inter", sans-serif;
-        }
-      </style>
-    </head>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        font-family: "Inter", sans-serif;
+      }
+    </style>
+  </head>
 
-    <body
-      class="bg-brand-dark text-slate-200 antialiased"
-      x-data="{ width: 0, update() { let scrollTop = window.scrollY; let docHeight = document.documentElement.scrollHeight - window.innerHeight; this.width = (scrollTop / docHeight) * 100; } }"
-      @scroll.window="update()"
+  <body
+    class="bg-brand-dark text-slate-200 antialiased"
+    x-data="{ width: 0, update() { let scrollTop = window.scrollY; let docHeight = document.documentElement.scrollHeight - window.innerHeight; this.width = (scrollTop / docHeight) * 100; } }"
+    @scroll.window="update()"
+  >
+    <div
+      class="fixed top-0 left-0 h-1 bg-brand-cyan z-[99]"
+      :style="`width: ${width}%`"
+    ></div>
+
+    <header
+      class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50"
     >
-      <div
-        class="fixed top-0 left-0 h-1 bg-brand-cyan z-[99]"
-        :style="`width: ${width}%`"
-      ></div>
-
-      <header
-        class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50"
+      <nav
+        class="container mx-auto px-4 py-2 flex justify-between items-center"
       >
-        <nav
-          class="container mx-auto px-4 py-2 flex justify-between items-center"
-        >
-          <a href="/">
-            <img
-              class="h-16 w-auto transform transition-transform hover:scale-125"
-              src="./fixed-logo.png"
-              alt="LenonDev Logo"
-            />
-          </a>
+        <a href="/">
+          <img
+            class="h-16 w-auto transform transition-transform hover:scale-125"
+            src="./fixed-logo.png"
+            alt="LenonDev Logo"
+          />
+        </a>
 
-          <div class="text-slate-200 flex items-center space-x-6">
-              <a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/uses" hx-target="#content-area" hx-push-url="/uses">Uses</a>
-              <a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/blog" hx-target="#content-area" hx-push-url="/blog">Blog</a>
-              <a class="cursor-pointer text-sm hover:text-brand-cyan" href="/#projekty">Projekty</a>
-              <a class="cursor-pointer text-sm hover:text-brand-cyan" href="/#kontakt">Kontakt</a>
-          </div>
-
-        </nav>
-
-      </header>
-
-      <main 
-        id="content-area" 
-        hx-get="/content" 
-        hx-trigger="load" 
-        hx-swap="innerHTML"
-        class="flex flex-col items-center justify-center text-center px-4 pt-20"
-      >
-      </main>
-
-      <footer class="relative">
-        <div
-          class="absolute top-0 h-px w-full bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent"
-        ></div>
-        <div class="container mx-auto px-4 py-6 text-center text-slate-400">
-          <a href="/admin/dashboard" class="hover:text-brand-cyan transition-colors">
-            <p>© 2025 LenonDev</p>
-          </a>
+        <div class="text-slate-200 flex items-center space-x-6">
+          <a href="/uses" class="cursor-pointer text-sm hover:text-brand-cyan"
+            >Uses</a
+          >
+          <a href="/blog" class="cursor-pointer text-sm hover:text-brand-cyan"
+            >Blog</a
+          >
+          <a
+            class="cursor-pointer text-sm hover:text-brand-cyan"
+            href="/#projekty"
+            >Projekty</a
+          >
+          <a
+            class="cursor-pointer text-sm hover:text-brand-cyan"
+            href="/#kontakt"
+            >Kontakt</a
+          >
         </div>
-      </footer>
+      </nav>
+    </header>
 
-      <div id="modal-container"></div>
-  
-      </body>
-    </html>
+    <main
+      id="content-area"
+      hx-get="/content"
+      hx-trigger="load"
+      hx-swap="innerHTML"
+      class="flex flex-col items-center justify-center text-center px-4 pt-20"
+    ></main>
+
+    <footer class="relative">
+      <div
+        class="absolute top-0 h-px w-full bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent"
+      ></div>
+      <div class="container mx-auto px-4 py-6 text-center text-slate-400">
+        <a
+          href="/admin/dashboard"
+          class="hover:text-brand-cyan transition-colors"
+        >
+          <p>© 2025 LenonDev</p>
+        </a>
+      </div>
+    </footer>
+
+    <div id="modal-container"></div>
+    <div class="hidden shadow-cyan-glow"></div>
+  </body>
 </html>
