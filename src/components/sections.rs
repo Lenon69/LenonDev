@@ -101,11 +101,24 @@ pub fn contact_section() -> Markup {
                 h2 class="text-3xl lg:text-4xl font-bold tracking-tight mb-4 text-brand-cyan" {
                     "Skontaktuj się ze mną"
                 }
-                p class="text-slate-400" {
-                    "Masz pomysł na projekt lub pytanie? Wypełnij formularz, a ja odezwę się najszybciej, jak to możliwe."
+                p class="text-slate-400 mb-12" { // Zwiększony margines dolny
+                    "Masz pomysł na projekt lub pytanie? Wypełnij formularz lub napisz na WhatsApp – to najszybsza forma kontaktu."
                 }
 
-                div id="contact-form-response" class="mt-8" {
+                // --- NOWA SEKCJA Z PRZYCISKIEM WHATSAPP ---
+                div class="mb-12" {
+                    a href="https://wa.me/48696619168" target="_blank"
+                      class="inline-flex items-center gap-3 bg-green-500/10 hover:bg-green-500/20 transition-colors duration-300 text-green-400 font-bold py-3 px-8 rounded-lg border border-green-500/30" {
+                        // Użyjemy SVG dla ikony WhatsApp
+                        svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {
+                            path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.505 1.905 6.334l-1.196 4.359 4.554-1.187z";
+                        }
+                        span { "Napisz na WhatsApp" }
+                    }
+                }
+
+                // --- FORMULARZ E-MAIL ---
+                div id="contact-form-response" {
                     form
                         hx-post="/contact"
                         hx-target="#contact-form-response"
@@ -123,8 +136,6 @@ pub fn contact_section() -> Markup {
                         }
                         div {
                             label for="message" class="block text-sm font-medium text-slate-300" { "Wiadomość" }
-                            // --- POPRAWKA ---
-                            // Dodajemy puste nawiasy klamrowe {}, aby poprawnie zamknąć tag.
                             textarea
                                 name="message"
                                 id="message"
@@ -138,7 +149,7 @@ pub fn contact_section() -> Markup {
                                 type="submit"
                                 class="mt-2 inline-block bg-brand-purple hover:shadow-cyan-glow transition-all duration-300 text-white font-bold py-2 px-6 rounded-lg"
                             {
-                                "Wyślij"
+                                "Wyślij e-mail" // Zmieniony tekst przycisku
                             }
                         }
                     }
