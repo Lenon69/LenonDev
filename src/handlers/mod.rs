@@ -4,3 +4,4 @@ pub mod contact;
 pub mod htmx;
 pub mod projects;
 pub mod uses;
+pub mod offer;

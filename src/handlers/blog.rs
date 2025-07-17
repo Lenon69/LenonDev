@@ -59,7 +59,7 @@ pub async fn show_article(
 
         // Krok 2: Renderowanie widoku
         let content_fragment = html! {
-            div class="container mx-auto px-4 py-16 lg:py-24" {
+            div class="container mx-auto px-4 pb-16 lg:pb-24" {
                 div class="max-w-4xl mx-auto" {
                     // Sekcja tytułowa (bez zmian)
                     div class="text-center mb-12" {

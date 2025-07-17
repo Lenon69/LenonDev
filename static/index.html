@@ -62,31 +62,35 @@
       class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50"
     >
       <nav
-        class="container mx-auto px-4 py-2 flex justify-between items-center"
+        class="container mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center"
       >
         <a href="/">
-          <img
-            class="h-16 w-auto transform transition-transform hover:scale-125"
-            src="./fixed-logo.png"
-            alt="LenonDev Logo"
-          />
+          <img class="h-16 w-auto" src="./fixed-logo.png" alt="LenonDev Logo" />
         </a>
-
-        <div class="text-slate-200 flex items-center space-x-6">
+        <div
+          class="text-slate-200 flex flex-wrap justify-center items-center space-x-4 md:space-x-6 mt-4 md:mt-0"
+        >
           <a href="/uses" class="cursor-pointer text-sm hover:text-brand-cyan"
             >Uses</a
+          >
+          <a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan"
+            >Oferta</a
           >
           <a href="/blog" class="cursor-pointer text-sm hover:text-brand-cyan"
             >Blog</a
           >
+
+          <a href="/blog" class="cursor-pointer text-sm hover:text-brand-cyan"
+            >Blog</a
+          >
           <a
-            class="cursor-pointer text-sm hover:text-brand-cyan"
             href="/#projekty"
+            class="cursor-pointer text-sm hover:text-brand-cyan"
             >Projekty</a
           >
           <a
-            class="cursor-pointer text-sm hover:text-brand-cyan"
             href="/#kontakt"
+            class="cursor-pointer text-sm hover:text-brand-cyan"
             >Kontakt</a
           >
         </div>

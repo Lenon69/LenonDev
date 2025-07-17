@@ -63,6 +63,7 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                         div class="text-slate-200 flex flex-wrap justify-center items-center space-x-4 md:space-x-6 mt-4 md:mt-0" {
 
                             a href="/uses" class="cursor-pointer text-sm hover:text-brand-cyan" { "Uses" }
+                            a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan" { "Oferta" }
                             a href="/blog" class="cursor-pointer text-sm hover:text-brand-cyan" { "Blog" }
 
                             a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" { "Projekty" }
@@ -71,7 +72,7 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                     }
                 }
                 // Reszta strony (bez zmian)
-                main id="content-area" { (content) }
+                main id="content-area" class="pt-32 md:pt-24" { (content) }
                 footer class="relative" {
                     div class="absolute top-0 h-px w-full bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent" {}
                     div class="container mx-auto px-4 py-6 text-center text-slate-400" {
