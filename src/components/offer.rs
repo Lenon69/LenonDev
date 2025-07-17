@@ -19,7 +19,7 @@ pub fn offer_page_view() -> Markup {
 
             // --- SEKCJA: TWORZENIE STRON INTERNETOWYCH ---
             div {
-                h2 class="text-3xl font-bold text-center text-slate-100 mb-10" { "Tworzenie Stron Internetowych" }
+                h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Tworzenie Stron Internetowych" }
                 // Grid z kartami dla każdego typu strony
                 div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" {
                     // Karta: Strona Wizytówka
@@ -57,7 +57,7 @@ pub fn offer_page_view() -> Markup {
 
             // --- SEKCJA: USŁUGI DODATKOWE ---
             div class="mt-20" {
-                h2 class="text-3xl font-bold text-center text-slate-100 mb-10" { "Usługi Dodatkowe" }
+                h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Usługi Dodatkowe" }
                 div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center" {
                     // Karta: Opieka nad stroną
                     (service_card(
