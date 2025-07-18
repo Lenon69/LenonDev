@@ -70,7 +70,7 @@ pub fn projects_section(projects: Vec<Project>) -> Markup {
     html! {
         section id="projekty" class="bg-[#1A1A1E]/50 py-20 lg:py-32" {
             div class="container mx-auto px-4 text-center" {
-                h2 class="text-3xl lg:text-4xl font-bold tracking-tight mb-12 text-brand-cyan" { "Moje Projekty" }
+                h2 class="text-3xl lg:text-4xl font-bold tracking-tight mb-12 text-brand-cyan" { "Aktualne Projekty" }
                 div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left" {
                     @for project in projects {
                         // Zmieniamy <a> na <div> i dodajemy atrybuty HTMX

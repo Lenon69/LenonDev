@@ -70,18 +70,12 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
         
                         // Jeśli element istnieje
                         if (el) {
-                            // 1. Znajdź nagłówek po jego nowym ID
                             const header = document.getElementById('main-header');
-                            // 2. Pobierz jego dynamiczną wysokość (działa na mobile i desktop)
                             const headerHeight = header ? header.offsetHeight : 0;
 
-                            // 3. Oblicz pozycję docelową elementu
                             const elementPosition = el.getBoundingClientRect().top + window.scrollY;
-            
-                            // 4. Ustaw finalną pozycję, odejmując wysokość nagłówka i dodając mały margines (np. 20px)
-                            const offsetPosition = elementPosition - headerHeight - 20;
+                            const offsetPosition = elementPosition - headerHeight;
 
-                            // 5. Użyj window.scrollTo, aby precyzyjnie przewinąć stronę
                             window.scrollTo({
                                 top: offsetPosition,
                                 behavior: 'smooth'
@@ -103,13 +97,12 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                         img class="h-16 w-auto transition-transform duration-300 hover:scale-110" src="/fixed-logo.png" alt="LenonDev Logo";
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
-                        div class="text-slate-200 flex flex-wrap justify-center items-center gap-2 mt-4 md:mt-0" { // Zmieniono space-x na gap dla lepszego odstępu
-                            // Do każdego linku dodajemy: px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow
-                            a href="/uses" class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
-                            a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
-                            a href="/blog" class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
-                            a class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" { "Projekty" }
-                            a class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" hx-get="/content?scroll_to=kontakt" hx-target="#content-area" hx-push-url="/" { "Kontakt" }
+                        div class="text-slate-200 flex flex-wrap justify-center items-center gap-2 mt-4 md:mt-0" {
+                        a href="/uses"   class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
+                        a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
+                        a href="/blog"   class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
+                        a hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Projekty" }
+                        a hx-get="/content?scroll_to=kontakt"  hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Kontakt" }
                         }
                     }
                 }

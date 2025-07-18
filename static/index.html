@@ -72,25 +72,35 @@
           />
         </a>
         <div
-          class="text-slate-200 flex flex-wrap justify-center items-center space-x-4 md:space-x-6 mt-4 md:mt-0"
+          class="text-slate-200 flex flex-wrap justify-center items-center gap-2 mt-4 md:mt-0"
         >
-          <a href="/uses" class="cursor-pointer text-sm hover:text-brand-cyan"
+          <a
+            href="/uses"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Uses</a
           >
-          <a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan"
+          <a
+            href="/oferta"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Oferta</a
           >
-          <a href="/blog" class="cursor-pointer text-sm hover:text-brand-cyan"
+          <a
+            href="/blog"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Blog</a
           >
           <a
             href="/#projekty"
-            class="cursor-pointer text-sm hover:text-brand-cyan"
+            hx-target="#content-area"
+            hx-push-url="/"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Projekty</a
           >
           <a
             href="/#kontakt"
-            class="cursor-pointer text-sm hover:text-brand-cyan"
+            hx-target="#content-area"
+            hx-push-url="/"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Kontakt</a
           >
         </div>
