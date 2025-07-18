@@ -35,8 +35,17 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
             }
             // --- NOWA, KLUCZOWA ZMIANA W TAGU BODY ---
             body
-                x-data="{}"
-                // Alpine.js nasłuchuje na zdarzenie 'scrollToSection' wysłane przez serwer
+                // 1. Łączymy logikę paska postępu z istniejącym x-data
+                x-data="{
+                    width: 0, 
+                    update() { 
+                        let scrollTop = window.scrollY; 
+                        let docHeight = document.documentElement.scrollHeight - window.innerHeight; 
+                        this.width = (scrollTop / docHeight) * 100; 
+                    } 
+                }"
+                // 2. Dodajemy nasłuchiwanie na scroll i łączymy je z nasłuchiwaniem na zdarzenie od serwera
+                "@scroll.window"="update()"
                 "@scroll-to-section.window"="
                     $nextTick(() => {
                         const selector = $event.detail.value;
@@ -49,7 +58,7 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 class="bg-brand-dark text-slate-200 antialiased"
             {
                 // Pasek postępu (bez zmian)
-                div class="fixed top-0 left-0 h-1 bg-brand-cyan z-[99]" ":style"="`width: ${(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100}%`" {}
+                div class="fixed top-0 left-0 h-1 bg-brand-cyan z-[99]" x-bind:style="`width: ${width}%`" {}
 
                 // Nagłówek i nawigacja
                 header class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50" {

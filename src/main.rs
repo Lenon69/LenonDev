@@ -92,7 +92,7 @@ async fn main() {
         .layer(session_layer)
         .layer(CookieManagerLayer::new());
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     println!("🚀 Serwer nasłuchuje na https://{}", addr);
 
     // Konfiguracja TLS
