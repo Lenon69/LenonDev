@@ -25,6 +25,8 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 meta property="og:url" content="https://lenondev.com";
                 meta property="og:type" content="website";
                 // --- KONIEC SEKCJI SEO I FAVICON ---
+                script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography" {}
+                script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" {}
 
                   script {
                     (maud::PreEscaped(r#"
@@ -39,8 +41,6 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                     "#))
                   }
 
-                script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography" {}
-                script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" {}
                 script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" {}
                 style type="text/tailwindcss" { "@theme { --color-brand-dark: #101014; --color-brand-purple: #8b5cf6; --color-brand-cyan: #2dd4bf; --color-brand-green: #a3e635; --shadow-cyan-glow: 0 0 15px rgba(45, 212, 191, 0.4), 0 0 25px rgba(45, 212, 191, 0.1); }" }
                 link rel="preconnect" href="https://fonts.googleapis.com";
@@ -95,17 +95,17 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                         img class="h-16 w-auto transition-transform duration-300 hover:scale-110" src="/fixed-logo.png" alt="LenonDev Logo";
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
-                        div class="text-slate-200 flex flex-wrap justify-center items-center gap-2 mt-4 md:mt-0" {
-                        a href="/uses"   class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
-                        a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
-                        a href="/blog"   class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
-                        a hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Projekty" }
-                        a hx-get="/content?scroll_to=kontakt"  hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Kontakt" }
+                        div class="text-slate-200 flex flex-wrap justify-center items-center gap-1 mt-4 md:mt-0" {
+                        a href="/uses"   class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
+                        a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
+                        a href="/blog"   class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
+                        a hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Projekty" }
+                        a hx-get="/content?scroll_to=kontakt"  hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Kontakt" }
                         }
                     }
                 }
                 // Reszta strony (bez zmian)
-                main id="content-area" class="min-h-screen pt-32 md:pt-24" { (content) }
+                main id="content-area" class="min-h-screen pt-36 md:pt-24" { (content) }
                 footer class="relative" {
                     div class="absolute top-0 h-px w-full bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent" {}
                     div class="container mx-auto px-4 py-6 text-center text-slate-400" {

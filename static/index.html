@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LenonDev</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
     <script>
       tailwind.config = {
         safelist: [
@@ -15,13 +21,6 @@
         ],
       };
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography"></script>
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
 
     <style type="text/tailwindcss">
       @theme {
@@ -72,35 +71,35 @@
           />
         </a>
         <div
-          class="text-slate-200 flex flex-wrap justify-center items-center gap-2 mt-4 md:mt-0"
+          class="text-slate-200 flex flex-wrap justify-center items-center gap-1 mt-4 md:mt-0"
         >
           <a
             href="/uses"
-            class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Uses</a
           >
           <a
             href="/oferta"
-            class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Oferta</a
           >
           <a
             href="/blog"
-            class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Blog</a
           >
           <a
             href="/#projekty"
             hx-target="#content-area"
             hx-push-url="/"
-            class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Projekty</a
           >
           <a
             href="/#kontakt"
             hx-target="#content-area"
             hx-push-url="/"
-            class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
+            class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow"
             >Kontakt</a
           >
         </div>

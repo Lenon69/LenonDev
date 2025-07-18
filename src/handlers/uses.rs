@@ -23,21 +23,21 @@ pub async fn get_uses_content(headers: HeaderMap) -> Html<Markup> {
                 div class="bg-slate-800/50 p-6 lg:p-8 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow" {
                     h2 class="text-2xl font-bold text-slate-200 mb-6 border-b border-slate-700 pb-3" {"Hardware"}
                     ul class="space-y-4 text-slate-300" {
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Komputer:"} span {"ASUS ROG Strix G531GW"}}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Monitor:"} span {"15' Full HD" }}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Klawiatura:"} span {"ASUS ROG Keyboard"}}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Mysz:"} span {"Logitech G502"}}
+                        // Zastosuj nową klasę do wszystkich <li>
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Komputer:"} span {"ASUS ROG Strix G531GW"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Monitor:"} span {"15' Full HD" }}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Klawiatura:"} span {"ASUS ROG Keyboard"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Mysz:"} span {"Logitech G502"}}
                     }
                 }
-
                 // Karta "Software"
                 div class="bg-slate-800/50 p-6 lg:p-8 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow" {
                     h2 class="text-2xl font-bold text-slate-200 mb-6 border-b border-slate-700 pb-3" {"Software"}
                     ul class="space-y-4 text-slate-300" {
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Edytor:"} span {"Helix Editor"}}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Terminal:"} span {"PowerShell"}}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Przeglądarka:"} span {"Brave"}}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Font:"} span {"Cascadia Mono"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Edytor:"} span {"Helix Editor"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Terminal:"} span {"PowerShell"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Przeglądarka:"} span {"Brave"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Font:"} span {"Cascadia Mono"}}
                     }
                 }
 
@@ -45,10 +45,10 @@ pub async fn get_uses_content(headers: HeaderMap) -> Html<Markup> {
                 div class="bg-slate-800/50 p-6 lg:p-8 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow" {
                     h2 class="text-2xl font-bold text-slate-200 mb-6 border-b border-slate-700 pb-3" {"Usługi"}
                     ul class="space-y-4 text-slate-300" {
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Hosting:"} span {"OVHcloud"}}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Kod:"} span {"GitHub"}}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Baza Danych:"} span {"Neon"}}
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"E-mail:"} span {"Resend"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Hosting:"} span {"OVHcloud"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Kod:"} span {"GitHub"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"Baza Danych:"} span {"Neon"}}
+                        li class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline" { span class="font-semibold text-slate-400" {"E-mail:"} span {"Resend"}}
                     }
                 }
             }
