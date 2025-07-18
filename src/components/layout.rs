@@ -64,11 +64,9 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 "@scroll-to-section.window"="
                     // Używamy $nextTick, aby mieć pewność, że DOM jest już gotowy
                     $nextTick(() => {
-                        // Pobieramy selektor z eventu (np. '#projekty')
                         const selector = $event.detail.value;
                         const el = document.querySelector(selector);
         
-                        // Jeśli element istnieje
                         if (el) {
                             const header = document.getElementById('main-header');
                             const headerHeight = header ? header.offsetHeight : 0;

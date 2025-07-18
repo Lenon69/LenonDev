@@ -44,7 +44,7 @@ pub fn offer_page_view() -> Markup {
                     (offer_card(
                         "Sklep Internetowy",
                         "Sprzedawaj swoje produkty online. Kompletne rozwiązanie e-commerce z płatnościami i zarządzaniem.",
-                        "8 000 - 22 000 zł"
+                        "10 000 - 22 000 zł"
                     ))
                     // Karta: Projekt Indywidualny
                     (offer_card(
@@ -56,7 +56,7 @@ pub fn offer_page_view() -> Markup {
                     (offer_card(
                         "Aplikacja webowa (CRM)",
                         "Zaawansowana logika backendowa.",
-                        "od 10 000 zł - 50 0000+ zł"
+                        "od 15 000 zł - 50 0000+ zł"
                     ))
                 }
             }
