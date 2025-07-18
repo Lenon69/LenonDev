@@ -45,7 +45,7 @@ pub async fn get_uses_content(headers: HeaderMap) -> Html<Markup> {
                 div class="bg-slate-800/50 p-6 lg:p-8 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow" {
                     h2 class="text-2xl font-bold text-slate-200 mb-6 border-b border-slate-700 pb-3" {"Usługi"}
                     ul class="space-y-4 text-slate-300" {
-                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Hosting:"} span {"Hostinger"}}
+                        li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Hosting:"} span {"OVHcloud"}}
                         li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Kod:"} span {"GitHub"}}
                         li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"Baza Danych:"} span {"Neon"}}
                         li class="flex justify-between items-baseline" { span class="font-semibold text-slate-400" {"E-mail:"} span {"Resend"}}

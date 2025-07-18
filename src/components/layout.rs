@@ -57,7 +57,7 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                     nav class="container mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center" {
                         // Link z logo
                         a href="/" {
-                            img class="h-16 w-auto" src="/fixed-logo.png" alt="LenonDev Logo";
+                        img class="h-16 w-auto transition-transform duration-300 hover:scale-110" src="/fixed-logo.png" alt="LenonDev Logo";
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
                         div class="text-slate-200 flex flex-wrap justify-center items-center space-x-4 md:space-x-6 mt-4 md:mt-0" {
