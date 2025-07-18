@@ -4,13 +4,15 @@ use maud::{Markup, html};
 
 pub fn about_section() -> Markup {
     html! {
-        section id="o-mnie" class="relative bg-cover bg-center" style="background-image: url('/background.jpg');" {
+        section id="o-mnie" class="relative bg-cover bg-center"
+        style="background-image: url('/background.jpg');"
+         {
             div class="absolute inset-0 bg-brand-dark/75" {}
             div class="relative z-10 container mx-auto px-4 py-20 lg:py-32 text-center" {
                 h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-brand-cyan" { "Pasjonat Kodu i Nowoczesnych Technologii" }
                 div class="mt-8 max-w-3xl mx-auto text-slate-300 space-y-4 text-lg" {
                     p { "Witaj na LenonDev. Programowanie to nie tylko mój zawód, ale przede wszystkim pasja. Eksploruję świat nowoczesnego developmentu, skupiając się na wydajności, bezpieczeństwie i elegancji kodu, którą oferuje ekosystem Rusta." }
-                    p { "Tworzę strony i aplikacje, w najnowszych technologiach, które są nie tylko mega szybkie, ale także gotowe na wyzwania przyszłości." }
+                    p { "Tworzę strony i aplikacje, w najnowszych technologiach, które są nie tylko super szybkie, ale także gotowe na wyzwania przyszłości." }
                 }
 
                     // --- SEKCJA TECHNOLOGII Z ZEWNĘTRZNYMI PLIKAMI SVG ---

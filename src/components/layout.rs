@@ -10,6 +10,21 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 meta charset="UTF-8";
                 meta name="viewport" content="width=device-width, initial-scale=1.0";
                 title { (title) }
+                meta name="description" content="LenonDev - Tworzenie nowoczesnych i ultra-szybkich stron internetowych w technologii Rust. Zobacz portfolio i ofertę.";
+                meta name="keywords" content="Rust, Axum, HTMX, strony internetowe, programista, portfolio, web developer, tworzenie stron, zakup strony, strona internetowa, profesjonalne strony internetowe";
+
+                // Favicon
+                link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png";
+                link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png";
+                link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png";
+
+                // Open Graph (dla social media)
+                meta property="og:title" content="LenonDev - Nowoczesne Strony Internetowe";
+                meta property="og:description" content="Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe.";
+                meta property="og:image" content="https://lenondev.com/og-image.jpg"; // Stwórz i umieść obrazek 1200x630px
+                meta property="og:url" content="https://lenondev.com";
+                meta property="og:type" content="website";
+                // --- KONIEC SEKCJI SEO I FAVICON ---
 
                   script {
                     (maud::PreEscaped(r#"
@@ -47,11 +62,30 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 // 2. Dodajemy nasłuchiwanie na scroll i łączymy je z nasłuchiwaniem na zdarzenie od serwera
                 "@scroll.window"="update()"
                 "@scroll-to-section.window"="
+                    // Używamy $nextTick, aby mieć pewność, że DOM jest już gotowy
                     $nextTick(() => {
+                        // Pobieramy selektor z eventu (np. '#projekty')
                         const selector = $event.detail.value;
                         const el = document.querySelector(selector);
+        
+                        // Jeśli element istnieje
                         if (el) {
-                            el.scrollIntoView({ behavior: 'smooth' });
+                            // 1. Znajdź nagłówek po jego nowym ID
+                            const header = document.getElementById('main-header');
+                            // 2. Pobierz jego dynamiczną wysokość (działa na mobile i desktop)
+                            const headerHeight = header ? header.offsetHeight : 0;
+
+                            // 3. Oblicz pozycję docelową elementu
+                            const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+            
+                            // 4. Ustaw finalną pozycję, odejmując wysokość nagłówka i dodając mały margines (np. 20px)
+                            const offsetPosition = elementPosition - headerHeight - 20;
+
+                            // 5. Użyj window.scrollTo, aby precyzyjnie przewinąć stronę
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                            });
                         }
                     })
                 "
@@ -61,7 +95,7 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 div class="fixed top-0 left-0 h-1 bg-brand-cyan z-[99]" x-bind:style="`width: ${width}%`" {}
 
                 // Nagłówek i nawigacja
-                header class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50" {
+                header id="main-header" class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50" {
                     // Na małych ekranach (domyślnie) elementy będą w kolumnie, a na średnich (md:) i większych w rzędzie.
                     nav class="container mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center" {
                         // Link z logo
@@ -69,14 +103,13 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                         img class="h-16 w-auto transition-transform duration-300 hover:scale-110" src="/fixed-logo.png" alt="LenonDev Logo";
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
-                        div class="text-slate-200 flex flex-wrap justify-center items-center space-x-4 md:space-x-6 mt-4 md:mt-0" {
-
-                            a href="/uses" class="cursor-pointer text-sm hover:text-brand-cyan" { "Uses" }
-                            a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan" { "Oferta" }
-                            a href="/blog" class="cursor-pointer text-sm hover:text-brand-cyan" { "Blog" }
-
-                            a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" { "Projekty" }
-                            a class="cursor-pointer text-sm hover:text-brand-cyan" hx-get="/content?scroll_to=kontakt" hx-target="#content-area" hx-push-url="/" { "Kontakt" }
+                        div class="text-slate-200 flex flex-wrap justify-center items-center gap-2 mt-4 md:mt-0" { // Zmieniono space-x na gap dla lepszego odstępu
+                            // Do każdego linku dodajemy: px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow
+                            a href="/uses" class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
+                            a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
+                            a href="/blog" class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
+                            a class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" { "Projekty" }
+                            a class="cursor-pointer text-sm hover:text-brand-cyan px-3 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" hx-get="/content?scroll_to=kontakt" hx-target="#content-area" hx-push-url="/" { "Kontakt" }
                         }
                     }
                 }
