@@ -28,21 +28,21 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography" {}
                 script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" {}
 
-                  script {
-                    (maud::PreEscaped(r#"
-                      tailwind.config = {
-                        safelist: [
-                          'hover:shadow-cyan-glow',
-                          'hover:-translate-y-1',
-                          'group-hover:text-brand-cyan',
-                          'hover:bg-slate-800/80',
-                        ]
-                      }
-                    "#))
-                  }
 
                 script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" {}
-                style type="text/tailwindcss" { "@theme { --color-brand-dark: #101014; --color-brand-purple: #8b5cf6; --color-brand-cyan: #2dd4bf; --color-brand-green: #a3e635; --shadow-cyan-glow: 0 0 15px rgba(45, 212, 191, 0.4), 0 0 25px rgba(45, 212, 191, 0.1); }" }
+                style type="text/tailwindcss" {
+                    (maud::PreEscaped(r#"
+                        @theme {
+                            --color-brand-dark: #101014;
+                            --color-brand-purple: #8b5cf6;
+                            --color-brand-cyan: #2dd4bf;
+                            --color-brand-green: #a3e635;
+                            --shadow-cyan-glow: 0 0 15px rgba(45, 212, 191, 0.4), 0 0 25px rgba(45, 212, 191, 0.1);
+                        }
+
+                        @source inline("hover:shadow-cyan-glow hover:-translate-y-1 group-hover:text-brand-cyan hover:bg-slate-800/80");
+                    "#))
+                }
                 link rel="preconnect" href="https://fonts.googleapis.com";
                 link rel="preconnect" href="https://fonts.gstatic.com" crossorigin;
                 link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet";

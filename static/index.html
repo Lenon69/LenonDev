@@ -11,16 +11,6 @@
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-    <script>
-      tailwind.config = {
-        safelist: [
-          "hover:shadow-cyan-glow",
-          "hover:-translate-y-1",
-          "group-hover:text-brand-cyan",
-          "hover:bg-slate-800/80",
-        ],
-      };
-    </script>
 
     <style type="text/tailwindcss">
       @theme {
@@ -31,6 +21,8 @@
         --shadow-cyan-glow:
           0 0 15px rgba(45, 212, 191, 0.4), 0 0 25px rgba(45, 212, 191, 0.1);
       }
+
+      @source inline("hover:shadow-cyan-glow hover:-translate-y-1 group-hover:text-brand-cyan hover:bg-slate-800/80");
     </style>
 
     <link rel="stylesheet" href="/style.css" />
