@@ -2,7 +2,7 @@
 use crate::{
     AppState,
     components::{self},
-    models::Article,
+    models::{Article, ProjectForm},
 };
 use axum::{
     Form, Router,
@@ -147,6 +147,10 @@ pub fn protected_admin_routes() -> Router<AppState> {
             get(get_edit_article_form).post(post_update_article),
         )
         .route("/articles/delete/{id}", post(post_delete_article))
+        .route(
+            "/projects/new",
+            get(get_new_project_form).post(post_new_project),
+        )
 }
 
 // Handler GET /admin/articles/edit/{id} - wyświetla formularz edycji
@@ -230,4 +234,47 @@ async fn post_delete_article(
     }
 
     Redirect::to("/admin/dashboard")
+}
+
+// Handler GET /admin/projects/new - wyświetla formularz
+async fn get_new_project_form() -> Html<Markup> {
+    Html(components::admin::new_project_form())
+}
+
+// Handler POST /admin/projects/new - zapisuje nowy projekt
+async fn post_new_project(
+    State(state): State<AppState>,
+    Form(form): Form<ProjectForm>,
+) -> impl IntoResponse {
+    let slug = slug::slugify(&form.title);
+
+    let query_result = sqlx::query(
+        "INSERT INTO projects (title, slug, description, technologies, image_url, project_url) VALUES ($1, $2, $3, $4, $5, $6)",
+    )
+    .bind(form.title)
+    .bind(slug)
+    .bind(form.description)
+    .bind(form.technologies)
+    .bind(form.image_url)
+    .bind(form.project_url)
+    .execute(&state.db_pool)
+    .await;
+
+    match query_result {
+        Ok(_) => {
+            // Unieważniamy cache strony głównej, aby nowy projekt był widoczny
+            println!(
+                "CACHE INVALIDATION: Strona główna została unieważniona z powodu nowego projektu."
+            );
+            state.cache.invalidate("page:/:scroll_to=");
+            Ok(Redirect::to("/admin/dashboard"))
+        }
+        Err(e) => {
+            eprintln!("Błąd zapisu projektu do bazy danych: {}", e);
+            Err((
+                axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+                "Błąd serwera podczas zapisu projektu.",
+            ))
+        }
+    }
 }

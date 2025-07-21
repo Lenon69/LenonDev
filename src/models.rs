@@ -1,6 +1,6 @@
 // src/models.rs
 use chrono::{DateTime, Utc};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(sqlx::FromRow, Serialize)]
 pub struct Project {
@@ -104,4 +104,13 @@ pub struct Provider<'a> {
     #[serde(rename = "@type")]
     pub type_of: &'a str,
     pub name: &'a str,
+}
+
+#[derive(Deserialize)]
+pub struct ProjectForm {
+    pub title: String,
+    pub description: String,
+    pub technologies: String,
+    pub image_url: Option<String>,
+    pub project_url: Option<String>,
 }
