@@ -89,14 +89,15 @@ async fn main() {
     let app = Router::new()
         .route_service("/", ServeFile::new("static/index.html"))
         .route_service("/robots.txt", ServeFile::new("static/robots.txt"))
+        .nest_service("/public", ServeDir::new("static"))
         .route("/content", get(get_main_content))
-        .route("/contact", post(handle_contact_form))
         .route("/oferta", get(get_offer_page))
         .route("/projekty/{slug}", get(show_project))
         .route("/blog", get(blog_index))
         .route("/uses", get(get_uses_content))
         .route("/blog/{slug}", get(show_article))
         .route("/sitemap.xml", get(get_sitemap))
+        .route("/contact", post(handle_contact_form))
         .nest(
             "/admin",
             // Najpierw łączymy trasy chronione z ich warstwą middleware
@@ -109,7 +110,6 @@ async fn main() {
                 .merge(public_admin_routes()),
         )
         // KROK 1: Serwuj pliki z folderu 'static' pod adresem '/public'
-        .nest_service("/public", ServeDir::new("static"))
         // KROK 2: Ustaw nasz handler jako domyślną stronę dla wszystkich innych tras
         .fallback(handler_404)
         .with_state(app_state)

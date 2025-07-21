@@ -5,7 +5,7 @@ use maud::{Markup, html};
 // Komponent dla strony /blog (lista artykułów)
 pub fn blog_index_view(articles: Vec<Article>) -> Markup {
     html! {
-        div class="bg-[#1A1A1E]/50 pb-20 lg:pb-24 pt-36 md:pt-24" {
+        div class="bg-[#1A1A1E]/50 pb-20 lg:pb-24 pt-36 md:pt-28" {
             div class="container mx-auto px-4" {
                 div class="text-center mb-16" {
                     h1 class="text-4xl lg:text-5xl font-bold tracking-tight text-brand-cyan" {"Wpisy na blogu"}

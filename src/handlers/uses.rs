@@ -17,7 +17,7 @@ pub async fn get_uses_content(headers: HeaderMap, State(state): State<AppState>)
 
     let content_fragment = html! {
         // Główny kontener zapewniający odpowiednie marginesy i wyśrodkowanie.
-        div class="container mx-auto px-4 pb-16 lg:pb-24 pt-36 md:pt-24" {
+        div class="container mx-auto px-4 pb-16 lg:pb-24 pt-36 md:pt-28" {
 
             // Nagłówek sekcji.
             div class="text-center mb-12 md:mb-16"{
