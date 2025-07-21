@@ -18,3 +18,10 @@ article blockquote {
   font-style: italic;
   margin: 1.5em 0;
 }
+
+/* Zwiększenie interlinii wewnątrz artykułów, aby zapobiec ucinaniu tekstu */
+.prose p,
+.prose li,
+.prose strong {
+  line-height: 1.75;
+}
