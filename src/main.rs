@@ -22,7 +22,7 @@ use moka::sync::Cache;
 use resend_rs::Resend;
 use sqlx::PgPool;
 use std::net::SocketAddr;
-use tower_http::services::ServeDir;
+use tower_http::services::{ServeDir, ServeFile};
 
 use crate::appstate::AppState;
 use crate::handlers::admin::{auth_middleware, protected_admin_routes, public_admin_routes};
@@ -86,6 +86,7 @@ async fn main() {
     // --------------------------
 
     let app = Router::new()
+        .route_service("/", ServeFile::new("static/index.html"))
         .route("/content", get(get_main_content))
         .route("/contact", post(handle_contact_form))
         .route("/oferta", get(get_offer_page))

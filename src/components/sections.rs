@@ -256,23 +256,55 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                 p class="mt-4 text-lg text-slate-400" { (project.technologies) }
             }
 
-            // Galeria i opis (możemy użyć układu dwukolumnowego)
+            // --- POCZĄTEK ZMODYFIKOWANEJ GALERII ---
             div class="max-w-5xl mx-auto" {
                 div x-data=(&format!(
-                    "{{ mainImage: '{}', allImages: {} }}",
-                    all_images.get(0).cloned().unwrap_or_default(),
-                    all_images_json
+                    "{{
+                        allImages: {json},
+                        currentIndex: 0,
+                        get mainImage() {{ return this.allImages[this.currentIndex] }},
+                        next() {{ this.currentIndex = (this.currentIndex + 1) % this.allImages.length }},
+                        prev() {{ this.currentIndex = (this.currentIndex - 1 + this.allImages.length) % this.allImages.length }}
+                    }}",
+                    json = all_images_json
                 )) {
-                    // Główny obraz
-                    img class="w-full h-auto object-cover rounded-xl shadow-lg mb-4" x-bind:src="mainImage" alt=(project.title);
+                    // Główny obraz z przyciskami nawigacji
+                    div class="relative mb-4" {
+                        // Kontener na obraz
+                        div class="w-full h-auto overflow-hidden rounded-xl shadow-lg" {
+                             img class="w-full object-cover transition-transform duration-300" x-bind:src="mainImage" alt=(project.title);
+                        }
 
-                    // Miniatury
+                        // Przyciski nawigacji (pojawiają się, gdy jest więcej niż 1 zdjęcie)
+                        template x-if="allImages.length > 1" {
+                                div {
+                                    // Przycisk "Wstecz" (lewa strzałka)
+                                    button ."absolute top-1/2 left-2 md:left-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-2 transition-all duration-300 focus:outline-none"
+                                        "@click"="prev()"
+                                    {
+                                        svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
+                                            path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" {}
+                                        }
+                                    }
+                                    // Przycisk "Dalej" (prawa strzałka)
+                                    button ."absolute top-1/2 right-2 md:right-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-2 transition-all duration-300 focus:outline-none"
+                                        "@click"="next()"
+                                    {
+                                        svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
+                                            path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Miniatury (bez zmian, ale teraz aktualizują `currentIndex`)
                     @if all_images.len() > 1 {
                         div class="flex items-center justify-center space-x-2 mb-12" {
-                            template x-for="image in allImages" {
+                            template x-for="(image, index) in allImages" {
                                 div class="w-20 h-20 rounded-md overflow-hidden cursor-pointer transition-all duration-200"
-                                    x-on:click="mainImage = image"
-                                    x-bind:class="{ 'border-2 border-brand-cyan scale-110': mainImage === image, 'opacity-60 hover:opacity-100': mainImage !== image }"
+                                    x-on:click="currentIndex = index" // Zmiana: ustawiamy indeks zamiast URL
+                                    x-bind:class="{ 'border-2 border-brand-cyan scale-110': currentIndex === index, 'opacity-60 hover:opacity-100': currentIndex !== index }"
                                 {
                                     img class="h-full w-full object-cover" x-bind:src="image" alt="Thumbnail";
                                 }
@@ -280,6 +312,7 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                         }
                     }
                 }
+                // --- KONIEC ZMODYFIKOWANEJ GALERII ---
 
                 // Opis projektu
                 div class="prose prose-invert prose-xl mx-auto" {
