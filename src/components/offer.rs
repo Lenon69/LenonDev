@@ -5,7 +5,7 @@ use maud::{Markup, html};
 pub fn offer_page_view() -> Markup {
     html! {
         // Główny kontener z odpowiednim paddingiem
-        div class="container mx-auto px-4 pb-16 lg:pb-24" {
+        div class="container mx-auto px-4 pb-16 lg:pb-24 pt-36 md:pt-24" {
 
             // --- SEKCJA NAGŁÓWKOWA ---
             div class="text-center mb-16 md:mb-20" {

@@ -133,7 +133,7 @@ pub fn base_layout(
                     }
                 }
                 // Reszta strony (bez zmian)
-                main id="content-area" class="min-h-screen pt-36 md:pt-24" { (content) }
+                main id="content-area" class="min-h-screen" { (content) }
                 footer class="relative" {
                     div class="absolute top-0 h-px w-full bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent" {}
                     div class="container mx-auto px-4 py-6 text-center text-slate-400" {

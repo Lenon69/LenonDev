@@ -95,9 +95,9 @@ pub async fn show_article(
 
             // Renderujemy główną treść artykułu
             let content_fragment = html! {
-                div class="container mx-auto px-4 pb-16 lg:pb-24" {
+                div class="container mx-auto px-4 pb-16 lg:pb-24 pt-32 md:pt-28" {
                     div class="max-w-4xl mx-auto" {
-                        div class="text-center mb-12 mt-8" {
+                        div class="text-center mb-12" {
                             @if let Some(published_at) = article.published_at {
                                 p class="text-sm text-slate-400 mb-4" { (published_at.format("%d %B %Y")) }
                             }
