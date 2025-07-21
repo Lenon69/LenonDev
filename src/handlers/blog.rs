@@ -97,11 +97,11 @@ pub async fn show_article(
             let content_fragment = html! {
                 div class="container mx-auto px-4 pb-16 lg:pb-24" {
                     div class="max-w-4xl mx-auto" {
-                        div class="text-center mb-12" {
+                        div class="text-center mb-12 mt-8" {
                             @if let Some(published_at) = article.published_at {
                                 p class="text-sm text-slate-400 mb-4" { (published_at.format("%d %B %Y")) }
                             }
-                            h1 class="text-4xl lg:text-6xl font-bold tracking-tighter bg-gradient-to-r from-brand-cyan to-brand-green text-transparent bg-clip-text" {
+                            h1 class="text-4xl lg:text-6xl font-bold tracking-tighter bg-gradient-to-r from-brand-cyan to-brand-green text-transparent bg-clip-text py-4" {
                                 (article.title)
                             }
                         }
