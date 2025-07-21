@@ -9,7 +9,7 @@ pub fn offer_page_view() -> Markup {
 
             // --- SEKCJA NAGŁÓWKOWA ---
             div class="text-center mb-16 md:mb-20" {
-                h1 class="text-4xl lg:text-6xl font-bold tracking-tighter bg-gradient-to-r from-brand-cyan to-brand-green text-transparent bg-clip-text" {
+                h1 class="text-4xl lg:text-6xl py-2 font-bold tracking-tighter bg-gradient-to-r from-brand-cyan to-brand-green text-transparent bg-clip-text" {
                     "Oferta i Usługi"
                 }
                 p class="mt-4 text-lg text-slate-400 max-w-2xl mx-auto" {

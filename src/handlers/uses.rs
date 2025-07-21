@@ -1,11 +1,33 @@
+use std::sync::OnceLock;
+
 // src/handlers/uses.rs
 use axum::{http::HeaderMap, response::Html};
 use maud::{Markup, html};
+use moka::sync::Cache;
 
 use crate::components::layout;
 
+// Globalny cache dla renderowanych stron (taki sam jak w offer.rs)
+static RENDER_CACHE: OnceLock<Cache<String, Html<Markup>>> = OnceLock::new();
+
+fn get_cache() -> &'static Cache<String, Html<Markup>> {
+    RENDER_CACHE.get_or_init(|| {
+        Cache::builder()
+            .max_capacity(100)
+            .time_to_live(std::time::Duration::from_secs(3600 * 24))
+            .build()
+    })
+}
+
 /// Kompletna, zoptymalizowana funkcja renderująca zawartość strony /uses.
 pub async fn get_uses_content(headers: HeaderMap) -> Html<Markup> {
+    let cache = get_cache();
+    let cache_key = "page:/uses".to_string();
+
+    if let Some(cached_page) = cache.get(&cache_key) {
+        return cached_page;
+    }
+
     let content_fragment = html! {
         // Główny kontener zapewniający odpowiednie marginesy i wyśrodkowanie.
         div class="container mx-auto px-4 pb-16 lg:pb-24" {
@@ -55,11 +77,12 @@ pub async fn get_uses_content(headers: HeaderMap) -> Html<Markup> {
         }
     };
 
-    // Sprawdzamy, czy to zapytanie od HTMX
-    if headers.contains_key("HX-Request") {
+    let full_page = if headers.contains_key("HX-Request") {
         Html(content_fragment)
     } else {
-        // Jeśli nie, serwujemy pełną stronę
         Html(layout::base_layout("LenonDev - Uses", content_fragment))
-    }
+    };
+
+    cache.insert(cache_key, full_page.clone());
+    full_page
 }
