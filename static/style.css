@@ -24,3 +24,29 @@ article blockquote {
 .prose strong {
   line-height: 1.75;
 }
+
+/*
+  Wymusza wyśrodkowanie dla wszystkich kluczowych elementów `.prose`,
+  gdy są one opakowane w kontener `.text-center`.
+*/
+
+/* Wyśrodkowanie dla list */
+.prose .text-center ul,
+.prose .text-center ol {
+  text-align: center;
+  list-style-position: inside; /* Sprawia, że kropki są w jednej linii z tekstem */
+  padding-left: 0; /* Usuwa domyślne wcięcie, które źle wygląda przy wyśrodkowaniu */
+}
+
+/* Wyśrodkowanie dla paragrafów */
+.prose .text-center p {
+  text-align: center;
+}
+
+/* Wyśrodkowanie dla nagłówków (na wszelki wypadek) */
+.prose .text-center h1,
+.prose .text-center h2,
+.prose .text-center h3,
+.prose .text-center h4 {
+  text-align: center;
+}

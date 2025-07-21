@@ -1,7 +1,6 @@
 // src/handlers/projects.rs
 use crate::{
     AppState,
-    appstate::CacheValue,
     components::{layout, sections},
     models::{Project, ProjectWithImages},
 };
