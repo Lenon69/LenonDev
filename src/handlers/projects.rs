@@ -83,7 +83,7 @@ pub async fn show_project(
             let page_html = if is_htmx_request {
                 content.into()
             } else {
-                layout::base_layout("404 - Nie znaleziono", content, None).into()
+                layout::base_layout("404 - Nie znaleziono", content, None, None).into()
             };
             return (HeaderMap::new(), page_html);
         }
@@ -112,7 +112,7 @@ pub async fn show_project(
     let page_html = if is_htmx_request {
         content_fragment.into()
     } else {
-        layout::base_layout(&project.title, content_fragment, None).into()
+        layout::base_layout(&project.title, content_fragment, None, None).into()
     };
 
     let response = (HeaderMap::new(), page_html);

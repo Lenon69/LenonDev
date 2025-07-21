@@ -71,6 +71,7 @@ pub async fn get_uses_content(headers: HeaderMap, State(state): State<AppState>)
             "LenonDev - Uses",
             content_fragment,
             None,
+            None,
         ))
     };
 

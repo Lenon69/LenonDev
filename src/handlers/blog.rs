@@ -3,7 +3,7 @@ use crate::{
     AppState,
     appstate::CacheValue,
     components::{blog, layout},
-    models::Article,
+    models::{Article, ArticleSchema, Author},
 };
 use axum::{
     extract::{Path, State},
@@ -36,6 +36,7 @@ pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> Ca
         Html(layout::base_layout(
             "LenonDev - Blog",
             content_fragment,
+            None,
             None,
         ))
     };
@@ -120,6 +121,17 @@ pub async fn show_article(
                 }
             };
 
+            let schema = ArticleSchema {
+                context: "https://schema.org".to_string(),
+                type_of: "BlogPosting".to_string(),
+                headline: article.title.clone(),
+                author: Author {
+                    type_of: "Person".to_string(),
+                    name: "Lenon".to_string(),
+                },
+            };
+            let schema_json = serde_json::to_string(&schema).unwrap_or_default();
+
             // Tworzymy pełną odpowiedź (z layoutem lub bez)
             let page_html = if is_htmx_request {
                 Html(content_fragment)
@@ -127,7 +139,8 @@ pub async fn show_article(
                 Html(layout::base_layout(
                     &article.title,
                     content_fragment,
-                    article.excerpt.as_deref(), // <-- Kluczowa zmiana: przekazujemy zajawkę!
+                    article.excerpt.as_deref(),
+                    Some(schema_json),
                 ))
             };
 
@@ -149,6 +162,7 @@ pub async fn show_article(
                 Html(layout::base_layout(
                     "404 - Nie znaleziono",
                     error_content,
+                    None,
                     None,
                 ))
             };

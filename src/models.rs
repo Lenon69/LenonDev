@@ -36,3 +36,61 @@ pub struct ProjectWithImages {
     pub project_url: Option<String>,
     pub images: Vec<String>, // Lista dodatkowych URL-i zdjęć
 }
+
+#[derive(serde::Serialize)]
+pub struct Author {
+    #[serde(rename = "@type")]
+    pub type_of: String,
+    pub name: String,
+}
+
+#[derive(serde::Serialize)]
+pub struct ArticleSchema {
+    #[serde(rename = "@context")]
+    pub context: String,
+    #[serde(rename = "@type")]
+    pub type_of: String,
+    pub headline: String,
+    pub author: Author,
+}
+
+#[derive(Serialize)]
+struct PriceSpecification<'a> {
+    #[serde(rename = "@type")]
+    type_of: &'a str,
+    #[serde(rename = "minPrice")]
+    min_price: &'a str,
+    #[serde(rename = "maxPrice")]
+    max_price: &'a str,
+    #[serde(rename = "priceCurrency")]
+    price_currency: &'a str,
+}
+
+#[derive(Serialize)]
+struct OfferedService<'a> {
+    #[serde(rename = "@type")]
+    type_of: &'a str,
+    name: &'a str,
+    description: &'a str,
+}
+
+#[derive(Serialize)]
+struct OfferItem<'a> {
+    #[serde(rename = "@type")]
+    type_of: &'a str,
+    #[serde(rename = "itemOffered")]
+    item_offered: OfferedService<'a>,
+    #[serde(rename = "priceSpecification")]
+    price_specification: PriceSpecification<'a>,
+}
+
+#[derive(Serialize)]
+struct OfferCatalogSchema<'a> {
+    #[serde(rename = "@context")]
+    context: &'a str,
+    #[serde(rename = "@type")]
+    type_of: &'a str,
+    name: &'a str,
+    #[serde(rename = "itemListElement")]
+    item_list_element: Vec<OfferItem<'a>>,
+}

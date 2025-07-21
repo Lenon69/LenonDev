@@ -1,14 +1,16 @@
 use std::env;
 
 // src/components/layout.rs
-use maud::{DOCTYPE, Markup, html};
+use maud::{DOCTYPE, Markup, PreEscaped, html};
 
-pub fn base_layout(title: &str, content: Markup, description: Option<&str>) -> Markup {
+pub fn base_layout(
+    title: &str,
+    content: Markup,
+    description: Option<&str>,
+    schema_json: Option<String>,
+) -> Markup {
     let meta_description = description.unwrap_or("LenonDev - Tworzenie nowoczesnych i szybkich stron internetowych w technologii Rust. Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe.");
-
-    // Odczytaj bazowy URL ze zmiennej środowiskowej
     let base_url = env::var("APP_BASE_URL").unwrap_or_else(|_| "".to_string());
-    // Zbuduj pełny, absolutny URL do obrazka
     let og_image_url = format!("{}/public/og-image.png", base_url);
 
     html! {
@@ -33,6 +35,13 @@ pub fn base_layout(title: &str, content: Markup, description: Option<&str>) -> M
                 meta property="og:image" content=(og_image_url);
                 meta property="og:url" content=(base_url);
                 meta property="og:type" content="website";
+
+                @if let Some(schema) = schema_json {
+                    script type="application/ld+json" {
+                        (PreEscaped(schema))
+                    }
+                }
+
                 // --- KONIEC SEKCJI SEO I FAVICON ---
                 script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography" {}
                 script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" {}

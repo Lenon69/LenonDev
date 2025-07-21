@@ -23,6 +23,7 @@ pub async fn get_offer_page(headers: HeaderMap, State(state): State<AppState>) -
             "LenonDev - Oferta",
             content_fragment,
             None,
+            None,
         ))
     };
 
