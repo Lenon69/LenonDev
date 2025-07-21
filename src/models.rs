@@ -51,6 +51,9 @@ pub struct ArticleSchema {
     #[serde(rename = "@type")]
     pub type_of: String,
     pub headline: String,
+    #[serde(rename = "datePublished")]
+    pub date_published: String, // Data w formacie ISO 8601
+    pub image: Vec<String>,
     pub author: Author,
 }
 
@@ -91,6 +94,14 @@ pub struct OfferCatalogSchema<'a> {
     #[serde(rename = "@type")]
     pub type_of: &'a str,
     pub name: &'a str,
+    pub provider: Provider<'a>,
     #[serde(rename = "itemListElement")]
     pub item_list_element: Vec<OfferItem<'a>>,
+}
+
+#[derive(Serialize)]
+pub struct Provider<'a> {
+    #[serde(rename = "@type")]
+    pub type_of: &'a str,
+    pub name: &'a str,
 }

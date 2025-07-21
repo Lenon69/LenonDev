@@ -78,6 +78,8 @@ pub async fn show_article(
     // Przekształcamy wynik w odpowiedź HTML
     match article_result {
         Ok(article) => {
+            let base_url = std::env::var("APP_BASE_URL").unwrap_or_default();
+            let og_image_url = format!("{}/public/og-image.png", base_url);
             // Przetwarzamy Markdown na HTML
             let sections: Vec<String> = article
                 .content
@@ -125,6 +127,11 @@ pub async fn show_article(
                 context: "https://schema.org".to_string(),
                 type_of: "BlogPosting".to_string(),
                 headline: article.title.clone(),
+                date_published: article
+                    .published_at
+                    .map(|d| d.to_rfc3339())
+                    .unwrap_or_default(),
+                image: vec![og_image_url],
                 author: Author {
                     type_of: "Person".to_string(),
                     name: "Lenon".to_string(),

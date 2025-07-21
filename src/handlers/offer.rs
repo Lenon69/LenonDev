@@ -1,4 +1,4 @@
-use crate::models::{OfferCatalogSchema, OfferItem, OfferedService, PriceSpecification};
+use crate::models::{OfferCatalogSchema, OfferItem, OfferedService, PriceSpecification, Provider};
 // src/handlers/offer.rs
 use crate::AppState;
 use crate::appstate::CacheValue;
@@ -111,6 +111,10 @@ pub async fn get_offer_page(headers: HeaderMap, State(state): State<AppState>) -
         type_of: "OfferCatalog",
         name: "Oferta Usług Web Developmentu",
         item_list_element: offers,
+        provider: Provider {
+            type_of: "Organization",
+            name: "LenonDev",
+        },
     };
 
     let schema_json = serde_json::to_string(&schema).unwrap_or_default();
