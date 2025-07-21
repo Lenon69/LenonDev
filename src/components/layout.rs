@@ -123,7 +123,7 @@ pub fn base_layout(
                         img class="h-16 w-auto transition-transform duration-300 hover:scale-110" src="/public/fixed-logo.png" alt="LenonDev Logo";
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
-                        div class="text-slate-200 flex flex-wrap justify-center items-center gap-1 mt-4 md:mt-0" {
+                        div class="text-slate-200 flex flex-wrap justify-center items-center gap-2 md:gap-4 mt-4 md:mt-0" {
                         a href="/uses"   class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
                         a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
                         a href="/blog"   class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
