@@ -11,6 +11,7 @@ use axum::middleware;
 use axum::routing::post;
 use axum::{Router, routing::get};
 use axum_server::tls_rustls::RustlsConfig;
+use handlers::error::handler_404;
 use handlers::offer::get_offer_page;
 use handlers::projects::show_project;
 use handlers::{
@@ -103,7 +104,10 @@ async fn main() {
                 // Następnie dołączamy trasy publiczne, które nie mają tej warstwy
                 .merge(public_admin_routes()),
         )
-        .fallback_service(ServeDir::new("static"))
+        // KROK 1: Serwuj pliki z folderu 'static' pod adresem '/public'
+        .nest_service("/public", ServeDir::new("static"))
+        // KROK 2: Ustaw nasz handler jako domyślną stronę dla wszystkich innych tras
+        .fallback(handler_404)
         .with_state(app_state)
         .layer(session_layer)
         .layer(CookieManagerLayer::new());

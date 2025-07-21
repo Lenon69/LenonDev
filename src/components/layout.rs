@@ -16,9 +16,9 @@ pub fn base_layout(title: &str, content: Markup, description: Option<&str>) -> M
                 meta name="keywords" content="Rust, Axum, HTMX, strony internetowe, programista, portfolio, web developer, tworzenie stron, zakup strony, strona internetowa, profesjonalne strony internetowe";
 
                 // Favicon
-                link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png";
-                link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png";
-                link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png";
+                link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png";
+                link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png";
+                link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png";
 
                 // Open Graph (dla social media)
                 meta property="og:title" content=(title);
@@ -30,6 +30,15 @@ pub fn base_layout(title: &str, content: Markup, description: Option<&str>) -> M
                 script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography" {}
                 script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" {}
 
+                script {
+                    (maud::PreEscaped(r#"
+                        document.addEventListener('htmx:afterSwap', function(event) {
+                            if (event.detail.target.id === 'content-area') {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
+                        });
+                    "#))
+                }
 
                 script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" {}
                 style type="text/tailwindcss" {
@@ -94,7 +103,7 @@ pub fn base_layout(title: &str, content: Markup, description: Option<&str>) -> M
                     nav class="container mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center" {
                         // Link z logo
                         a href="/" {
-                        img class="h-16 w-auto transition-transform duration-300 hover:scale-110" src="/fixed-logo.png" alt="LenonDev Logo";
+                        img class="h-16 w-auto transition-transform duration-300 hover:scale-110" src="/public/fixed-logo.png" alt="LenonDev Logo";
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
                         div class="text-slate-200 flex flex-wrap justify-center items-center gap-1 mt-4 md:mt-0" {

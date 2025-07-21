@@ -5,6 +5,7 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
+#[allow(dead_code)]
 pub async fn handler_404() -> impl IntoResponse {
     let content = maud::html! {
         div class="text-center py-40" {

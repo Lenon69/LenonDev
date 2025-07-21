@@ -5,7 +5,7 @@ use maud::{Markup, html};
 pub fn about_section() -> Markup {
     html! {
         section id="o-mnie" class="relative bg-cover bg-center"
-        style="background-image: url('/background.jpg');"
+        style="background-image: url('/public/background.jpg');"
          {
             div class="absolute inset-0 bg-brand-dark/75" {}
             div class="relative z-10 container mx-auto px-4 py-20 lg:py-32 text-center" {
@@ -25,37 +25,37 @@ pub fn about_section() -> Markup {
                             target="_blank"
                             class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 transition-colors" {
                                 // Dodajemy klasy h-5 (wysokość) i w-5 (szerokość)
-                                img class="h-5 w-5" src="/svg/rust.svg" alt="Rust logo";
+                                img class="h-5 w-5" src="/public/svg/rust.svg" alt="Rust logo";
                                 span { "Rust" }
                             }
 
                             // Axum
                             a href="https://github.com/tokio-rs/axum" target="_blank" class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 transition-colors" {
-                               img class="h-5 w-5" src="/svg/axum.svg" alt="Axum logo";
+                               img class="h-5 w-5" src="/public/svg/axum.svg" alt="Axum logo";
                                span { "Axum" }
                             }
 
                             // HTMX
                             a href="https://htmx.org/" target="_blank" class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 transition-colors" {
-                                img class="h-5 w-5" src="/svg/htmx.svg" alt="HTMX logo";
+                                img class="h-5 w-5" src="/public/svg/htmx.svg" alt="HTMX logo";
                                 span { "HTMX" }
                             }
 
                             // PostgreSQL
                             a href="https://www.postgresql.org/" target="_blank" class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 transition-colors" {
-                                img class="h-5 w-5" src="/svg/postgresql.svg" alt="PostgreSQL logo";
+                                img class="h-5 w-5" src="public/svg/postgresql.svg" alt="PostgreSQL logo";
                                 span { "PostgreSQL" }
                             }
 
                             // Tailwind CSS
                             a href="https://tailwindcss.com/" target="_blank" class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 transition-colors" {
-                                img class="h-5 w-5" src="/svg/tailwind.svg" alt="Tailwind CSS logo";
+                                img class="h-5 w-5" src="public/svg/tailwind.svg" alt="Tailwind CSS logo";
                                 span { "Tailwind CSS" }
                             }
 
                             // Alpine.js
                             a href="https://alpinejs.dev/" target="_blank" class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 transition-colors" {
-                                img class="h-5 w-5" src="/svg/alpinejs.svg" alt="Alpine.js logo";
+                                img class="h-5 w-5" src="public/svg/alpinejs.svg" alt="Alpine.js logo";
                                 span { "Alpine.js" }
                             }
                         }
