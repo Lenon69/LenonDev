@@ -1,8 +1,15 @@
+use std::env;
+
 // src/components/layout.rs
 use maud::{DOCTYPE, Markup, html};
 
 pub fn base_layout(title: &str, content: Markup, description: Option<&str>) -> Markup {
     let meta_description = description.unwrap_or("LenonDev - Tworzenie nowoczesnych i szybkich stron internetowych w technologii Rust. Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe.");
+
+    // Odczytaj bazowy URL ze zmiennej środowiskowej
+    let base_url = env::var("APP_BASE_URL").unwrap_or_else(|_| "".to_string());
+    // Zbuduj pełny, absolutny URL do obrazka
+    let og_image_url = format!("{}/public/og-image.png", base_url);
 
     html! {
         (DOCTYPE)
@@ -13,7 +20,7 @@ pub fn base_layout(title: &str, content: Markup, description: Option<&str>) -> M
                 meta name="viewport" content="width=device-width, initial-scale=1.0";
                 title { (title) }
                 meta name="description" content=(meta_description);
-                meta name="keywords" content="Rust, Axum, HTMX, strony internetowe, programista, portfolio, web developer, tworzenie stron, zakup strony, strona internetowa, profesjonalne strony internetowe";
+                meta name="keywords" content="tworzenie stron internetowych, strony internetowe na zamówienie, Rust web developer, Axum backend, HTMX frontend, szybkie strony, nowoczesne strony, programista Rust, portfolio programisty, responsywne strony, SEO strony, tani web developer, strony z HTMX, web design, strony dla firm, landing page, strona wizytówka, programowanie stron, zakup strony internetowej, strony pod SEO, profesjonalne strony internetowe, web development Rust, szybkie ładowanie stron, nowoczesne technologie webowe";
 
                 // Favicon
                 link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png";
@@ -21,10 +28,10 @@ pub fn base_layout(title: &str, content: Markup, description: Option<&str>) -> M
                 link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png";
 
                 // Open Graph (dla social media)
-                meta property="og:title" content=(title);
-                meta property="og:description" content="Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe.";
-                meta property="og:image" content="https://lenondev.com/og-image.jpg"; // Stwórz i umieść obrazek 1200x630px
-                meta property="og:url" content="https://lenondev.com";
+                meta property="og:title" content="Nowoczesne i szybkie strony internetowe – LenonDev";
+                meta property="og:description" content="Tworzę wydajne, bezpieczne i nowoczesne strony internetowe w technologii Rust + HTMX. Postaw na prędkość, SEO i elegancki wygląd.";
+                meta property="og:image" content=(og_image_url);
+                meta property="og:url" content=(base_url);
                 meta property="og:type" content="website";
                 // --- KONIEC SEKCJI SEO I FAVICON ---
                 script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography" {}
