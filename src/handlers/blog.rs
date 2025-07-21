@@ -8,7 +8,7 @@ use crate::{
 use axum::{
     extract::{Path, State},
     http::HeaderMap,
-    response::Html,
+    response::{Html, IntoResponse},
 };
 use maud::{PreEscaped, html};
 
@@ -53,21 +53,18 @@ pub async fn show_article(
     headers: HeaderMap,
     State(state): State<AppState>,
     Path(slug): Path<String>,
-) -> CacheValue {
-    // Tworzymy dynamiczny klucz dla cache'a
-    let cache_key = format!("page:/blog/{}", slug);
+) -> impl IntoResponse {
     let is_htmx_request = headers.contains_key("HX-Request");
 
-    // Sprawdzamy cache
-    if let Some(cached_page) = state.cache.get(&cache_key) {
-        // Jeśli to zapytanie HTMX, zwróć tylko drugi element krotki (sam HTML)
-        if is_htmx_request {
-            return (HeaderMap::new(), cached_page.1);
+    // Jeśli to NIE JEST zapytanie HTMX, sprawdzamy cache dla PEŁNEJ STRONY
+    if !is_htmx_request {
+        let cache_key = format!("page:/blog/{}", slug);
+        if let Some(cached_page) = state.cache.get(&cache_key) {
+            return cached_page.into_response();
         }
-        return cached_page;
     }
 
-    // Jeśli nie ma w cache'u, pobierz artykuł z bazy
+    // Jeśli to zapytanie HTMX lub w cache'u nie ma strony, generujemy treść
     let article_result = sqlx::query_as::<_, Article>(
         "SELECT * FROM articles WHERE slug = $1 AND published_at IS NOT NULL",
     )
@@ -75,12 +72,9 @@ pub async fn show_article(
     .fetch_one(&state.db_pool)
     .await;
 
-    // Przekształcamy wynik w odpowiedź HTML
     match article_result {
         Ok(article) => {
-            let base_url = std::env::var("APP_BASE_URL").unwrap_or_default();
-            let og_image_url = format!("{}/public/og-image.png", base_url);
-            // Przetwarzamy Markdown na HTML
+            // Generowanie fragmentu HTML
             let sections: Vec<String> = article
                 .content
                 .split("---")
@@ -93,7 +87,6 @@ pub async fn show_article(
                 })
                 .collect();
 
-            // Renderujemy główną treść artykułu
             let content_fragment = html! {
                 div class="container mx-auto px-4 pb-16 lg:pb-24 pt-36 md:pt-28" {
                     div class="max-w-4xl mx-auto" {
@@ -105,24 +98,26 @@ pub async fn show_article(
                                 (article.title)
                             }
                         }
-
                         @for rendered_html in &sections {
                             section class="py-10" {
-                                div class="prose prose-invert prose-xl" {
-                                    (PreEscaped(rendered_html))
-                                }
+                                div class="prose prose-invert prose-xl" { (PreEscaped(rendered_html)) }
                             }
                         }
-
                         div class="text-center mt-16" {
-                            a hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
-                                "← Wróć na bloga"
-                            }
+                            a hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" { "← Wróć na bloga" }
                         }
                     }
                 }
             };
 
+            // Jeśli to zapytanie HTMX, zwróć tylko fragment
+            if is_htmx_request {
+                return Html(content_fragment).into_response();
+            }
+
+            // W przeciwnym razie, zbuduj całą stronę i zapisz ją w cache'u
+            let base_url = std::env::var("APP_BASE_URL").unwrap_or_default();
+            let og_image_url = format!("{}/public/og-image.png", base_url);
             let schema = ArticleSchema {
                 context: "https://schema.org".to_string(),
                 type_of: "BlogPosting".to_string(),
@@ -137,43 +132,49 @@ pub async fn show_article(
                     name: "Lenon".to_string(),
                 },
             };
-            let schema_json = serde_json::to_string(&schema).unwrap_or_default();
+            let schema_json = serde_json::to_string(&schema).ok();
 
-            // Tworzymy pełną odpowiedź (z layoutem lub bez)
-            let page_html = if is_htmx_request {
-                Html(content_fragment)
-            } else {
-                Html(layout::base_layout(
-                    &article.title,
-                    content_fragment,
-                    article.excerpt.as_deref(),
-                    Some(schema_json),
-                ))
-            };
+            let full_page_html = Html(layout::base_layout(
+                &article.title,
+                content_fragment,
+                article.excerpt.as_deref(),
+                schema_json,
+            ));
 
-            // Zapisujemy pełną stronę do cache'a i ją zwracamy
-            let response = (HeaderMap::new(), page_html);
-            state.cache.insert(cache_key, response.clone());
-            response
+            // Zapisz PEŁNĄ stronę w cache'u
+            let cache_key = format!("page:/blog/{}", slug);
+            state
+                .cache
+                .insert(cache_key, (HeaderMap::new(), full_page_html.clone()));
+
+            full_page_html.into_response()
         }
         Err(_) => {
-            // Artykułu nie znaleziono - zwracamy stronę błędu 404
+            // Tworzymy fragment HTML z informacją o błędzie 404
             let error_content = html! {
-                div class="text-center py-40" {
-                    h1 class="text-2xl text-red-500" { "404 - Nie znaleziono artykułu" }
+                div class="container mx-auto px-4 pb-16 lg:pb-24 pt-36 md:pt-28" {
+                    div class="text-center py-40" {
+                        h1 class="text-2xl text-red-500" { "404 - Nie znaleziono artykułu" }
+                        a hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="mt-8 cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
+                            "← Wróć na bloga"
+                        }
+                    }
                 }
             };
-            let page_html = if is_htmx_request {
-                Html(error_content)
-            } else {
-                Html(layout::base_layout(
-                    "404 - Nie znaleziono",
-                    error_content,
-                    None,
-                    None,
-                ))
-            };
-            (HeaderMap::new(), page_html)
+
+            // Jeśli to zapytanie HTMX, zwróć tylko sam fragment błędu
+            if is_htmx_request {
+                return Html(error_content).into_response();
+            }
+
+            // W przeciwnym razie, zwróć pełną stronę błędu 404 z całym layoutem
+            Html(layout::base_layout(
+                "404 - Nie znaleziono",
+                error_content,
+                Some("Strona, której szukasz, nie została znaleziona."),
+                None,
+            ))
+            .into_response()
         }
     }
 }

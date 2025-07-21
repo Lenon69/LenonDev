@@ -86,35 +86,42 @@ async fn main() {
     warm_up_cache(app_state.clone()).await;
     // --------------------------
 
-    let app = Router::new()
-        .route_service("/", ServeFile::new("static/index.html"))
-        .route_service("/robots.txt", ServeFile::new("static/robots.txt"))
-        .nest_service("/public", ServeDir::new("static"))
+    // --- NOWA, ODPORNA NA BŁĘDY STRUKTURA ROUTERA ---
+
+    // 1. Definiujemy router tylko dla logiki aplikacji
+    let app_router = Router::new()
         .route("/content", get(get_main_content))
         .route("/oferta", get(get_offer_page))
-        .route("/projekty/{slug}", get(show_project))
         .route("/blog", get(blog_index))
         .route("/uses", get(get_uses_content))
         .route("/blog/{slug}", get(show_article))
-        .route("/sitemap.xml", get(get_sitemap))
+        .route("/projekty/{slug}", get(show_project))
         .route("/contact", post(handle_contact_form))
+        .route("/sitemap.xml", get(get_sitemap))
         .nest(
             "/admin",
-            // Najpierw łączymy trasy chronione z ich warstwą middleware
             protected_admin_routes()
                 .route_layer(middleware::from_fn_with_state(
                     app_state.clone(),
                     auth_middleware,
                 ))
-                // Następnie dołączamy trasy publiczne, które nie mają tej warstwy
                 .merge(public_admin_routes()),
         )
-        // KROK 1: Serwuj pliki z folderu 'static' pod adresem '/public'
-        // KROK 2: Ustaw nasz handler jako domyślną stronę dla wszystkich innych tras
-        .fallback(handler_404)
+        .fallback(handler_404); // Fallback dla tras aplikacji
+
+    // 2. Tworzymy główną aplikację, łącząc serwowanie plików z logiką aplikacji
+    let app = Router::new()
+        // Najpierw obsługujemy pliki statyczne. To ma teraz najwyższy priorytet.
+        .nest_service("/public", ServeDir::new("static"))
+        .route_service("/", ServeFile::new("static/index.html"))
+        .route_service("/robots.txt", ServeFile::new("static/robots.txt"))
+        // Następnie łączymy (merge) wszystkie trasy naszej aplikacji
+        .merge(app_router)
         .with_state(app_state)
         .layer(session_layer)
         .layer(CookieManagerLayer::new());
+
+    // --- KONIEC NOWEJ STRUKTURY ROUTERA ---
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     println!("🚀 Serwer nasłuchuje na https://{}", addr);

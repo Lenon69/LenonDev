@@ -8,7 +8,7 @@ use crate::{
 use axum::{
     extract::{Path, State},
     http::HeaderMap,
-    response::Html,
+    response::{Html, IntoResponse},
 };
 use maud::Markup;
 
@@ -59,63 +59,82 @@ pub async fn show_project(
     headers: HeaderMap,
     State(state): State<AppState>,
     Path(slug): Path<String>,
-) -> CacheValue {
-    let cache_key = format!("page:/projekty/{}", slug);
+) -> impl IntoResponse {
+    let cache_key = format!("fragment:/projekty/{}", slug);
     let is_htmx_request = headers.contains_key("HX-Request");
 
-    if let Some(cached_page) = state.cache.get(&cache_key) {
-        if is_htmx_request {
-            return (HeaderMap::new(), cached_page.1);
-        }
-        return cached_page;
-    }
-
-    let project_result = sqlx::query_as::<_, Project>("SELECT * FROM projects WHERE slug = $1")
+    // Krok 1: Sprawdź, czy w cache'u istnieje już gotowy FRAGMENT HTML.
+    // Zmieniamy typ `CacheValue` na `Html<Markup>`, bo przechowujemy tylko fragmenty.
+    let content_fragment: Markup = if let Some(cached_data) = state.cache.get(&cache_key) {
+        // Jeśli tak, użyj go.
+        cached_data.1.0 // .1 to Html<Markup>, .0 to jego wewnętrzna zawartość
+    } else {
+        // Jeśli nie, wygeneruj fragment, zapisz go i użyj.
+        let project_result = sqlx::query_as::<_, Project>(
+            "SELECT id, title, slug, description, technologies, image_url, project_url FROM projects WHERE slug = $1",
+        )
         .bind(&slug)
         .fetch_one(&state.db_pool)
         .await;
 
-    let project = match project_result {
-        Ok(p) => p,
-        Err(_) => {
-            // Prosta obsługa błędu 404
-            let content = maud::html! { h1 { "404 - Nie znaleziono projektu" }};
-            let page_html = if is_htmx_request {
-                content.into()
-            } else {
-                layout::base_layout("404 - Nie znaleziono", content, None, None).into()
-            };
-            return (HeaderMap::new(), page_html);
+        match project_result {
+            Ok(project) => {
+                let additional_images = sqlx::query_scalar::<_, String>(
+                    "SELECT image_url FROM project_images WHERE project_id = $1 ORDER BY id",
+                )
+                .bind(project.id)
+                .fetch_all(&state.db_pool)
+                .await
+                .unwrap_or_else(|_| vec![]);
+
+                let project_with_images = ProjectWithImages {
+                    id: project.id,
+                    title: project.title.clone(),
+                    slug: project.slug.clone(),
+                    description: project.description.clone(),
+                    technologies: project.technologies.clone(),
+                    image_url: project.image_url.clone(),
+                    project_url: project.project_url.clone(),
+                    images: additional_images,
+                };
+
+                let fragment = sections::project_detail_page(project_with_images);
+
+                // Zapisz nowo wygenerowany fragment do cache'a
+                state
+                    .cache
+                    .insert(cache_key, (HeaderMap::new(), Html(fragment.clone())));
+                fragment
+            }
+            Err(_) => {
+                // Jeśli projekt nie istnieje, zwróć fragment błędu 404
+                maud::html! {
+                    div class="text-center py-40" {
+                        h1 class="text-2xl text-red-500" { "404 - Nie znaleziono projektu" }
+                    }
+                }
+            }
         }
     };
 
-    let additional_images = sqlx::query_scalar::<_, String>(
-        "SELECT image_url FROM project_images WHERE project_id = $1 ORDER BY id",
-    )
-    .bind(project.id)
-    .fetch_all(&state.db_pool)
-    .await
-    .unwrap_or_else(|_| vec![]);
-
-    let project_with_images = ProjectWithImages {
-        id: project.id,
-        title: project.title.clone(),
-        slug: project.slug,
-        description: project.description,
-        technologies: project.technologies,
-        image_url: project.image_url,
-        project_url: project.project_url,
-        images: additional_images,
-    };
-
-    let content_fragment = sections::project_detail_page(project_with_images);
-    let page_html = if is_htmx_request {
-        content_fragment.into()
+    // Krok 2: Na samym końcu, na podstawie gotowego fragmentu, zdecyduj, co zwrócić.
+    if is_htmx_request {
+        // Dla HTMX: zwróć sam fragment.
+        Html(content_fragment).into_response()
     } else {
-        layout::base_layout(&project.title, content_fragment, None, None).into()
-    };
+        // Dla pełnego przeładowania: opakuj fragment w pełny layout.
+        // Aby uzyskać tytuł, musielibyśmy ponownie odpytać bazę, co jest nieefektywne.
+        // Lepszym rozwiązaniem jest ustawienie ogólnego tytułu lub przekazanie go w inny sposób.
+        // Na razie ustawmy go na "Projekt".
+        let page_title = "Projekt";
+        let description = "Szczegóły projektu z portfolio LenonDev."; // Możesz to rozbudować
 
-    let response = (HeaderMap::new(), page_html);
-    state.cache.insert(cache_key, response.clone());
-    response
+        Html(layout::base_layout(
+            page_title,
+            content_fragment,
+            Some(description),
+            None,
+        ))
+        .into_response()
+    }
 }
