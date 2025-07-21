@@ -36,7 +36,9 @@ pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> Ca
         Html(layout::base_layout(
             "LenonDev - Blog",
             content_fragment,
-            None,
+            Some(
+                "Blog o nowoczesnym web developmencie, technologii Rust, Axum, HTMX i tworzeniu wydajnych aplikacji internetowych. Dzielę się tutaj swoją wiedzą i przemyśleniami.",
+            ),
             None,
         ))
     };

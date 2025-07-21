@@ -70,7 +70,9 @@ pub async fn get_uses_content(headers: HeaderMap, State(state): State<AppState>)
         Html(layout::base_layout(
             "LenonDev - Uses",
             content_fragment,
-            None,
+            Some(
+                "Sprawdź mój setup i narzędzia, z których korzystam na co dzień. Dowiedz się, jaki sprzęt, oprogramowanie i usługi napędzają moją pracę jako web developera.",
+            ),
             None,
         ))
     };
