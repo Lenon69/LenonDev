@@ -55,42 +55,42 @@ pub struct ArticleSchema {
 }
 
 #[derive(Serialize)]
-struct PriceSpecification<'a> {
+pub struct PriceSpecification<'a> {
     #[serde(rename = "@type")]
-    type_of: &'a str,
+    pub type_of: &'a str,
     #[serde(rename = "minPrice")]
-    min_price: &'a str,
+    pub min_price: &'a str,
     #[serde(rename = "maxPrice")]
-    max_price: &'a str,
+    pub max_price: &'a str,
     #[serde(rename = "priceCurrency")]
-    price_currency: &'a str,
+    pub price_currency: &'a str,
 }
 
 #[derive(Serialize)]
-struct OfferedService<'a> {
+pub struct OfferedService<'a> {
     #[serde(rename = "@type")]
-    type_of: &'a str,
-    name: &'a str,
-    description: &'a str,
+    pub type_of: &'a str,
+    pub name: &'a str,
+    pub description: &'a str,
 }
 
 #[derive(Serialize)]
-struct OfferItem<'a> {
+pub struct OfferItem<'a> {
     #[serde(rename = "@type")]
-    type_of: &'a str,
+    pub type_of: &'a str,
     #[serde(rename = "itemOffered")]
-    item_offered: OfferedService<'a>,
+    pub item_offered: OfferedService<'a>,
     #[serde(rename = "priceSpecification")]
-    price_specification: PriceSpecification<'a>,
+    pub price_specification: PriceSpecification<'a>,
 }
 
 #[derive(Serialize)]
-struct OfferCatalogSchema<'a> {
+pub struct OfferCatalogSchema<'a> {
     #[serde(rename = "@context")]
-    context: &'a str,
+    pub context: &'a str,
     #[serde(rename = "@type")]
-    type_of: &'a str,
-    name: &'a str,
+    pub type_of: &'a str,
+    pub name: &'a str,
     #[serde(rename = "itemListElement")]
-    item_list_element: Vec<OfferItem<'a>>,
+    pub item_list_element: Vec<OfferItem<'a>>,
 }
