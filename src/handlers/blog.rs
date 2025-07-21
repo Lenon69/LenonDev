@@ -15,12 +15,16 @@ use maud::{PreEscaped, html};
 // Handler dla /blog
 pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> CacheValue {
     let cache_key = "page:/blog".to_string();
+    let is_htmx_request = headers.contains_key("HX-Request");
 
-    // Sprawdzamy cache
-    if let Some(cached_page) = state.cache.get(&cache_key) {
-        return cached_page;
+    // Jeśli to NIE jest zapytanie HTMX, sprawdzamy cache
+    if !is_htmx_request {
+        if let Some(cached_page) = state.cache.get(&cache_key) {
+            return cached_page;
+        }
     }
 
+    // Generujemy treść (zawsze, bo HTMX omija cache, a pełne przeładowanie nie znalazło nic w cache'u)
     let articles = sqlx::query_as::<_, Article>(
         "SELECT * FROM articles WHERE published_at IS NOT NULL ORDER BY published_at DESC",
     )
@@ -30,21 +34,23 @@ pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> Ca
 
     let content_fragment = blog::blog_index_view(articles);
 
-    let page_html = if headers.contains_key("HX-Request") {
-        Html(content_fragment)
-    } else {
-        Html(layout::base_layout(
-            "LenonDev - Blog",
-            content_fragment,
-            Some(
-                "Blog o nowoczesnym web developmencie, technologii Rust, Axum, HTMX i tworzeniu wydajnych aplikacji internetowych. Dzielę się tutaj swoją wiedzą i przemyśleniami.",
-            ),
-            None,
-        ))
-    };
+    // Jeśli to zapytanie HTMX, zwróć tylko fragment opakowany w CacheValue
+    if is_htmx_request {
+        return (HeaderMap::new(), Html(content_fragment));
+    }
 
-    // Zapisujemy stronę w cache'u i ją zwracamy
-    let response = (HeaderMap::new(), page_html);
+    // W przeciwnym razie, zbuduj całą stronę
+    let full_page_html = Html(layout::base_layout(
+        "LenonDev - Blog",
+        content_fragment,
+        Some(
+            "Blog o nowoczesnym web developmencie, technologii Rust, Axum, HTMX i tworzeniu wydajnych aplikacji internetowych.",
+        ),
+        None,
+    ));
+
+    // Stwórz odpowiedź, zapisz ją w cache'u i zwróć
+    let response = (HeaderMap::new(), full_page_html);
     state.cache.insert(cache_key, response.clone());
 
     response
