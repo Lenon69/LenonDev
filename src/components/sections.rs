@@ -68,15 +68,15 @@ pub fn about_section() -> Markup {
 
 pub fn projects_section(projects: Vec<Project>) -> Markup {
     html! {
+        // Krok 1: Zewnętrzny `section` ma teraz tylko tło i pionowy padding.
         section id="projekty" class="bg-[#1A1A1E]/50 py-20 lg:py-32" {
+            // Krok 2: Dodajemy `div.container`, który centruje całą zawartość.
             div class="container mx-auto px-4 text-center" {
                 h2 class="text-3xl lg:text-4xl font-bold tracking-tight mb-12 text-brand-cyan" { "Aktualne Projekty" }
                 div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left" {
                     @for project in projects {
-                        // ZMIANA: Zamiast div z hx-get, używamy teraz linku <a>
                         a href=(format!("/projekty/{}", project.slug))
                           class="group block bg-slate-800/50 hover:bg-slate-700/50 p-6 rounded-lg border border-slate-700/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-glow"
-                          // Opcjonalnie: jeśli chcesz zachować dynamiczne ładowanie przez HTMX
                           hx-get=(format!("/projekty/{}", project.slug))
                           hx-target="#content-area"
                           hx-push-url="true"
