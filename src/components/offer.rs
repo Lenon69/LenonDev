@@ -38,13 +38,13 @@ pub fn offer_page_view() -> Markup {
                     (offer_card(
                         "Strona z Blogiem / CMS",
                         "Dziel się wiedzą i buduj pozycję eksperta. Prosty w obsłudze system do zarządzania treścią.",
-                        "5000 - 9 000 zł"
+                        "4500 - 9 000 zł"
                     ))
                     // Karta: Sklep Internetowy
                     (offer_card(
                         "Sklep Internetowy",
                         "Sprzedawaj swoje produkty online. Kompletne rozwiązanie e-commerce z płatnościami i zarządzaniem.",
-                        "10 000 - 22 000 zł"
+                        "15 000 - 22 000 zł"
                     ))
                     // Karta: Projekt Indywidualny
                     (offer_card(

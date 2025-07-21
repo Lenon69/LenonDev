@@ -4,6 +4,9 @@ mod components;
 mod handlers;
 mod models;
 
+use appstate::CacheValue;
+use axum::extract::Query;
+use axum::http::HeaderMap;
 use axum::middleware;
 use axum::routing::post;
 use axum::{Router, routing::get};
@@ -14,6 +17,7 @@ use handlers::{
     contact::handle_contact_form,
     projects::get_project_detail,
 };
+use moka::sync::Cache;
 use resend_rs::Resend;
 use sqlx::PgPool;
 use std::net::SocketAddr;
@@ -62,11 +66,23 @@ async fn main() {
     let session_layer = SessionManagerLayer::new(session_store).with_secure(false);
     // ---------------------------------
 
+    // --- Inicjalizacja Cache ---
+    let app_cache: Cache<String, CacheValue> = Cache::builder()
+        .max_capacity(100)
+        .time_to_live(std::time::Duration::from_secs(3600 * 24))
+        .build();
+    // -------------------------
+
     // Tworzenie stanu aplikacji
     let app_state = AppState {
         db_pool,
         resend_client,
+        cache: app_cache,
     };
+
+    // --- ROZGRZEWANIE CACHE ---
+    warm_up_cache(app_state.clone()).await;
+    // --------------------------
 
     let app = Router::new()
         .route("/content", get(get_main_content))
@@ -105,4 +121,30 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
+}
+
+// Funkcja rozgrzewająca cache
+async fn warm_up_cache(state: AppState) {
+    println!("🔥 Rozgrzewanie cache'a...");
+
+    // 1. Strona główna
+    let main_page_params = Query(handlers::htmx::ScrollParams { scroll_to: None });
+    let main_page = get_main_content(axum::extract::State(state.clone()), main_page_params).await;
+    state
+        .cache
+        .insert("page:/:scroll_to=".to_string(), main_page);
+
+    // 2. Strona /oferta
+    let offer_page = get_offer_page(HeaderMap::new(), axum::extract::State(state.clone())).await;
+    state.cache.insert("page:/oferta".to_string(), offer_page);
+
+    // 3. Strona /uses
+    let uses_page = get_uses_content(HeaderMap::new(), axum::extract::State(state.clone())).await;
+    state.cache.insert("page:/uses".to_string(), uses_page);
+
+    // 4. Strona /blog
+    let blog_page = blog_index(HeaderMap::new(), axum::extract::State(state.clone())).await;
+    state.cache.insert("page:/blog".to_string(), blog_page);
+
+    println!("✅ Cache rozgrzany!");
 }

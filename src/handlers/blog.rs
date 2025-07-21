@@ -1,8 +1,7 @@
-use std::sync::OnceLock;
-
 // src/handlers/blog.rs
 use crate::{
     AppState,
+    appstate::CacheValue,
     components::{blog, layout},
     models::Article,
 };
@@ -12,27 +11,13 @@ use axum::{
     response::Html,
 };
 use maud::{Markup, PreEscaped, html};
-use moka::sync::Cache;
-
-// Globalny cache dla renderowanych stron
-static RENDER_CACHE: OnceLock<Cache<String, Html<Markup>>> = OnceLock::new();
-
-fn get_cache() -> &'static Cache<String, Html<Markup>> {
-    RENDER_CACHE.get_or_init(|| {
-        Cache::builder()
-            .max_capacity(100)
-            .time_to_live(std::time::Duration::from_secs(3600 * 24))
-            .build()
-    })
-}
 
 // Handler dla /blog
-pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> Html<Markup> {
-    let cache = get_cache();
+pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> CacheValue {
     let cache_key = "page:/blog".to_string();
 
     // Sprawdzamy cache
-    if let Some(cached_page) = cache.get(&cache_key) {
+    if let Some(cached_page) = state.cache.get(&cache_key) {
         return cached_page;
     }
 
@@ -45,15 +30,17 @@ pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> Ht
 
     let content_fragment = blog::blog_index_view(articles);
 
-    let full_page = if headers.contains_key("HX-Request") {
+    let page_html = if headers.contains_key("HX-Request") {
         Html(content_fragment)
     } else {
         Html(layout::base_layout("LenonDev - Blog", content_fragment))
     };
 
     // Zapisujemy stronę w cache'u i ją zwracamy
-    cache.insert(cache_key, full_page.clone());
-    full_page
+    let response = (HeaderMap::new(), page_html);
+    state.cache.insert(cache_key, response.clone());
+
+    response
 }
 
 // Handler dla /blog/{slug}

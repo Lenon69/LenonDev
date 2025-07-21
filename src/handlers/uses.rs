@@ -1,30 +1,17 @@
-use std::sync::OnceLock;
-
 // src/handlers/uses.rs
-use axum::{http::HeaderMap, response::Html};
-use maud::{Markup, html};
-use moka::sync::Cache;
+use axum::{extract::State, http::HeaderMap, response::Html};
+use maud::html;
 
-use crate::components::layout;
-
-// Globalny cache dla renderowanych stron (taki sam jak w offer.rs)
-static RENDER_CACHE: OnceLock<Cache<String, Html<Markup>>> = OnceLock::new();
-
-fn get_cache() -> &'static Cache<String, Html<Markup>> {
-    RENDER_CACHE.get_or_init(|| {
-        Cache::builder()
-            .max_capacity(100)
-            .time_to_live(std::time::Duration::from_secs(3600 * 24))
-            .build()
-    })
-}
+use crate::{
+    appstate::{AppState, CacheValue},
+    components::layout,
+};
 
 /// Kompletna, zoptymalizowana funkcja renderująca zawartość strony /uses.
-pub async fn get_uses_content(headers: HeaderMap) -> Html<Markup> {
-    let cache = get_cache();
+pub async fn get_uses_content(headers: HeaderMap, State(state): State<AppState>) -> CacheValue {
     let cache_key = "page:/uses".to_string();
 
-    if let Some(cached_page) = cache.get(&cache_key) {
+    if let Some(cached_page) = state.cache.get(&cache_key) {
         return cached_page;
     }
 
@@ -77,12 +64,13 @@ pub async fn get_uses_content(headers: HeaderMap) -> Html<Markup> {
         }
     };
 
-    let full_page = if headers.contains_key("HX-Request") {
+    let page_html = if headers.contains_key("HX-Request") {
         Html(content_fragment)
     } else {
         Html(layout::base_layout("LenonDev - Uses", content_fragment))
     };
 
-    cache.insert(cache_key, full_page.clone());
-    full_page
+    let response = (HeaderMap::new(), page_html);
+    state.cache.insert(cache_key, response.clone());
+    response
 }
