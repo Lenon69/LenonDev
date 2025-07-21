@@ -6,6 +6,7 @@ use serde::Serialize;
 pub struct Project {
     pub id: i32,
     pub title: String,
+    pub slug: String,
     pub description: String,
     pub technologies: String,
     pub image_url: Option<String>,
@@ -28,6 +29,7 @@ pub struct Article {
 pub struct ProjectWithImages {
     pub id: i32,
     pub title: String,
+    pub slug: String,
     pub description: String,
     pub technologies: String,
     pub image_url: Option<String>,

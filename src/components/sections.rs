@@ -73,12 +73,14 @@ pub fn projects_section(projects: Vec<Project>) -> Markup {
                 h2 class="text-3xl lg:text-4xl font-bold tracking-tight mb-12 text-brand-cyan" { "Aktualne Projekty" }
                 div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left" {
                     @for project in projects {
-                        // Zmieniamy <a> na <div> i dodajemy atrybuty HTMX
-                        div
-                            class="cursor-pointer group bg-slate-800/50 hover:bg-slate-700/50 p-6 rounded-lg border border-slate-700/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-glow"
-                            hx-get=(format!("/project/{}", project.id))
-                            hx-target="#modal-container"
-                            hx-swap="innerHTML"                        {
+                        // ZMIANA: Zamiast div z hx-get, używamy teraz linku <a>
+                        a href=(format!("/projekty/{}", project.slug))
+                          class="group block bg-slate-800/50 hover:bg-slate-700/50 p-6 rounded-lg border border-slate-700/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-glow"
+                          // Opcjonalnie: jeśli chcesz zachować dynamiczne ładowanie przez HTMX
+                          hx-get=(format!("/projekty/{}", project.slug))
+                          hx-target="#content-area"
+                          hx-push-url="true"
+                        {
                             @if let Some(image_url) = &project.image_url {
                                 img class="w-full h-48 object-cover rounded-md mb-4 group-hover:opacity-80 transition-opacity" src=(image_url) alt=(project.title);
                             }
@@ -161,6 +163,7 @@ pub fn contact_section() -> Markup {
     }
 }
 
+#[allow(dead_code)]
 pub fn project_detail_modal(project: ProjectWithImages) -> Markup {
     // Tworzymy jedną, kompletną listę wszystkich zdjęć
     let mut all_images = vec![];
@@ -228,6 +231,69 @@ pub fn project_detail_modal(project: ProjectWithImages) -> Markup {
                         }
                         button "@click"="open = false" class="flex-1 text-center bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-4 rounded-lg" { "Zamknij" }
                     }
+                }
+            }
+        }
+    }
+}
+
+pub fn project_detail_page(project: ProjectWithImages) -> Markup {
+    // Logika galerii - taka sama jak w starym modalu
+    let mut all_images = vec![];
+    if let Some(main_image) = &project.image_url {
+        all_images.push(main_image.clone());
+    }
+    all_images.extend(project.images.clone());
+    let all_images_json = serde_json::to_string(&all_images).unwrap_or_else(|_| "[]".to_string());
+
+    html! {
+        div class="container mx-auto px-4 pb-16 lg:pb-24" {
+            // Nagłówek strony projektu
+            div class="text-center mb-12" {
+                h1 class="text-4xl lg:text-6xl font-bold tracking-tighter bg-gradient-to-r from-brand-cyan to-brand-green text-transparent bg-clip-text py-4" {
+                    (project.title)
+                }
+                p class="mt-4 text-lg text-slate-400" { (project.technologies) }
+            }
+
+            // Galeria i opis (możemy użyć układu dwukolumnowego)
+            div class="max-w-5xl mx-auto" {
+                div x-data=(&format!(
+                    "{{ mainImage: '{}', allImages: {} }}",
+                    all_images.get(0).cloned().unwrap_or_default(),
+                    all_images_json
+                )) {
+                    // Główny obraz
+                    img class="w-full h-auto object-cover rounded-xl shadow-lg mb-4" x-bind:src="mainImage" alt=(project.title);
+
+                    // Miniatury
+                    @if all_images.len() > 1 {
+                        div class="flex items-center justify-center space-x-2 mb-12" {
+                            template x-for="image in allImages" {
+                                div class="w-20 h-20 rounded-md overflow-hidden cursor-pointer transition-all duration-200"
+                                    x-on:click="mainImage = image"
+                                    x-bind:class="{ 'border-2 border-brand-cyan scale-110': mainImage === image, 'opacity-60 hover:opacity-100': mainImage !== image }"
+                                {
+                                    img class="h-full w-full object-cover" x-bind:src="image" alt="Thumbnail";
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Opis projektu
+                div class="prose prose-invert prose-xl mx-auto" {
+                    (maud::PreEscaped(project.description))
+                }
+
+                // Przyciski
+                div class="mt-12 flex justify-center gap-4" {
+                    @if let Some(project_url) = &project.project_url {
+                        @if project_url != "#" {
+                            a href=(project_url) target="_blank" class="inline-block text-center bg-brand-purple hover:opacity-80 transition-opacity text-white font-bold py-3 px-8 rounded-lg" { "Odwiedź stronę" }
+                        }
+                    }
+                    a href="/#projekty" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="inline-block text-center bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-3 px-8 rounded-lg" { "Wróć do projektów" }
                 }
             }
         }

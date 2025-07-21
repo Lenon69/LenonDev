@@ -28,7 +28,7 @@ pub async fn get_main_content(
     }
 
     // Pobieramy projekty, tak jak wcześniej
-    let projects = sqlx::query_as::<_, Project>("SELECT * FROM projects")
+    let projects = sqlx::query_as::<_, Project>("SELECT id, title, slug, description, technologies, image_url, project_url FROM projects ORDER BY id ASC")
         .fetch_all(&state.db_pool)
         .await
         .unwrap_or_else(|e| {

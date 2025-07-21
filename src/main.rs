@@ -12,10 +12,10 @@ use axum::routing::post;
 use axum::{Router, routing::get};
 use axum_server::tls_rustls::RustlsConfig;
 use handlers::offer::get_offer_page;
+use handlers::projects::show_project;
 use handlers::{
     blog::{blog_index, show_article},
     contact::handle_contact_form,
-    projects::get_project_detail,
 };
 use moka::sync::Cache;
 use resend_rs::Resend;
@@ -88,7 +88,7 @@ async fn main() {
         .route("/content", get(get_main_content))
         .route("/contact", post(handle_contact_form))
         .route("/oferta", get(get_offer_page))
-        .route("/project/{id}", get(get_project_detail))
+        .route("/projekty/{slug}", get(show_project))
         .route("/blog", get(blog_index))
         .route("/uses", get(get_uses_content))
         .route("/blog/{slug}", get(show_article))
