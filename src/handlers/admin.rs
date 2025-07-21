@@ -76,15 +76,15 @@ async fn get_new_article_form() -> Html<maud::Markup> {
 }
 
 // === POPRAWIONY HANDLER POST ===
+// Handler dodający nowy artykuł
 async fn post_new_article(
     State(state): State<AppState>,
     Form(form): Form<ArticleForm>,
 ) -> impl IntoResponse {
-    // <-- ZMIANA: Używamy prostszego `impl IntoResponse`
     let slug = slug::slugify(&form.title);
 
     let query_result = sqlx::query(
-        "INSERT INTO articles (title, slug, excerpt, content, published_at) VALUES ($1, $2, $3, $4, NOW())"
+        "INSERT INTO articles (title, slug, excerpt, content, published_at) VALUES ($1, $2, $3, $4, NOW())",
     )
     .bind(form.title)
     .bind(slug)
@@ -94,8 +94,12 @@ async fn post_new_article(
     .await;
 
     match query_result {
-        // Obie gałęzie zwracają typy, które implementują IntoResponse
-        Ok(_) => Ok(Redirect::to("/blog")),
+        Ok(_) => {
+            // KROK 1: Unieważniamy cache strony głównej bloga
+            println!("CACHE INVALIDATION: Strona /blog została unieważniona.");
+            state.cache.invalidate("page:/blog");
+            Ok(Redirect::to("/admin/dashboard"))
+        }
         Err(e) => {
             eprintln!("Błąd zapisu do bazy danych: {}", e);
             Err((
@@ -172,7 +176,7 @@ async fn post_update_article(
         "UPDATE articles SET title = $1, slug = $2, excerpt = $3, content = $4, updated_at = NOW() WHERE id = $5",
     )
     .bind(form.title)
-    .bind(slug)
+    .bind(&slug) // Przekazujemy referencję do sluga
     .bind(form.excerpt)
     .bind(form.content)
     .bind(id)
@@ -180,11 +184,16 @@ async fn post_update_article(
     .await;
 
     if query_result.is_ok() {
-        Redirect::to("/admin/dashboard")
-    } else {
-        // W przyszłości można tu dodać lepszą obsługę błędów
-        Redirect::to("/admin/dashboard")
+        // KROK 2: Unieważniamy cache strony głównej bloga ORAZ edytowanego artykułu
+        println!(
+            "CACHE INVALIDATION: Strona /blog i artykuł /blog/{} zostały unieważnione.",
+            slug
+        );
+        state.cache.invalidate("page:/blog");
+        state.cache.invalidate(&format!("page:/blog/{}", slug));
     }
+
+    Redirect::to("/admin/dashboard")
 }
 
 // Handler POST /admin/articles/delete/{id} - usuwa artykuł
@@ -192,11 +201,33 @@ async fn post_delete_article(
     State(state): State<AppState>,
     Path(id): Path<i32>,
 ) -> impl IntoResponse {
+    // KROK 3: Najpierw pobieramy slug artykułu, ZANIM go usuniemy
+    let article_slug: Option<String> =
+        sqlx::query_scalar("SELECT slug FROM articles WHERE id = $1")
+            .bind(id)
+            .fetch_one(&state.db_pool)
+            .await
+            .ok();
+
+    // Usuwamy artykuł z bazy danych
     sqlx::query("DELETE FROM articles WHERE id = $1")
         .bind(id)
         .execute(&state.db_pool)
         .await
-        .ok(); // Ignorujemy błąd, jeśli np. artykuł został już usunięty
+        .ok();
+
+    // Unieważniamy cache strony głównej bloga
+    println!("CACHE INVALIDATION: Strona /blog została unieważniona.");
+    state.cache.invalidate("page:/blog");
+
+    // Jeśli udało się pobrać slug, unieważniamy także cache dla tego konkretnego artykułu
+    if let Some(slug) = article_slug {
+        println!(
+            "CACHE INVALIDATION: Artykuł /blog/{} został unieważniony.",
+            slug
+        );
+        state.cache.invalidate(&format!("page:/blog/{}", slug));
+    }
 
     Redirect::to("/admin/dashboard")
 }

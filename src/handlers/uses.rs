@@ -67,7 +67,11 @@ pub async fn get_uses_content(headers: HeaderMap, State(state): State<AppState>)
     let page_html = if headers.contains_key("HX-Request") {
         Html(content_fragment)
     } else {
-        Html(layout::base_layout("LenonDev - Uses", content_fragment))
+        Html(layout::base_layout(
+            "LenonDev - Uses",
+            content_fragment,
+            None,
+        ))
     };
 
     let response = (HeaderMap::new(), page_html);

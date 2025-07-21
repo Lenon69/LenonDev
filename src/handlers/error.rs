@@ -17,6 +17,6 @@ pub async fn handler_404() -> impl IntoResponse {
     };
     (
         StatusCode::NOT_FOUND,
-        Html(layout::base_layout("404 - Nie znaleziono", content)),
+        Html(layout::base_layout("404 - Nie znaleziono", content, None)),
     )
 }

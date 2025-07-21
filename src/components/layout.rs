@@ -1,7 +1,9 @@
 // src/components/layout.rs
 use maud::{DOCTYPE, Markup, html};
 
-pub fn base_layout(title: &str, content: Markup) -> Markup {
+pub fn base_layout(title: &str, content: Markup, description: Option<&str>) -> Markup {
+    let meta_description = description.unwrap_or("LenonDev - Tworzenie nowoczesnych i szybkich stron internetowych w technologii Rust. Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe.");
+
     html! {
         (DOCTYPE)
         html lang="pl" class="scroll-smooth" {
@@ -10,7 +12,7 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 meta charset="UTF-8";
                 meta name="viewport" content="width=device-width, initial-scale=1.0";
                 title { (title) }
-                meta name="description" content="LenonDev - Tworzenie nowoczesnych i ultra-szybkich stron internetowych w technologii Rust. Zobacz portfolio i ofertę.";
+                meta name="description" content=(meta_description);
                 meta name="keywords" content="Rust, Axum, HTMX, strony internetowe, programista, portfolio, web developer, tworzenie stron, zakup strony, strona internetowa, profesjonalne strony internetowe";
 
                 // Favicon
@@ -19,7 +21,7 @@ pub fn base_layout(title: &str, content: Markup) -> Markup {
                 link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png";
 
                 // Open Graph (dla social media)
-                meta property="og:title" content="LenonDev - Nowoczesne Strony Internetowe";
+                meta property="og:title" content=(title);
                 meta property="og:description" content="Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe.";
                 meta property="og:image" content="https://lenondev.com/og-image.jpg"; // Stwórz i umieść obrazek 1200x630px
                 meta property="og:url" content="https://lenondev.com";

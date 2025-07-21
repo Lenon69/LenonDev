@@ -19,7 +19,11 @@ pub async fn get_offer_page(headers: HeaderMap, State(state): State<AppState>) -
     let page_html = if headers.contains_key("HX-Request") {
         Html(content_fragment)
     } else {
-        Html(layout::base_layout("LenonDev - Oferta", content_fragment))
+        Html(layout::base_layout(
+            "LenonDev - Oferta",
+            content_fragment,
+            None,
+        ))
     };
 
     // Zapisz wygenerowaną stronę do cache'a i ją zwróć
