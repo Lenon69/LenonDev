@@ -258,16 +258,40 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
 
             // --- GŁÓWNY KONTENER GALERII I MODALA ---
             div class="max-w-5xl mx-auto"
-                // Krok 1: Rozbudowujemy logikę Alpine.js
                 x-data=(&format!(
                     "{{
                         allImages: {json},
                         currentIndex: 0,
-                        modalOpen: false, // Nowy stan do kontroli modala
+                        modalOpen: false,
+                        touchStartX: null, // Używamy null, aby lepiej śledzić stan
                         get mainImage() {{ return this.allImages[this.currentIndex] }},
                         next() {{ this.currentIndex = (this.currentIndex + 1) % this.allImages.length }},
                         prev() {{ this.currentIndex = (this.currentIndex - 1 + this.allImages.length) % this.allImages.length }},
-                        openModal(index) {{ this.currentIndex = index; this.modalOpen = true; }}
+                        openModal(index) {{ this.currentIndex = index; this.modalOpen = true; }},
+
+                        // --- OSTATECZNA, POPRAWIONA LOGIKA SWIPE ---
+                        handleTouchStart(event) {{
+                            // POPRAWKA 1: Rozpoczynamy gest tylko dla jednego palca
+                            if (event.touches.length !== 1) {{
+                                this.touchStartX = null; // Resetuj, jeśli to zoom
+                                return;
+                            }}
+                            this.touchStartX = event.touches[0].clientX;
+                        }},
+                        handleTouchEnd(event) {{
+                            // Jeśli gest nigdy się poprawnie nie rozpoczął (np. był to zoom), zakończ
+                            if (this.touchStartX === null) return;
+
+                            const touchEndX = event.changedTouches[0].clientX;
+                            const distance = touchEndX - this.touchStartX;
+                            
+                            if (Math.abs(distance) > 50) {{
+                                if (distance < 0) {{ this.next(); }} 
+                                else {{ this.prev(); }}
+                            }}
+                            
+                            this.touchStartX = null; // Zawsze resetuj na końcu
+                        }}
                     }}",
                     json = all_images_json
                 ))
@@ -315,49 +339,51 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
 
 
 
-                template x-teleport="body" { // Używamy x-teleport, aby modal był na samej górze drzewa DOM
+                // --- KOD MODALA ---
+                template x-teleport="body" {
                     div x-show="modalOpen"
-                        x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0"
-                        x-transition:enter-end="opacity-100"
-                        x-transition:leave="transition ease-in duration-200"
-                        x-transition:leave-start="opacity-100"
-                        x-transition:leave-end="opacity-0"
                         class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[99] flex items-center justify-center p-4"
                         style="display: none;"
+                        "@touchstart"="handleTouchStart($event)"
+                        "@touchend"="handleTouchEnd($event)"
                     {
-                        // Tło do kliknięcia w celu zamknięcia modala
+                        // Półprzezroczyste tło do zamykania modala
                         div class="absolute inset-0" "@click"="modalOpen = false" {}
 
-                        // Przycisk zamknięcia (X)
+                        // Przycisk zamknięcia (X) w prawym górnym rogu
                         button
                             "@click"="modalOpen = false"
-                            class="absolute top-4 right-4 text-white hover:text-brand-cyan z-50"
+                            class="absolute top-4 right-4 text-white hover:text-brand-cyan z-[100] transition-colors"
+                            aria-label="Zamknij galerię"
                         {
                             svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
                                 path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" {}
                             }
                         }
 
-                        // Kontener na obraz i nawigację
-                        div class="relative w-full max-w-7xl flex items-center justify-center" {
-                             // Przycisk "Wstecz" (lewa strzałka)
+                        // Kontener na obraz i nawigację, który obsługuje gesty swipe
+                        div class="relative w-full max-w-6xl flex items-center justify-center" {
+                            // Przycisk "Wstecz" (lewa strzałka)
                             button
                                 "@click.stop"="prev()"
-                                class="absolute left-0 -translate-x-16 text-white hover:text-brand-cyan transition-colors"
+                                class="absolute left-0 -translate-x-12 sm:-translate-x-16 text-white hover:text-brand-cyan transition-colors"
+                                aria-label="Poprzednie zdjęcie"
                             {
                                 svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
                                     path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" {}
                                 }
                             }
 
-                            // Obraz
-                            img x-bind:src="mainImage" alt="Powiększone zdjęcie projektu" class="max-h-[95vh] w-auto rounded-lg shadow-2xl";
+                            // Główny obraz
+                            img x-bind:src="mainImage"
+                                alt="Powiększone zdjęcie projektu"
+                                class="max-h-[95vh] w-auto rounded-lg shadow-2xl select-none"; // `select-none` zapobiega przypadkowemu zaznaczaniu obrazu
 
-                             // Przycisk "Dalej" (prawa strzałka)
+                            // Przycisk "Dalej" (prawa strzałka)
                             button
                                 "@click.stop"="next()"
-                                class="absolute right-0 translate-x-16 text-white hover:text-brand-cyan transition-colors"
+                                class="absolute right-0 translate-x-12 sm:translate-x-16 text-white hover:text-brand-cyan transition-colors"
+                                aria-label="Następne zdjęcie"
                             {
                                 svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
                                     path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" {}
