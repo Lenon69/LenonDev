@@ -6,7 +6,7 @@ mod models;
 
 use appstate::CacheValue;
 use axum::extract::Query;
-use axum::http::HeaderMap;
+use axum::http::{HeaderMap, Uri};
 use axum::middleware;
 use axum::routing::post;
 use axum::{Router, routing::get};
@@ -150,15 +150,33 @@ async fn warm_up_cache(state: AppState) {
         .insert("page:/:scroll_to=".to_string(), main_page);
 
     // 2. Strona /oferta
-    let offer_page = get_offer_page(HeaderMap::new(), axum::extract::State(state.clone())).await;
+    let offer_uri: Uri = "/oferta".parse().unwrap();
+    let offer_page = get_offer_page(
+        offer_uri,
+        HeaderMap::new(),
+        axum::extract::State(state.clone()),
+    )
+    .await;
     state.cache.insert("page:/oferta".to_string(), offer_page);
 
     // 3. Strona /uses
-    let uses_page = get_uses_content(HeaderMap::new(), axum::extract::State(state.clone())).await;
+    let uses_uri: Uri = "/uses".parse().unwrap();
+    let uses_page = get_uses_content(
+        uses_uri,
+        HeaderMap::new(),
+        axum::extract::State(state.clone()),
+    )
+    .await;
     state.cache.insert("page:/uses".to_string(), uses_page);
 
     // 4. Strona /blog
-    let blog_page = blog_index(HeaderMap::new(), axum::extract::State(state.clone())).await;
+    let blog_uri: Uri = "/blog".parse().unwrap();
+    let blog_page = blog_index(
+        blog_uri,
+        HeaderMap::new(),
+        axum::extract::State(state.clone()),
+    )
+    .await;
     state.cache.insert("page:/blog".to_string(), blog_page);
 
     println!("✅ Cache rozgrzany!");
