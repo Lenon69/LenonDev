@@ -49,8 +49,12 @@ pub fn base_layout(
                 script {
                     (maud::PreEscaped(r#"
                         document.addEventListener('htmx:afterSwap', function(event) {
-                            if (event.detail.target.id === 'content-area') {
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            // POPRAWKA: Najpierw sprawdzamy, czy event.detail i event.detail.target istnieją
+                            if (event.detail && event.detail.target && event.detail.target.id === 'content-area') {
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth'
+                                });
                             }
                         });
                     "#))
