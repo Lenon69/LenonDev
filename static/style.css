@@ -1,3 +1,11 @@
+/*
+  Wzmocnienie deklaracji o trybie ciemnym,
+  aby zapobiec "wymuszonemu" odwracaniu kolorów przez przeglądarki.
+*/
+:root {
+  color-scheme: dark;
+}
+
 article h1,
 article h2,
 article h3 {
@@ -49,4 +57,19 @@ article blockquote {
 .prose .text-center h3,
 .prose .text-center h4 {
   text-align: center;
+}
+/*
+  Dodaje przezroczysty obrys do tekstu, co może powstrzymać
+  niektóre przeglądarki przed zmianą jego koloru.
+*/
+p,
+h1,
+h2,
+h3,
+h4,
+span,
+li,
+a {
+  -webkit-text-stroke: 0.1px transparent;
+  text-stroke: 0.1px transparent;
 }
