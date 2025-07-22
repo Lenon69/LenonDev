@@ -3,9 +3,9 @@ use crate::models::Article;
 use maud::{Markup, html};
 
 // Komponent dla strony /blog (lista artykułów)
-pub fn blog_index_view(articles: Vec<Article>) -> Markup {
+pub fn blog_index_view(articles: Vec<Article>, current_page: i64, total_pages: i64) -> Markup {
     html! {
-        div class="bg-[#1A1A1E]/50 pb-20 lg:pb-24 pt-36 md:pt-28" {
+        div id="blog-list-container" class="bg-[#1A1A1E]/50 pb-20 lg:pb-24 pt-36 md:pt-28" hx-target="this" hx-swap="outerHTML" {
             div class="container mx-auto px-4" {
                 div class="text-center mb-16" {
                     h1 class="text-4xl lg:text-5xl font-bold tracking-tight text-brand-cyan" {"Wpisy na blogu"}
@@ -13,6 +13,9 @@ pub fn blog_index_view(articles: Vec<Article>) -> Markup {
                 }
 
                 div class="max-w-4xl mx-auto space-y-12" {
+                    @if articles.is_empty() {
+                        p class="text-center text-slate-400" { "Brak wpisów na tej stronie." }
+                    }
                     @for article in articles {
                         // Ten link używa HTMX, aby dynamicznie załadować treść artykułu
                         a hx-get=(format!("/blog/{}", article.slug)) hx-target="#content-area" hx-push-url=(format!("/blog/{}", article.slug))
@@ -29,6 +32,35 @@ pub fn blog_index_view(articles: Vec<Article>) -> Markup {
                                     p class="text-slate-300 mt-3" { (excerpt) }
                                 }
                             }
+                        }
+                    }
+                }
+
+                // --- NOWA SEKCJA: NAWIGACJA PAGINACJI ---
+                @if total_pages > 1 {
+                    div class="flex justify-between items-center max-w-4xl mx-auto mt-16" {
+                        // Przycisk "Poprzednia" (widoczny, jeśli nie jesteśmy na pierwszej stronie)
+                        @if current_page > 1 {
+                            a hx-get=(format!("/blog?page={}", current_page - 1)) class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
+                                "← Nowsze wpisy"
+                            }
+                        } @else {
+                            // Pusty div, aby utrzymać layout
+                            div {}
+                        }
+
+                        // Informacja o bieżącej stronie
+                        span class="text-slate-400" {
+                            "Strona " (current_page) " z " (total_pages)
+                        }
+
+                        // Przycisk "Następna" (widoczny, jeśli nie jesteśmy na ostatniej stronie)
+                        @if current_page < total_pages {
+                            a hx-get=(format!("/blog?page={}", current_page + 1)) class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
+                                "Starsze wpisy →"
+                            }
+                        } @else {
+                            div {}
                         }
                     }
                 }

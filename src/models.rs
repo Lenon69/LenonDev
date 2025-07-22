@@ -149,3 +149,13 @@ pub struct ProjectUpdateForm {
     pub image_url: Option<String>,
     pub project_url: Option<String>,
 }
+
+#[derive(Deserialize, Debug)]
+pub struct PaginationParams {
+    #[serde(default = "default_page")]
+    pub page: i64,
+}
+
+fn default_page() -> i64 {
+    1
+}

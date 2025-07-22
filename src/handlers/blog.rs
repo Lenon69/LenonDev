@@ -13,33 +13,53 @@ use axum::{
 use maud::{PreEscaped, html};
 
 // Handler dla /blog
-pub async fn blog_index(uri: Uri, headers: HeaderMap, State(state): State<AppState>) -> CacheValue {
-    let cache_key = "page:/blog".to_string();
+pub async fn blog_index(
+    headers: HeaderMap,
+    State(state): State<AppState>,
+    axum::extract::Query(pagination): axum::extract::Query<PaginationParams>, // Odczytujemy parametr 'page'
+) -> CacheValue {
     let is_htmx_request = headers.contains_key("HX-Request");
+    let current_page = pagination.page;
+    const ARTICLES_PER_PAGE: i64 = 5; // Ile artykułów na stronę?
 
-    // Jeśli to NIE jest zapytanie HTMX, sprawdzamy cache
+    // KROK 2: Używamy dynamicznego klucza dla cache'a
+    let cache_key = format!("page:/blog?page={}", current_page);
+
     if !is_htmx_request {
         if let Some(cached_page) = state.cache.get(&cache_key) {
             return cached_page;
         }
     }
 
-    // Generujemy treść (zawsze, bo HTMX omija cache, a pełne przeładowanie nie znalazło nic w cache'u)
+    // KROK 3: Pobierz łączną liczbę artykułów
+    let total_articles: i64 =
+        sqlx::query_scalar("SELECT COUNT(*) FROM articles WHERE published_at IS NOT NULL")
+            .fetch_one(&state.db_pool)
+            .await
+            .unwrap_or(0);
+
+    let total_pages = (total_articles as f64 / ARTICLES_PER_PAGE as f64).ceil() as i64;
+    let offset = (current_page - 1) * ARTICLES_PER_PAGE;
+
+    // KROK 4: Pobierz tylko artykuły dla bieżącej strony
     let articles = sqlx::query_as::<_, Article>(
-        "SELECT * FROM articles WHERE published_at IS NOT NULL ORDER BY published_at DESC",
+        "SELECT * FROM articles WHERE published_at IS NOT NULL ORDER BY published_at DESC LIMIT $1 OFFSET $2",
     )
+    .bind(ARTICLES_PER_PAGE)
+    .bind(offset)
     .fetch_all(&state.db_pool)
     .await
     .unwrap_or_else(|_| vec![]);
 
-    let content_fragment = blog::blog_index_view(articles);
+    // KROK 5: Przekaż dane o paginacji do widoku
+    let content_fragment = blog::blog_index_view(articles, current_page, total_pages);
 
-    // Jeśli to zapytanie HTMX, zwróć tylko fragment opakowany w CacheValue
     if is_htmx_request {
+        // Dla HTMX zwracamy tylko fragment, bez zapisywania w cache'u całej strony
         return (HeaderMap::new(), Html(content_fragment));
     }
 
-    // W przeciwnym razie, zbuduj całą stronę
+    // Dla pełnego przeładowania, budujemy całą stronę i zapisujemy w cache'u
     let full_page_html = Html(layout::base_layout(
         "LenonDev - Blog",
         content_fragment,
@@ -47,7 +67,7 @@ pub async fn blog_index(uri: Uri, headers: HeaderMap, State(state): State<AppSta
             "Blog o nowoczesnym web developmencie, technologii Rust, Axum, HTMX i tworzeniu wydajnych aplikacji internetowych.",
         ),
         None,
-        uri.path(),
+        "/blog",
     ));
 
     // Stwórz odpowiedź, zapisz ją w cache'u i zwróć
