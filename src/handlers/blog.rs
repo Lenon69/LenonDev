@@ -3,7 +3,7 @@ use crate::{
     AppState,
     appstate::CacheValue,
     components::{blog, layout},
-    models::{Article, ArticleSchema, Author, ImageObject, Publisher},
+    models::{Article, ArticleSchema, Author, ImageObject, PaginationParams, Publisher},
 };
 use axum::{
     extract::{Path, State},

@@ -170,11 +170,11 @@ async fn warm_up_cache(state: AppState) {
     state.cache.insert("page:/uses".to_string(), uses_page);
 
     // 4. Strona /blog
-    let blog_uri: Uri = "/blog".parse().unwrap();
+    let blog_pagination = Query(models::PaginationParams { page: 1 });
     let blog_page = blog_index(
-        blog_uri,
         HeaderMap::new(),
         axum::extract::State(state.clone()),
+        blog_pagination,
     )
     .await;
     state.cache.insert("page:/blog".to_string(), blog_page);
