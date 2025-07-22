@@ -366,7 +366,9 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                             // Przycisk "Wstecz" (lewa strzałka)
                             button
                                 "@click.stop"="prev()"
-                                class="absolute left-0 -translate-x-12 sm:-translate-x-16 text-white hover:text-brand-cyan transition-colors"
+                                class="absolute left-4 lg:left-0 lg:-translate-x-16 z-10
+                                       text-brand-cyan lg:text-white
+                                       hover:text-white transition-colors"
                                 aria-label="Poprzednie zdjęcie"
                             {
                                 svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
@@ -382,7 +384,9 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                             // Przycisk "Dalej" (prawa strzałka)
                             button
                                 "@click.stop"="next()"
-                                class="absolute right-0 translate-x-12 sm:translate-x-16 text-white hover:text-brand-cyan transition-colors"
+                                class="absolute right-4 lg:right-0 lg:translate-x-16 z-10
+                                       text-brand-cyan lg:text-white
+                                       hover:text-white transition-colors"
                                 aria-label="Następne zdjęcie"
                             {
                                 svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
