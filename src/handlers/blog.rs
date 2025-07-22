@@ -3,7 +3,7 @@ use crate::{
     AppState,
     appstate::CacheValue,
     components::{blog, layout},
-    models::{Article, ArticleSchema, Author},
+    models::{Article, ArticleSchema, Author, ImageObject, Publisher},
 };
 use axum::{
     extract::{Path, State},
@@ -127,18 +127,34 @@ pub async fn show_article(
             let base_url = std::env::var("APP_BASE_URL").unwrap_or_default();
             let og_image_url = format!("{}/public/og-image.png", base_url);
             let schema = ArticleSchema {
-                context: "https://schema.org".to_string(),
-                type_of: "BlogPosting".to_string(),
+                context: "https://schema.org",
+                type_of: "BlogPosting",
                 headline: article.title.clone(),
-                date_published: article
-                    .published_at
-                    .map(|d| d.to_rfc3339())
-                    .unwrap_or_default(),
-                image: vec![og_image_url],
+                image: ImageObject {
+                    type_of: "ImageObject",
+                    url: og_image_url,
+                    width: 1200,
+                    height: 630,
+                },
                 author: Author {
                     type_of: "Person".to_string(),
                     name: "Lenon".to_string(),
                 },
+                date_published: article
+                    .published_at
+                    .map(|d| d.to_rfc3339())
+                    .unwrap_or_default(),
+                publisher: Publisher {
+                    type_of: "Organization",
+                    name: "LenonDev",
+                    logo: ImageObject {
+                        type_of: "ImageObject",
+                        url: format!("{}/public/fixed-logo.png", base_url),
+                        width: 372,
+                        height: 281,
+                    },
+                },
+                date_modified: article.updated_at.to_rfc3339(),
             };
             let schema_json = serde_json::to_string(&schema).ok();
 

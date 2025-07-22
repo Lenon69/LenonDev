@@ -37,6 +37,23 @@ pub struct ProjectWithImages {
     pub images: Vec<String>, // Lista dodatkowych URL-i zdjęć
 }
 
+#[derive(Serialize)]
+pub struct Publisher<'a> {
+    #[serde(rename = "@type")]
+    pub type_of: &'a str,
+    pub name: &'a str,
+    pub logo: ImageObject<'a>,
+}
+
+#[derive(Serialize)]
+pub struct ImageObject<'a> {
+    #[serde(rename = "@type")]
+    pub type_of: &'a str,
+    pub url: String,
+    pub width: u32,
+    pub height: u32,
+}
+
 #[derive(serde::Serialize)]
 pub struct Author {
     #[serde(rename = "@type")]
@@ -44,17 +61,20 @@ pub struct Author {
     pub name: String,
 }
 
-#[derive(serde::Serialize)]
-pub struct ArticleSchema {
+#[derive(Serialize)]
+pub struct ArticleSchema<'a> {
     #[serde(rename = "@context")]
-    pub context: String,
+    pub context: &'a str,
     #[serde(rename = "@type")]
-    pub type_of: String,
+    pub type_of: &'a str,
     pub headline: String,
-    #[serde(rename = "datePublished")]
-    pub date_published: String, // Data w formacie ISO 8601
-    pub image: Vec<String>,
     pub author: Author,
+    pub image: ImageObject<'a>, // Zmieniamy z Vec<String> na ImageObject
+    #[serde(rename = "datePublished")]
+    pub date_published: String,
+    #[serde(rename = "dateModified")]
+    pub date_modified: String,
+    pub publisher: Publisher<'a>,
 }
 
 #[derive(Serialize)]

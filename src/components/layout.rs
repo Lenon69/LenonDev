@@ -30,7 +30,7 @@ pub fn base_layout(
                 link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png";
 
                 // Open Graph (dla social media)
-                meta property="og:title" content="Nowoczesne i szybkie strony internetowe – LenonDev";
+                meta property="og:title" content=(title)
                 meta property="og:description" content="Tworzę wydajne, bezpieczne i nowoczesne strony internetowe w technologii Rust + HTMX. Postaw na prędkość, SEO i elegancki wygląd.";
                 meta property="og:image" content=(og_image_url);
                 meta property="og:url" content=(base_url);
