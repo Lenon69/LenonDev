@@ -1,12 +1,14 @@
+use std::{fs, path};
+
 // src/handlers/admin.rs
 use crate::{
     AppState,
     components::{self},
-    models::{Article, ProjectForm},
+    models::{Article, Project, ProjectForm, ProjectImage, ProjectUpdateForm},
 };
 use axum::{
     Form, Router,
-    extract::{Path, Request, State},
+    extract::{DefaultBodyLimit, Path, Request, State},
     middleware::Next,
     response::{Html, IntoResponse, Redirect, Response},
     routing::{get, post},
@@ -56,18 +58,28 @@ async fn logout(session: Session) -> impl IntoResponse {
 }
 
 async fn dashboard(State(state): State<AppState>) -> Html<maud::Markup> {
-    // Pobieramy wszystkie artykuły z bazy danych, sortując od najnowszych
+    // Pobieramy artykuły (bez zmian)
     let articles = sqlx::query_as::<_, Article>("SELECT * FROM articles ORDER BY created_at DESC")
         .fetch_all(&state.db_pool)
         .await
         .unwrap_or_else(|e| {
-            // W przypadku błędu, logujemy go i zwracamy pustą listę
             eprintln!("Błąd podczas pobierania artykułów: {}", e);
             vec![]
         });
 
-    // Przekazujemy pobrane artykuły do nowego komponentu widoku, który zaraz stworzymy
-    Html(components::admin::dashboard_view(articles))
+    // DODAJ TO: Pobieramy projekty
+    let projects = sqlx::query_as::<_, crate::models::Project>(
+        "SELECT id, title, slug, description, technologies, image_url, project_url FROM projects ORDER BY id DESC"
+    )
+    .fetch_all(&state.db_pool)
+    .await
+    .unwrap_or_else(|e| {
+        eprintln!("Błąd podczas pobierania projektów: {}", e);
+        vec![]
+    });
+
+    // Przekazujemy oba zestawy danych do widoku
+    Html(components::admin::dashboard_view(articles, projects))
 }
 
 // Handler GET /admin/articles/new
@@ -151,6 +163,16 @@ pub fn protected_admin_routes() -> Router<AppState> {
             "/projects/new",
             get(get_new_project_form).post(post_new_project),
         )
+        .route(
+            "/projects/edit/{id}",
+            get(get_edit_project_form).post(post_update_project),
+        )
+        .route("/projects/add-image/{id}", post(post_add_project_image))
+        .route(
+            "/projects/delete-image/{id}",
+            post(post_delete_project_image),
+        )
+        .layer(DefaultBodyLimit::max(10 * 1024 * 1024)) // Ustaw limit 10MB na wgrywane pliki
 }
 
 // Handler GET /admin/articles/edit/{id} - wyświetla formularz edycji
@@ -277,4 +299,152 @@ async fn post_new_project(
             ))
         }
     }
+}
+
+// GET /admin/projects/edit/:id - Wyświetla stronę edycji
+async fn get_edit_project_form(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Markup, Redirect> {
+    let project = sqlx::query_as::<_, Project>("SELECT * FROM projects WHERE id = $1")
+        .bind(id)
+        .fetch_one(&state.db_pool)
+        .await
+        .map_err(|_| Redirect::to("/admin/dashboard"))?;
+
+    let images = sqlx::query_as::<_, ProjectImage>(
+        "SELECT id, image_url FROM project_images WHERE project_id = $1 ORDER BY id",
+    )
+    .bind(id)
+    .fetch_all(&state.db_pool)
+    .await
+    .unwrap_or_else(|_| vec![]);
+
+    Ok(components::admin::edit_project_form(&project, &images))
+}
+
+// POST /admin/projects/edit/:id - Aktualizuje dane tekstowe
+async fn post_update_project(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+    Form(form): Form<ProjectUpdateForm>,
+) -> impl IntoResponse {
+    let slug = slug::slugify(&form.title);
+
+    sqlx::query(
+        "UPDATE projects SET title = $1, slug = $2, description = $3, technologies = $4, image_url = $5, project_url = $6 WHERE id = $7",
+    )
+    .bind(form.title).bind(&slug).bind(form.description).bind(form.technologies).bind(form.image_url).bind(form.project_url).bind(id)
+    .execute(&state.db_pool).await.ok();
+
+    // Unieważnij cache dla strony głównej i edytowanego projektu
+    state.cache.invalidate("page:/:scroll_to=");
+    state
+        .cache
+        .invalidate(&format!("fragment:/projekty/{}", slug));
+
+    Redirect::to(&format!("/admin/projects/edit/{}", id))
+}
+
+// POST /admin/projects/add-image/:id - Wgrywa nowe zdjęcie
+async fn post_add_project_image(
+    State(state): State<AppState>,
+    Path(project_id): Path<i32>,
+    mut multipart: axum_extra::extract::Multipart,
+) -> Redirect {
+    // Pobierz aktualną liczbę zdjęć, aby wygenerować unikalną nazwę
+    let image_count: i64 =
+        sqlx::query_scalar("SELECT COUNT(*) FROM project_images WHERE project_id = $1")
+            .bind(project_id)
+            .fetch_one(&state.db_pool)
+            .await
+            .unwrap_or(0);
+
+    let file_name = format!("{}-{}.png", project_id, image_count + 1);
+    let file_path = path::Path::new("static/projects").join(&file_name);
+    let image_url = format!("/public/projects/{}", file_name);
+
+    if let Some(field) = multipart.next_field().await.unwrap() {
+        if let Ok(data) = field.bytes().await {
+            fs::write(&file_path, data).unwrap();
+
+            // Zapisz ścieżkę do bazy danych
+            sqlx::query("INSERT INTO project_images (project_id, image_url) VALUES ($1, $2)")
+                .bind(project_id)
+                .bind(&image_url)
+                .execute(&state.db_pool)
+                .await
+                .ok();
+
+            // Unieważnij cache dla tego projektu
+            if let Ok(slug_result) =
+                sqlx::query_scalar::<_, String>("SELECT slug from projects WHERE id = $1")
+                    .bind(project_id)
+                    .fetch_one(&state.db_pool)
+                    .await
+            {
+                state
+                    .cache
+                    .invalidate(&format!("fragment:/projekty/{}", slug_result));
+            }
+        }
+    }
+
+    Redirect::to(&format!("/admin/projects/edit/{}", project_id))
+}
+
+// Handler POST /admin/projects/delete-image/:id - Usuwa zdjęcie
+async fn post_delete_project_image(
+    State(state): State<AppState>,
+    Path(image_id): Path<i32>,
+) -> Redirect {
+    // Krok 1: Pobierz informacje o zdjęciu (URL i ID projektu) ZANIM je usuniesz
+    let image_info = sqlx::query_as::<_, (String, i32)>(
+        "SELECT image_url, project_id FROM project_images WHERE id = $1",
+    )
+    .bind(image_id)
+    .fetch_one(&state.db_pool)
+    .await;
+
+    // Jeśli nie udało się znaleźć zdjęcia, po prostu przekieruj z powrotem
+    let (image_url, project_id) = match image_info {
+        Ok(info) => info,
+        Err(_) => {
+            // Jeśli projekt nie istnieje, przekieruj do dashboardu
+            return Redirect::to("/admin/dashboard");
+        }
+    };
+
+    // Krok 2: Usuń plik fizycznie z serwera
+    // Przekształcamy URL (/public/projects/plik.png) na ścieżkę lokalną (static/projects/plik.png)
+    let local_path = image_url.replace("/public/", "static/");
+    match fs::remove_file(&local_path) {
+        Ok(_) => println!("Pomyślnie usunięto plik: {}", local_path),
+        Err(e) => eprintln!("Błąd podczas usuwania pliku {}: {}", local_path, e),
+    }
+
+    // Krok 3: Usuń wpis o zdjęciu z bazy danych
+    sqlx::query("DELETE FROM project_images WHERE id = $1")
+        .bind(image_id)
+        .execute(&state.db_pool)
+        .await
+        .ok();
+
+    // Krok 4: Unieważnij cache dla powiązanego projektu
+    if let Ok(project_slug) =
+        sqlx::query_scalar::<_, String>("SELECT slug FROM projects WHERE id = $1")
+            .bind(project_id)
+            .fetch_one(&state.db_pool)
+            .await
+    {
+        let cache_key = format!("fragment:/projekty/{}", project_slug);
+        state.cache.invalidate(&cache_key);
+        println!(
+            "CACHE INVALIDATION: Unieważniono cache dla klucza: {}",
+            cache_key
+        );
+    }
+
+    // Krok 5: Przekieruj użytkownika z powrotem na stronę edycji tego projektu
+    Redirect::to(&format!("/admin/projects/edit/{}", project_id))
 }

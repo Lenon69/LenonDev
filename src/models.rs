@@ -114,3 +114,18 @@ pub struct ProjectForm {
     pub image_url: Option<String>,
     pub project_url: Option<String>,
 }
+
+#[derive(sqlx::FromRow)]
+pub struct ProjectImage {
+    pub id: i32,
+    pub image_url: String,
+}
+
+#[derive(Deserialize)]
+pub struct ProjectUpdateForm {
+    pub title: String,
+    pub description: String,
+    pub technologies: String,
+    pub image_url: Option<String>,
+    pub project_url: Option<String>,
+}
