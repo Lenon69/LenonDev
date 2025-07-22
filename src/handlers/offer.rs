@@ -4,10 +4,15 @@ use crate::AppState;
 use crate::appstate::CacheValue;
 use crate::components::{layout, offer};
 use axum::extract::State;
+use axum::http::Uri;
 use axum::{http::HeaderMap, response::Html};
 
 // Handler, który serwuje stronę /oferta
-pub async fn get_offer_page(headers: HeaderMap, State(state): State<AppState>) -> CacheValue {
+pub async fn get_offer_page(
+    uri: Uri,
+    headers: HeaderMap,
+    State(state): State<AppState>,
+) -> CacheValue {
     let cache_key = "page:/oferta".to_string();
     let is_htmx_request = headers.contains_key("HX-Request");
 
@@ -131,6 +136,7 @@ pub async fn get_offer_page(headers: HeaderMap, State(state): State<AppState>) -
                 "Nowoczesne rozwiązania webowe, które pomogą Twojej firmie zaistnieć w internecie i osiągnąć sukces.",
             ),
             Some(schema_json), // Przekazujemy dane strukturalne
+            uri.path(),
         ))
     };
 

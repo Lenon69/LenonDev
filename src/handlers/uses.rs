@@ -1,5 +1,9 @@
 // src/handlers/uses.rs
-use axum::{extract::State, http::HeaderMap, response::Html};
+use axum::{
+    extract::State,
+    http::{HeaderMap, Uri},
+    response::Html,
+};
 use maud::html;
 
 use crate::{
@@ -8,7 +12,11 @@ use crate::{
 };
 
 /// Kompletna, zoptymalizowana funkcja renderująca zawartość strony /uses.
-pub async fn get_uses_content(headers: HeaderMap, State(state): State<AppState>) -> CacheValue {
+pub async fn get_uses_content(
+    uri: Uri,
+    headers: HeaderMap,
+    State(state): State<AppState>,
+) -> CacheValue {
     let cache_key = "page:/uses".to_string();
 
     if let Some(cached_page) = state.cache.get(&cache_key) {
@@ -74,6 +82,7 @@ pub async fn get_uses_content(headers: HeaderMap, State(state): State<AppState>)
                 "Sprawdź mój setup i narzędzia, z których korzystam na co dzień. Dowiedz się, jaki sprzęt, oprogramowanie i usługi napędzają moją pracę jako web developera.",
             ),
             None,
+            uri.path(),
         ))
     };
 

@@ -133,6 +133,7 @@ pub async fn show_project(
             content_fragment,
             Some(description),
             None,
+            &format!("/projekty/{}", slug),
         ))
         .into_response()
     }

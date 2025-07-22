@@ -7,13 +7,13 @@ use crate::{
 };
 use axum::{
     extract::{Path, State},
-    http::HeaderMap,
+    http::{HeaderMap, Uri},
     response::{Html, IntoResponse},
 };
 use maud::{PreEscaped, html};
 
 // Handler dla /blog
-pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> CacheValue {
+pub async fn blog_index(uri: Uri, headers: HeaderMap, State(state): State<AppState>) -> CacheValue {
     let cache_key = "page:/blog".to_string();
     let is_htmx_request = headers.contains_key("HX-Request");
 
@@ -47,6 +47,7 @@ pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> Ca
             "Blog o nowoczesnym web developmencie, technologii Rust, Axum, HTMX i tworzeniu wydajnych aplikacji internetowych.",
         ),
         None,
+        uri.path(),
     ));
 
     // Stwórz odpowiedź, zapisz ją w cache'u i zwróć
@@ -58,6 +59,7 @@ pub async fn blog_index(headers: HeaderMap, State(state): State<AppState>) -> Ca
 
 // Handler dla /blog/{slug} - W pełni przepisany i zoptymalizowany
 pub async fn show_article(
+    uri: Uri,
     headers: HeaderMap,
     State(state): State<AppState>,
     Path(slug): Path<String>,
@@ -163,6 +165,7 @@ pub async fn show_article(
                 content_fragment,
                 article.excerpt.as_deref(),
                 schema_json,
+                &format!("/blog/{}", slug),
             ));
 
             // Zapisz PEŁNĄ stronę w cache'u
@@ -197,6 +200,7 @@ pub async fn show_article(
                 error_content,
                 Some("Strona, której szukasz, nie została znaleziona."),
                 None,
+                uri.path(),
             ))
             .into_response()
         }

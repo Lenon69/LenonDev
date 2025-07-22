@@ -1,12 +1,12 @@
 // W nowym pliku src/handlers/error.rs
 use crate::components::layout;
 use axum::{
-    http::StatusCode,
+    http::{StatusCode, Uri},
     response::{Html, IntoResponse},
 };
 
 #[allow(dead_code)]
-pub async fn handler_404() -> impl IntoResponse {
+pub async fn handler_404(uri: Uri) -> impl IntoResponse {
     let content = maud::html! {
         div class="text-center py-40" {
             h1 class="text-6xl font-bold text-brand-cyan" { "404" }
@@ -23,6 +23,7 @@ pub async fn handler_404() -> impl IntoResponse {
             content,
             None,
             None,
+            uri.path(),
         )),
     )
 }

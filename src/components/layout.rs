@@ -8,10 +8,12 @@ pub fn base_layout(
     content: Markup,
     description: Option<&str>,
     schema_json: Option<String>,
+    current_path: &str,
 ) -> Markup {
     let meta_description = description.unwrap_or("LenonDev - Tworzenie nowoczesnych i szybkich stron internetowych w technologii Rust. Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe.");
     let base_url = env::var("APP_BASE_URL").unwrap_or_else(|_| "".to_string());
     let og_image_url = format!("{}/public/og-image.png", base_url);
+    let canonical_url = format!("{}{}", base_url, current_path);
 
     html! {
         (DOCTYPE)
@@ -28,12 +30,14 @@ pub fn base_layout(
                 link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png";
                 link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png";
                 link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png";
+                link rel="canonical" href=(canonical_url);
+
 
                 // Open Graph (dla social media)
                 meta property="og:title" content=(title)
                 meta property="og:description" content="Tworzę wydajne, bezpieczne i nowoczesne strony internetowe w technologii Rust + HTMX. Postaw na prędkość, SEO i elegancki wygląd.";
                 meta property="og:image" content=(og_image_url);
-                meta property="og:url" content=(base_url);
+                meta property="og:url" content=(canonical_url);
                 meta property="og:type" content="website";
 
                 @if let Some(schema) = schema_json {
