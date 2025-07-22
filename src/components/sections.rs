@@ -256,54 +256,39 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                 p class="mt-4 text-lg text-slate-400" { (project.technologies) }
             }
 
-            // --- POCZĄTEK ZMODYFIKOWANEJ GALERII ---
-            div class="max-w-5xl mx-auto" {
-                div x-data=(&format!(
+            // --- GŁÓWNY KONTENER GALERII I MODALA ---
+            div class="max-w-5xl mx-auto"
+                // Krok 1: Rozbudowujemy logikę Alpine.js
+                x-data=(&format!(
                     "{{
                         allImages: {json},
                         currentIndex: 0,
+                        modalOpen: false, // Nowy stan do kontroli modala
                         get mainImage() {{ return this.allImages[this.currentIndex] }},
                         next() {{ this.currentIndex = (this.currentIndex + 1) % this.allImages.length }},
-                        prev() {{ this.currentIndex = (this.currentIndex - 1 + this.allImages.length) % this.allImages.length }}
+                        prev() {{ this.currentIndex = (this.currentIndex - 1 + this.allImages.length) % this.allImages.length }},
+                        openModal(index) {{ this.currentIndex = index; this.modalOpen = true; }}
                     }}",
                     json = all_images_json
-                )) {
-                    // Główny obraz z przyciskami nawigacji
-                    div class="relative mb-4" {
-                        // Kontener na obraz
-                        div class="w-full h-auto overflow-hidden rounded-xl shadow-lg" {
-                             img class="w-full object-cover transition-transform duration-300" x-bind:src="mainImage" alt=(project.title);
-                        }
-
-                        // Przyciski nawigacji (pojawiają się, gdy jest więcej niż 1 zdjęcie)
-                        template x-if="allImages.length > 1" {
-                                div {
-                                    // Przycisk "Wstecz" (lewa strzałka)
-                                    button ."absolute top-1/2 left-2 md:left-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-2 transition-all duration-300 focus:outline-none"
-                                        "@click"="prev()"
-                                    {
-                                        svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
-                                            path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" {}
-                                        }
-                                    }
-                                    // Przycisk "Dalej" (prawa strzałka)
-                                    button ."absolute top-1/2 right-2 md:right-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-2 transition-all duration-300 focus:outline-none"
-                                        "@click"="next()"
-                                    {
-                                        svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
-                                            path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" {}
-                                    }
-                                }
-                            }
-                        }
+                ))
+                // Nasłuchujemy na klawisz Escape, aby zamknąć modal
+                "@keydown.escape.window"="modalOpen = false"
+            {
+                // --- Galeria na stronie (miniatury i główny obrazek) ---
+                div {
+                    // Główny obrazek - teraz otwiera modal
+                    div class="w-full h-auto overflow-hidden rounded-xl shadow-lg mb-4 cursor-pointer"
+                        "@click"="openModal(currentIndex)"
+                    {
+                        img class="w-full object-cover transition-transform duration-300 hover:scale-105" x-bind:src="mainImage" alt=(project.title);
                     }
 
-                    // Miniatury (bez zmian, ale teraz aktualizują `currentIndex`)
+                    // Miniatury - teraz otwierają modal z wybranym zdjęciem
                     @if all_images.len() > 1 {
                         div class="flex items-center justify-center space-x-2 mb-12" {
                             template x-for="(image, index) in allImages" {
                                 div class="w-20 h-20 rounded-md overflow-hidden cursor-pointer transition-all duration-200"
-                                    x-on:click="currentIndex = index" // Zmiana: ustawiamy indeks zamiast URL
+                                    x-on:click="openModal(index)"
                                     x-bind:class="{ 'border-2 border-brand-cyan scale-110': currentIndex === index, 'opacity-60 hover:opacity-100': currentIndex !== index }"
                                 {
                                     img class="h-full w-full object-cover" x-bind:src="image" alt="Thumbnail";
@@ -312,7 +297,6 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                         }
                     }
                 }
-                // --- KONIEC ZMODYFIKOWANEJ GALERII ---
 
                 // Opis projektu
                 div class="prose prose-invert prose-xl mx-auto" {
@@ -327,6 +311,60 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                         }
                     }
                     a href="/#projekty" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="inline-block text-center bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-3 px-8 rounded-lg" { "Wróć do projektów" }
+                }
+
+
+
+                template x-teleport="body" { // Używamy x-teleport, aby modal był na samej górze drzewa DOM
+                    div x-show="modalOpen"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
+                        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[99] flex items-center justify-center p-4"
+                        style="display: none;"
+                    {
+                        // Tło do kliknięcia w celu zamknięcia modala
+                        div class="absolute inset-0" "@click"="modalOpen = false" {}
+
+                        // Przycisk zamknięcia (X)
+                        button
+                            "@click"="modalOpen = false"
+                            class="absolute top-4 right-4 text-white hover:text-brand-cyan z-50"
+                        {
+                            svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
+                                path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" {}
+                            }
+                        }
+
+                        // Kontener na obraz i nawigację
+                        div class="relative w-full max-w-7xl flex items-center justify-center" {
+                             // Przycisk "Wstecz" (lewa strzałka)
+                            button
+                                "@click.stop"="prev()"
+                                class="absolute left-0 -translate-x-16 text-white hover:text-brand-cyan transition-colors"
+                            {
+                                svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
+                                    path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" {}
+                                }
+                            }
+
+                            // Obraz
+                            img x-bind:src="mainImage" alt="Powiększone zdjęcie projektu" class="max-h-[95vh] w-auto rounded-lg shadow-2xl";
+
+                             // Przycisk "Dalej" (prawa strzałka)
+                            button
+                                "@click.stop"="next()"
+                                class="absolute right-0 translate-x-16 text-white hover:text-brand-cyan transition-colors"
+                            {
+                                svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" {
+                                    path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" {}
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
