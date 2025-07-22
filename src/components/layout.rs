@@ -25,6 +25,7 @@ pub fn base_layout(
                 title { (title) }
                 meta name="description" content=(meta_description);
                 meta name="keywords" content="tworzenie stron internetowych, strony internetowe na zamówienie, Rust web developer, Axum backend, HTMX frontend, szybkie strony, nowoczesne strony, programista Rust, portfolio programisty, responsywne strony, SEO strony, tani web developer, strony z HTMX, web design, strony dla firm, landing page, strona wizytówka, programowanie stron, zakup strony internetowej, strony pod SEO, profesjonalne strony internetowe, web development Rust, szybkie ładowanie stron, nowoczesne technologie webowe";
+                meta name="color-scheme" content="dark";
 
                 // Favicon
                 link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png";
