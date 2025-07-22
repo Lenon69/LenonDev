@@ -82,7 +82,7 @@ pub fn projects_section(projects: Vec<Project>) -> Markup {
                           hx-push-url="true"
                         {
                             @if let Some(image_url) = &project.image_url {
-                                img class="w-full h-48 object-cover rounded-md mb-4 group-hover:opacity-80 transition-opacity" src=(image_url) alt=(project.title);
+                                img class="w-full h-48 object-cover rounded-md mb-4 group-hover:opacity-80 transition-opacity" src=(image_url) alt=(project.title) loading="lazy" width="300" height="300";
                             }
                             h3 class="text-xl font-bold text-brand-cyan" { (project.title) }
                             p class="text-slate-400 mt-2" { (project.description) }
