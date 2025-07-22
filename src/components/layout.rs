@@ -36,7 +36,9 @@ pub fn base_layout(
                 // Open Graph (dla social media)
                 meta property="og:title" content=(title)
                 meta property="og:description" content="Tworzę wydajne, bezpieczne i nowoczesne strony internetowe w technologii Rust + HTMX. Postaw na prędkość, SEO i elegancki wygląd.";
-                meta property="og:image" content=(og_image_url);
+                meta property="og:image" content="/public/og-image.png";
+                meta property="og:image:width" content="372";
+                meta property="og:image:height" content="281";
                 meta property="og:url" content=(canonical_url);
                 meta property="og:type" content="website";
 
