@@ -41,16 +41,6 @@ use tower_sessions::{MemoryStore, SessionManagerLayer}; // Import do obsługi se
 async fn main() {
     // Ładowanie zmiennych środowiskowych z pliku .env
     dotenvy::dotenv().expect("Failed to load .env file");
-
-    let provider = rustls::crypto::aws_lc_rs::default_provider();
-    if let Err(e) = provider.install_default() {
-        tracing::error!(
-            "Błąd podczas instalacji domyślnego dostawcy kryptograficznego: {:?}",
-            e
-        );
-        std::process::exit(1);
-    }
-
     tracing::info!("Inicjalizacja serwera...");
 
     // Tworzenie puli połączeń do bazy danych
@@ -128,18 +118,16 @@ async fn main() {
     // --- KONIEC NOWEJ STRUKTURY ROUTERA ---
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
-    println!("🚀 Serwer nasłuchuje na https://{}", addr);
+    println!("🚀 Serwer nasłuchuje na http://{}", addr);
 
-    // Konfiguracja TLS
-    let config = RustlsConfig::from_pem_file("localhost.pem", "localhost-key.pem")
+    // Tworzymy listener TCP dla serwera HTTP
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+
+    // Uruchamiamy serwer Axum, który będzie obsługiwał przychodzące połączenia
+    axum::serve(listener, app.into_make_service())
         .await
         .unwrap();
-
-    // Uruchomienie serwera z obsługą HTTP/1.1, HTTP/2 i HTTP/3
-    axum_server::bind_rustls(addr, config)
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    // --- KONIEC STARTU SERWERA ---}
 }
 
 // Funkcja rozgrzewająca cache
