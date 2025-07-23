@@ -8,9 +8,11 @@ use appstate::CacheValue;
 use axum::extract::Query;
 use axum::http::{HeaderMap, Uri};
 use axum::middleware;
+use axum::response::Html;
 use axum::routing::post;
 use axum::{Router, routing::get};
 use axum_server::tls_rustls::RustlsConfig;
+use components::{layout, sections};
 use handlers::error::handler_404;
 use handlers::offer::get_offer_page;
 use handlers::projects::show_project;
@@ -19,6 +21,7 @@ use handlers::{
     blog::{blog_index, show_article},
     contact::handle_contact_form,
 };
+use models::{Project, ProjectWithImages};
 use moka::sync::Cache;
 use resend_rs::Resend;
 use sqlx::PgPool;
@@ -178,6 +181,47 @@ async fn warm_up_cache(state: AppState) {
     )
     .await;
     state.cache.insert("page:/blog".to_string(), blog_page);
+
+    // --- NOWA SEKCJA: Rozgrzewanie cache'a dla projektów ---
+    println!(" caching projects...");
+    if let Ok(projects) = sqlx::query_as::<_, Project>("SELECT * FROM projects")
+        .fetch_all(&state.db_pool)
+        .await
+    {
+        for project in projects {
+            let additional_images = sqlx::query_scalar::<_, String>(
+                "SELECT image_url FROM project_images WHERE project_id = $1 ORDER BY id",
+            )
+            .bind(project.id)
+            .fetch_all(&state.db_pool)
+            .await
+            .unwrap_or_else(|_| vec![]);
+
+            let project_with_images = ProjectWithImages {
+                id: project.id,
+                title: project.title.clone(),
+                slug: project.slug.clone(),
+                description: project.description.clone(),
+                technologies: project.technologies.clone(),
+                image_url: project.image_url.clone(),
+                project_url: project.project_url.clone(),
+                images: additional_images,
+            };
+
+            let fragment = sections::project_detail_page(project_with_images);
+            let full_page = Html(layout::base_layout(
+                &project.title,
+                fragment,
+                Some(&project.description),
+                None,
+                &format!("/projekty/{}", project.slug),
+            ));
+
+            let cache_key = format!("page:/projekty/{}", project.slug);
+            state.cache.insert(cache_key, (HeaderMap::new(), full_page));
+        }
+    }
+    // --- KONIEC SEKCJI DLA PROJEKTÓW ---
 
     println!("✅ Cache rozgrzany!");
 }
