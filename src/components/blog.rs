@@ -18,7 +18,7 @@ pub fn blog_index_view(articles: Vec<Article>, current_page: i64, total_pages: i
                     }
                     @for article in articles {
                         // Ten link używa HTMX, aby dynamicznie załadować treść artykułu
-                        a hx-get=(format!("/blog/{}", article.slug)) hx-target="#content-area" hx-push-url=(format!("/blog/{}", article.slug))
+                        a href=(format!("/blog/{}", article.slug))
                           class="block group cursor-pointer" {
                             article class="bg-slate-800/40 hover:bg-slate-800/80 p-6 rounded-lg border border-slate-700/50 transition-all duration-300 hover:shadow-cyan-glow hover:-translate-y-1" {
                                 // Data publikacji
