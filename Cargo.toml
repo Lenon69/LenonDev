@@ -24,3 +24,11 @@ tower-cookies = "0.11.0"
 tower-http = { version = "0.6.6", features = ["fs", "full"] }
 tower-sessions = "0.14.0"
 tracing = { version = "0.1.41", features = ["async-await"] }
+
+
+[profile.release]
+opt-level = 3         # Maksymalna optymalizacja (domyślna)
+lto = true            # Link Time Optimization
+codegen-units = 1     # Lepsza optymalizacja, wolniejsze kompilowanie
+panic = "abort"       # Mniejszy rozmiar binarki, brak śladów paniki
+strip = true          # Usunięcie symboli debugowania (wymaga nightly albo ręcznie)

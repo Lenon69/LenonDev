@@ -107,9 +107,10 @@ async fn post_new_article(
 
     match query_result {
         Ok(_) => {
-            // KROK 1: Unieważniamy cache strony głównej bloga
-            println!("CACHE INVALIDATION: Strona /blog została unieważniona.");
-            state.cache.invalidate("page:/blog");
+            // POPRAWKA: Unieważniamy cache dla pierwszej strony bloga
+            let cache_key = "page:/blog?page=1";
+            println!("CACHE INVALIDATION: Unieważniono klucz: {}", cache_key);
+            state.cache.invalidate(cache_key);
             Ok(Redirect::to("/admin/dashboard"))
         }
         Err(e) => {
@@ -210,13 +211,16 @@ async fn post_update_article(
     .await;
 
     if query_result.is_ok() {
-        // KROK 2: Unieważniamy cache strony głównej bloga ORAZ edytowanego artykułu
+        // POPRAWKA: Unieważniamy cache dla pierwszej strony bloga ORAZ edytowanego artykułu
+        let blog_cache_key = "page:/blog?page=1";
+        let article_cache_key = format!("page:/blog/{}", slug);
+
         println!(
-            "CACHE INVALIDATION: Strona /blog i artykuł /blog/{} zostały unieważnione.",
-            slug
+            "CACHE INVALIDATION: Unieważniono klucze: {}, {}",
+            blog_cache_key, article_cache_key
         );
-        state.cache.invalidate("page:/blog");
-        state.cache.invalidate(&format!("page:/blog/{}", slug));
+        state.cache.invalidate(blog_cache_key);
+        state.cache.invalidate(&article_cache_key);
     }
 
     Redirect::to("/admin/dashboard")
@@ -242,9 +246,10 @@ async fn post_delete_article(
         .await
         .ok();
 
-    // Unieważniamy cache strony głównej bloga
-    println!("CACHE INVALIDATION: Strona /blog została unieważniona.");
-    state.cache.invalidate("page:/blog");
+    // POPRAWKA: Unieważniamy cache dla pierwszej strony bloga
+    let blog_cache_key = "page:/blog?page=1";
+    println!("CACHE INVALIDATION: Unieważniono klucz: {}", blog_cache_key);
+    state.cache.invalidate(blog_cache_key);
 
     // Jeśli udało się pobrać slug, unieważniamy także cache dla tego konkretnego artykułu
     if let Some(slug) = article_slug {
