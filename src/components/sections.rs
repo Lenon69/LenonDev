@@ -112,6 +112,7 @@ pub fn contact_section() -> Markup {
                 // --- NOWA SEKCJA Z PRZYCISKIEM WHATSAPP ---
                 div class="mb-12" {
                     a href="https://wa.me/48696619168" target="_blank"
+                      aria-label="Napisz na WhatsApp"
                       class="inline-flex items-center gap-3 bg-green-500/10 hover:bg-green-500/20 transition-colors duration-300 text-green-400 font-bold py-3 px-8 rounded-lg border border-green-500/30" {
                         // Użyjemy SVG dla ikony WhatsApp
                         svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {
