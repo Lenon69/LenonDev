@@ -37,10 +37,23 @@ pub async fn get_main_content(
         });
 
     // Generujemy kod HTML
-    let markup = html! {
+    let content_fragment = html! {
         (sections::about_section())
         (sections::projects_section(projects))
         (sections::contact_section())
+    };
+
+    // ZMIANA TUTAJ: Warunkowo dodajemy tytuł do odpowiedzi
+    let final_markup = if params.scroll_to.is_none() {
+        // Jeśli nie ma parametru scroll_to, to znaczy, że kliknięto w logo.
+        // Dołączamy wtedy tytuł z atrybutem hx-swap-oob="true".
+        html! {
+            title hx-swap-oob="true" { "LenonDev - Nowoczesne Strony Internetowe" }
+            (content_fragment)
+        }
+    } else {
+        // W przeciwnym razie zwracamy samą treść (dla linków "Projekty", "Kontakt" itd.)
+        content_fragment
     };
 
     let mut headers = HeaderMap::new();
@@ -52,7 +65,7 @@ pub async fn get_main_content(
         }
     }
 
-    let response: CacheValue = (headers, markup.into());
+    let response: CacheValue = (headers, final_markup.into());
     state.cache.insert(cache_key, response.clone());
 
     response

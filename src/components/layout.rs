@@ -10,7 +10,7 @@ pub fn base_layout(
     schema_json: Option<String>,
     current_path: &str,
 ) -> Markup {
-    let meta_description = description.unwrap_or("LenonDev - Tworzenie nowoczesnych i szybkich stron internetowych w technologii Rust. Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe.");
+    let meta_description = description.unwrap_or("LenonDev - Tworzenie nowoczesnych i szybkich stron internetowych w technologii Rust. Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe. Złoczew");
     let base_url = env::var("APP_BASE_URL").unwrap_or_else(|_| "".to_string());
     let canonical_url = format!("{}{}", base_url, current_path);
 
@@ -23,7 +23,7 @@ pub fn base_layout(
                 meta name="viewport" content="width=device-width, initial-scale=1.0";
                 title { (title) }
                 meta name="description" content=(meta_description);
-                meta name="keywords" content="tworzenie stron internetowych, strony internetowe na zamówienie, Rust web developer, Axum backend, HTMX frontend, szybkie strony, nowoczesne strony, programista Rust, portfolio programisty, responsywne strony, SEO strony, tani web developer, strony z HTMX, web design, strony dla firm, landing page, strona wizytówka, programowanie stron, zakup strony internetowej, strony pod SEO, profesjonalne strony internetowe, web development Rust, szybkie ładowanie stron, nowoczesne technologie webowe";
+                meta name="keywords" content="tworzenie stron internetowych, strony internetowe na zamówienie, Rust web developer, Axum backend, HTMX frontend, szybkie strony, nowoczesne strony, programista Rust, portfolio programisty, responsywne strony, SEO strony, tani web developer, strony z HTMX, web design, strony dla firm, landing page, strona wizytówka, programowanie stron, zakup strony internetowej, strony pod SEO, profesjonalne strony internetowe, web development Rust, szybkie ładowanie stron, nowoczesne technologie webowe, strony internetowe Złoczew, Złoczew, Sieradz, Wieluń";
                 meta name="color-scheme" content="dark only";
 
 

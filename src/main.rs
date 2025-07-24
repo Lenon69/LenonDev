@@ -109,7 +109,7 @@ async fn main() {
         .nest_service("/public", ServeDir::new("static"))
         .layer(SetResponseHeaderLayer::if_not_present(
             header::CACHE_CONTROL,
-            HeaderValue::from_static("public, max-age=604800"),
+            HeaderValue::from_static("public, max-age=32140800"),
         ))
         .route_service("/", ServeFile::new("static/index.html"))
         .route_service("/robots.txt", ServeFile::new("static/robots.txt"))
