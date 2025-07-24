@@ -14,6 +14,7 @@ use axum::{Router, routing::get};
 use components::{layout, sections};
 use handlers::error::handler_404;
 use handlers::offer::get_offer_page;
+use handlers::privacy::get_privacy_policy_page;
 use handlers::projects::show_project;
 use handlers::seo::get_sitemap;
 use handlers::{
@@ -86,6 +87,7 @@ async fn main() {
     let app_router = Router::new()
         .route("/content", get(get_main_content))
         .route("/oferta", get(get_offer_page))
+        .route("/polityka-prywatnosci", get(get_privacy_policy_page))
         .route("/blog", get(blog_index))
         .route("/uses", get(get_uses_content))
         .route("/blog/{slug}", get(show_article))

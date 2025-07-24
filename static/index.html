@@ -218,5 +218,29 @@
         }
       });
     </script>
+
+    <div
+      x-cloak
+      x-data="{ show: false }"
+      x-init="!localStorage.getItem('cookiesAccepted') && (show = true)"
+      x-show="show"
+      class="fixed bottom-0 left-0 right-0 z-50 p-4"
+    >
+      <div
+        class="container mx-auto max-w-4xl bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 rounded-lg shadow-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6"
+      >
+        <p class="text-slate-300 text-sm text-center md:text-left">
+          Ta strona wykorzystuje pliki cookies w celu poprawy doświadczenia
+          użytkownika oraz do analizy ruchu. Korzystając ze strony, wyrażasz
+          zgodę na ich użycie.
+        </p>
+        <button
+          @click="localStorage.setItem('cookiesAccepted', 'true'); show = false"
+          class="flex-shrink-0 bg-brand-cyan hover:opacity-80 text-brand-dark font-bold py-2 px-6 rounded-lg transition-opacity"
+        >
+          Rozumiem
+        </button>
+      </div>
+    </div>
   </body>
 </html>
