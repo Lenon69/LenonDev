@@ -257,7 +257,7 @@ async fn warm_up_cache(state: AppState) {
                             }
                         }
                         div class="text-center mt-16" {
-                            a hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" { "← Wróć na bloga" }
+                            a href="/blog" hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" { "← Wróć na bloga" }
                         }
                     }
                 }
