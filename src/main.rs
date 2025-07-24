@@ -6,12 +6,11 @@ mod models;
 
 use appstate::CacheValue;
 use axum::extract::Query;
-use axum::http::{HeaderMap, Uri};
+use axum::http::{HeaderMap, HeaderValue, Uri, header};
 use axum::middleware;
 use axum::response::Html;
 use axum::routing::post;
 use axum::{Router, routing::get};
-use axum_server::tls_rustls::RustlsConfig;
 use components::{layout, sections};
 use handlers::error::handler_404;
 use handlers::offer::get_offer_page;
@@ -28,6 +27,7 @@ use resend_rs::Resend;
 use sqlx::PgPool;
 use std::net::SocketAddr;
 use tower_http::services::{ServeDir, ServeFile};
+use tower_http::set_header::SetResponseHeaderLayer;
 
 use crate::appstate::AppState;
 use crate::handlers::admin::{auth_middleware, protected_admin_routes, public_admin_routes};
@@ -107,6 +107,10 @@ async fn main() {
     let app = Router::new()
         // Najpierw obsługujemy pliki statyczne. To ma teraz najwyższy priorytet.
         .nest_service("/public", ServeDir::new("static"))
+        .layer(SetResponseHeaderLayer::if_not_present(
+            header::CACHE_CONTROL,
+            HeaderValue::from_static("public, max-age=604800"),
+        ))
         .route_service("/", ServeFile::new("static/index.html"))
         .route_service("/robots.txt", ServeFile::new("static/robots.txt"))
         // Następnie łączymy (merge) wszystkie trasy naszej aplikacji

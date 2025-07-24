@@ -12,7 +12,6 @@ pub fn base_layout(
 ) -> Markup {
     let meta_description = description.unwrap_or("LenonDev - Tworzenie nowoczesnych i szybkich stron internetowych w technologii Rust. Pasjonat kodu i nowoczesnych technologii. Tworzę wydajne, bezpieczne i eleganckie strony internetowe.");
     let base_url = env::var("APP_BASE_URL").unwrap_or_else(|_| "".to_string());
-    let og_image_url = format!("{}/public/og-image.png", base_url);
     let canonical_url = format!("{}{}", base_url, current_path);
 
     html! {
@@ -26,6 +25,13 @@ pub fn base_layout(
                 meta name="description" content=(meta_description);
                 meta name="keywords" content="tworzenie stron internetowych, strony internetowe na zamówienie, Rust web developer, Axum backend, HTMX frontend, szybkie strony, nowoczesne strony, programista Rust, portfolio programisty, responsywne strony, SEO strony, tani web developer, strony z HTMX, web design, strony dla firm, landing page, strona wizytówka, programowanie stron, zakup strony internetowej, strony pod SEO, profesjonalne strony internetowe, web development Rust, szybkie ładowanie stron, nowoczesne technologie webowe";
                 meta name="color-scheme" content="dark only";
+
+
+                link rel="preload" href="/public/style.css" as="style";
+                link rel="preload" href="/public/background.jpg" as="image";
+                link rel="preload" href="/public/fixed-logo.png" as="image";
+                link rel="preload" href="/public/projects/project1.png" as="image";
+                link rel="preload" href="/public/projects/project2.png" as="image";
 
                 // Favicon
                 link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png";
@@ -142,8 +148,8 @@ pub fn base_layout(
                         a href="/uses"   class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
                         a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
                         a href="/blog"   class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
-                        a hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Projekty" }
-                        a hx-get="/content?scroll_to=kontakt"  hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Kontakt" }
+                        a href="/#projekty" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Projekty" }
+                        a href="/#kontakt" hx-get="/content?scroll_to=kontakt"  hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Kontakt" }
                         }
                     }
                 }
