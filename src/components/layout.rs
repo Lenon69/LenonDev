@@ -22,6 +22,8 @@ pub fn base_layout(
             head {
                 meta charset="UTF-8";
                 meta name="viewport" content="width=device-width, initial-scale=1.0";
+                link rel="preconnect" href="https://fonts.googleapis.com";
+                link rel="preconnect" href="https://fonts.gstatic.com" crossorigin;
                 script {
                     (maud::PreEscaped(r#"
                         const loadGtm = () => {
@@ -86,8 +88,8 @@ pub fn base_layout(
                 }
 
                 // --- KONIEC SEKCJI SEO I FAVICON ---
-                script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography" {}
-                script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" {}
+                script defer src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4?plugins=typography" {}
+                script defer src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" {}
 
                 script {
                     (maud::PreEscaped(r#"
@@ -118,8 +120,6 @@ pub fn base_layout(
                     "#))
                 }
                 link rel="stylesheet" href="/public/style.css";
-                link rel="preconnect" href="https://fonts.googleapis.com";
-                link rel="preconnect" href="https://fonts.gstatic.com" crossorigin;
                 link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet";
                 style { "html { font-family: 'Inter', sans-serif; }" }
             }
