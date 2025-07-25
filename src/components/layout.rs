@@ -46,7 +46,7 @@ pub fn base_layout(
 
 
                 link rel="preload" href="/public/style.css" as="style";
-                link rel="preload" href="/public/background.avif" as="image";
+                link rel="preload" href="/public/background.avif" as="image" fetchpriority="high";
                 link rel="preload" href="/public/fixed-logo.avif" as="image";
                 link rel="preload" href="/public/projects/project1.avif" as="image";
                 link rel="preload" href="/public/projects/project2.avif" as="image";
