@@ -3,21 +3,35 @@
 <html lang="pl" class="scroll-smooth">
   <head>
     <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-SYZJ42NF6P"
-    ></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
+      const loadGtm = () => {
+        // Funkcja tworząca i wstrzykująca skrypt GTM
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtag/js?id=G-SYZJ42NF6P";
+        document.head.appendChild(script);
 
-      gtag("config", "G-SYZJ42NF6P");
+        // Inicjalizacja dataLayer
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-SYZJ42NF6P");
+
+        // Usuwamy nasłuchiwanie, aby skrypt nie ładował się wielokrotnie
+        ["scroll", "mousemove", "touchstart"].forEach((event) =>
+          window.removeEventListener(event, loadGtm, { once: true }),
+        );
+      };
+
+      // Nasłuchujemy na pierwszą interakcję użytkownika
+      ["scroll", "mousemove", "touchstart"].forEach((event) =>
+        window.addEventListener(event, loadGtm, { once: true }),
+      );
     </script>
-    <meta charset="UTF-8" />
 
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LenonDev - Nowoczesne Strony Internetowe</title>
     <meta

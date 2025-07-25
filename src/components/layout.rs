@@ -20,19 +20,31 @@ pub fn base_layout(
         (DOCTYPE)
         html lang="pl" class="scroll-smooth" {
             head {
-
-
-                // Pierwszy skrypt (ładowanie biblioteki)
-                script async src="https://www.googletagmanager.com/gtag/js?id=G-SYZJ42NF6P" {}
-
-                // Drugi skrypt (konfiguracja)
                 script {
                     (maud::PreEscaped(r#"
-                        window.dataLayer = window.dataLayer || [];
-                        function gtag(){dataLayer.push(arguments);}
-                        gtag('js', new Date());
+                        const loadGtm = () => {
+                            // Funkcja tworząca i wstrzykująca skrypt GTM
+                            const script = document.createElement('script');
+                            script.async = true;
+                            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-SYZJ42NF6P';
+                            document.head.appendChild(script);
 
-                        gtag('config', 'G-SYZJ42NF6P');
+                            // Inicjalizacja dataLayer
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag(){dataLayer.push(arguments);}
+                            gtag('js', new Date());
+                            gtag('config', 'G-SYZJ42NF6P');
+
+                            // Usuwamy nasłuchiwanie, aby skrypt nie ładował się wielokrotnie
+                            ['scroll', 'mousemove', 'touchstart'].forEach(event => 
+                                window.removeEventListener(event, loadGtm, { once: true })
+                            );
+                        };
+
+                        // Nasłuchujemy na pierwszą interakcję użytkownika
+                        ['scroll', 'mousemove', 'touchstart'].forEach(event => 
+                            window.addEventListener(event, loadGtm, { once: true })
+                        );
                     "#))
                 }
 
