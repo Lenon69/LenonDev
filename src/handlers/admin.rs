@@ -365,7 +365,7 @@ async fn post_add_project_image(
             .await
             .unwrap_or(0);
 
-    let file_name = format!("{}-{}.png", project_id, image_count + 1);
+    let file_name = format!("{}-{}.avif", project_id, image_count + 1);
     let file_path = path::Path::new("static/projects").join(&file_name);
     let image_url = format!("/public/projects/{}", file_name);
 

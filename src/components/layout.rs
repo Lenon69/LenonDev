@@ -46,10 +46,10 @@ pub fn base_layout(
 
 
                 link rel="preload" href="/public/style.css" as="style";
-                link rel="preload" href="/public/background.jpg" as="image";
-                link rel="preload" href="/public/fixed-logo.png" as="image";
-                link rel="preload" href="/public/projects/project1.png" as="image";
-                link rel="preload" href="/public/projects/project2.png" as="image";
+                link rel="preload" href="/public/background.avif" as="image";
+                link rel="preload" href="/public/fixed-logo.avif" as="image";
+                link rel="preload" href="/public/projects/project1.avif" as="image";
+                link rel="preload" href="/public/projects/project2.avif" as="image";
 
                 // Favicon
                 link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png";
@@ -61,7 +61,7 @@ pub fn base_layout(
                 // Open Graph (dla social media)
                 meta property="og:title" content=(title)
                 meta property="og:description" content="Tworzę wydajne, bezpieczne i nowoczesne strony internetowe w technologii Rust + HTMX. Postaw na prędkość, SEO i elegancki wygląd.";
-                meta property="og:image" content="/public/og-image.png";
+                meta property="og:image" content="/public/og-image.avif";
                 meta property="og:image:width" content="372";
                 meta property="og:image:height" content="281";
                 meta property="og:url" content=(canonical_url);
@@ -167,7 +167,7 @@ pub fn base_layout(
                           hx-target="#content-area"
                           hx-push-url="/"
                         {
-                            img class="h-16 w-auto transition-transform duration-300 hover:scale-110" src="/public/fixed-logo.png" alt="LenonDev Logo" width="372" height="281";
+                            img class="h-16 w-auto transition-transform duration-300 hover:scale-110" src="/public/fixed-logo.avif" alt="LenonDev Logo" width="372" height="281";
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
                         div class="text-slate-200 flex flex-wrap justify-center items-center gap-2 md:gap-4 mt-4 md:mt-0" {

@@ -251,7 +251,7 @@ pub fn new_project_form() -> Markup {
                     }
                     // Pole Główne zdjęcie
                     div {
-                        label for="image_url" class="block text-sm font-medium text-slate-300 mb-1" { "URL głównego zdjęcia (np. /public/projects/nowy.png)" }
+                        label for="image_url" class="block text-sm font-medium text-slate-300 mb-1" { "URL głównego zdjęcia (np. /public/projects/nowy.avif)" }
                         input type="text" name="image_url" id="image_url"
                             class="block w-full bg-slate-800 border border-slate-700 rounded-md py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500";
                     }
@@ -310,7 +310,7 @@ pub fn edit_project_form(project: &Project, images: &[ProjectImage]) -> Markup {
                     }
                     // URL Głównego zdjęcia
                     div {
-                        label for="image_url" class="block text-sm font-medium text-slate-300 mb-1" { "URL głównego zdjęcia (np. /public/projects/projekt.png)" }
+                        label for="image_url" class="block text-sm font-medium text-slate-300 mb-1" { "URL głównego zdjęcia (np. /public/projects/projekt.avif)" }
                         input type="text" name="image_url" id="image_url" value=(project.image_url.as_deref().unwrap_or(""))
                             class="block w-full bg-slate-800 border border-slate-700 rounded-md py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500";
                     }

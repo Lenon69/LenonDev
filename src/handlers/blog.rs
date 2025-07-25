@@ -147,7 +147,7 @@ pub async fn show_article(
 
             // W przeciwnym razie, zbuduj całą stronę i zapisz ją w cache'u
             let base_url = std::env::var("APP_BASE_URL").unwrap_or_default();
-            let og_image_url = format!("{}/public/og-image.png", base_url);
+            let og_image_url = format!("{}/public/og-image.avif", base_url);
             let schema = ArticleSchema {
                 context: "https://schema.org",
                 type_of: "BlogPosting",
@@ -171,7 +171,7 @@ pub async fn show_article(
                     name: "LenonDev",
                     logo: ImageObject {
                         type_of: "ImageObject",
-                        url: format!("{}/public/fixed-logo.png", base_url),
+                        url: format!("{}/public/fixed-logo.avif", base_url),
                         width: 372,
                         height: 281,
                     },
