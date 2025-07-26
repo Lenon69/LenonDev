@@ -3,24 +3,29 @@ use crate::models::{OfferCatalogSchema, OfferItem, OfferedService, PriceSpecific
 use crate::AppState;
 use crate::appstate::CacheValue;
 use crate::components::{layout, offer};
-use axum::extract::State;
+use axum::extract::{Query, State};
 use axum::http::Uri;
 use axum::{http::HeaderMap, response::Html};
+
+use super::htmx::ScrollParams;
 
 // Handler, który serwuje stronę /oferta
 pub async fn get_offer_page(
     uri: Uri,
     headers: HeaderMap,
     State(state): State<AppState>,
+    Query(params): Query<ScrollParams>,
 ) -> CacheValue {
-    let cache_key = "page:/oferta".to_string();
+    let cache_key = format!(
+        "page:/oferta?scroll_to={}",
+        params.scroll_to.as_deref().unwrap_or("")
+    );
     let is_htmx_request = headers.contains_key("HX-Request");
 
-    if let Some(cached_page) = state.cache.get(&cache_key) {
-        if is_htmx_request {
-            return (HeaderMap::new(), cached_page.1);
+    if !is_htmx_request {
+        if let Some(cached_page) = state.cache.get(&cache_key) {
+            return cached_page;
         }
-        return cached_page;
     }
 
     // --- Tworzenie danych strukturalnych ---
@@ -35,7 +40,7 @@ pub async fn get_offer_page(
             price_specification: PriceSpecification {
                 type_of: "PriceSpecification",
                 min_price: "1500",
-                max_price: "4000",
+                max_price: "6000",
                 price_currency: "PLN",
             },
         },
@@ -126,21 +131,31 @@ pub async fn get_offer_page(
     // ------------------------------------
 
     let content_fragment = offer::offer_page_view();
-    let page_html = if is_htmx_request {
-        Html(content_fragment)
-    } else {
-        Html(layout::base_layout(
-            "LenonDev - Oferta",
-            content_fragment,
-            Some(
-                "Nowoczesne rozwiązania webowe, które pomogą Twojej firmie zaistnieć w internecie i osiągnąć sukces.",
-            ),
-            Some(schema_json), // Przekazujemy dane strukturalne
-            uri.path(),
-        ))
-    };
 
-    let response = (HeaderMap::new(), page_html);
+    // --- NOWA LOGIKA PRZEWIJANIA ---
+    let mut response_headers = HeaderMap::new();
+    if let Some(section_id) = params.scroll_to {
+        let trigger_value = format!("{{\"scrollToSection\": \"#{}\"}}", section_id);
+        if let Ok(header_value) = trigger_value.parse() {
+            response_headers.insert("HX-Trigger", header_value);
+        }
+    }
+
+    if is_htmx_request {
+        return (response_headers, Html(content_fragment));
+    }
+
+    let full_page_html = Html(layout::base_layout(
+        "LenonDev - Oferta",
+        content_fragment,
+        Some(
+            "Nowoczesne rozwiązania webowe, które pomogą Twojej firmie zaistnieć w internecie i osiągnąć sukces.",
+        ),
+        Some(schema_json),
+        uri.path(),
+    ));
+
+    let response = (response_headers, full_page_html);
     state.cache.insert(cache_key, response.clone());
     response
 }

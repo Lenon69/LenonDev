@@ -24,18 +24,21 @@ pub fn offer_page_view() -> Markup {
                 div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" {
                     // Karta: Strona Wizytówka
                     (offer_card(
+                        "prosta-strona-wizytówka",
                         "Prosta Strona Wizytówka",
                         html! { "Idealna na start – profesjonalnie zaprezentuj swoją firmę, usługi i dane kontaktowe." },
-                        "1 500 - 4 000 zł"
+                        "1 500 - 6 000 zł"
                     ))
                     // Karta: Landing Page
                     (offer_card(
+                        "landing-page",
                         "Landing Page",
                         html! {"Skupiona na jednym celu – idealna do kampanii marketingowych, promocji produktu lub zapisu na newsletter." },
                         "2 000 - 4 000 zł"
                     ))
                     // Karta: Strona z Blogiem
                     (offer_card(
+                        "strona-blog",
                     "Strona z Blogiem / CMS",
                     html! {
                         "Dziel się wiedzą i buduj pozycję eksperta. Zobacz, jak to robię na moim "
@@ -46,18 +49,21 @@ pub fn offer_page_view() -> Markup {
                     ))
                     // Karta: Sklep Internetowy
                     (offer_card(
+                        "sklep-internetowy",
                         "Sklep Internetowy",
                         html! {"Sprzedawaj swoje produkty online. Kompletne rozwiązanie e-commerce z płatnościami i zarządzaniem." },
                         "15 000 - 22 000 zł"
                     ))
                     // Karta: Projekt Indywidualny
                     (offer_card(
+                        "projekt-indywidualny",
                         "Projekt Indywidualny",
                         html! { "Masz unikalny pomysł? Stworzę dedykowaną aplikację webową idealnie dopasowaną do Twoich potrzeb." },
                         "od 5 000 zł"
                     ))
                     // Karta: Aplikacja Webowa
                     (offer_card(
+                        "aplikacja-webowa",
                         "Aplikacja webowa (CRM)",
                         html! {"Zaawansowana logika backendowa." },
                         "od 15 000 zł - 50 0000+ zł"
@@ -152,9 +158,9 @@ pub fn offer_page_view() -> Markup {
 }
 
 // Komponent pomocniczy do tworzenia kart z ofertą
-fn offer_card(title: &str, description: Markup, price: &str) -> Markup {
+fn offer_card(id: &str, title: &str, description: Markup, price: &str) -> Markup {
     html! {
-        div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1 flex flex-col" {
+        div id=(id) class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1 flex flex-col" {
             h3 class="text-xl font-bold text-brand-cyan mb-3" { (title) }
             p class="text-slate-400 flex-grow" { (description) }
             div class="mt-6 pt-4 border-t border-slate-700" {

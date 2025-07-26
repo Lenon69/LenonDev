@@ -13,6 +13,7 @@ use axum::routing::post;
 use axum::{Router, routing::get};
 use components::{layout, sections};
 use handlers::error::handler_404;
+use handlers::htmx::ScrollParams;
 use handlers::offer::get_offer_page;
 use handlers::privacy::get_privacy_policy_page;
 use handlers::projects::show_project;
@@ -148,11 +149,13 @@ async fn warm_up_cache(state: AppState) {
         .insert("page:/:scroll_to=".to_string(), main_page);
 
     // 2. Strona /oferta
+    let offer_params = Query(ScrollParams { scroll_to: None });
     let offer_uri: Uri = "/oferta".parse().unwrap();
     let offer_page = get_offer_page(
         offer_uri,
         HeaderMap::new(),
         axum::extract::State(state.clone()),
+        offer_params,
     )
     .await;
     state.cache.insert("page:/oferta".to_string(), offer_page);
