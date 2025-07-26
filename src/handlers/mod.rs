@@ -3,6 +3,7 @@ pub mod blog;
 pub mod contact;
 pub mod error;
 pub mod htmx;
+pub mod maintenance;
 pub mod offer;
 pub mod privacy;
 pub mod projects;

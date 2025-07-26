@@ -75,17 +75,21 @@ pub fn offer_page_view() -> Markup {
             div class="mt-20" {
                 h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Usługi Dodatkowe" }
                 div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center" {
-                    // Karta: Opieka nad stroną
-                    (service_card(
-                        html!{ "Opieka nad Stroną" },
-                        "Aktualizacje, kopie zapasowe i monitoring bezpieczeństwa. Śpij spokojnie, ja czuwam nad Twoją stroną."
-                    ))
-                    // Karta: Optymalizacja
+                    // ZMIANA TUTAJ: Zamieniamy `service_card` na link `<a>`
+                    a href="/oferta/opieka"
+                      hx-get="/oferta/opieka"
+                      hx-target="#content-area"
+                      hx-push-url="/oferta/opieka"
+                      class="block bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1"
+                    {
+                        h3 class="text-xl font-bold text-slate-200 mb-3" { "Opieka nad Stroną" }
+                        p class="text-slate-400" { "Aktualizacje, kopie zapasowe i monitoring bezpieczeństwa. Kliknij, aby zobaczyć pakiety." } // Zaktualizowany tekst
+                    }
+                    // Pozostałe karty bez zmian
                     (service_card(
                         html!{ "Optymalizacja i SEO" },
                         "Poprawa szybkości ładowania strony i optymalizacja pod kątem wyszukiwarek (SEO), aby klienci mogli Cię znaleźć."
                     ))
-                    // Karta: Hosting i Domena
                     (service_card(
                         html!{ "Hosting i Domena" },
                         "Pomoc w wyborze i konfiguracji szybkiego, niezawodnego hostingu oraz rejestracji idealnej domeny."
