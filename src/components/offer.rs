@@ -75,27 +75,29 @@ pub fn offer_page_view() -> Markup {
             div class="mt-20" {
                 h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Usługi Dodatkowe" }
                 div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center" {
-                    // ZMIANA TUTAJ: Zamieniamy `service_card` na link `<a>`
-                    a href="/oferta/opieka"
-                      hx-get="/oferta/opieka"
-                      hx-target="#content-area"
-                      hx-push-url="/oferta/opieka"
-                      class="block bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1"
-                    {
+                    // Karta: Opieka nad stroną (już jest linkiem)
+                    a href="/oferta/opieka" hx-get="/oferta/opieka" hx-target="#content-area" hx-push-url="/oferta/opieka"
+                      class="block bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1" {
                         h3 class="text-xl font-bold text-slate-200 mb-3" { "Opieka nad Stroną" }
-                        p class="text-slate-400" { "Aktualizacje, kopie zapasowe i monitoring bezpieczeństwa. Kliknij, aby zobaczyć pakiety." } // Zaktualizowany tekst
+                        p class="text-slate-400" { "Aktualizacje, kopie zapasowe i monitoring. Kliknij, aby zobaczyć pakiety." }
                     }
-                    // Pozostałe karty bez zmian
-                    (service_card(
-                        html!{ "Optymalizacja i SEO" },
-                        "Poprawa szybkości ładowania strony i optymalizacja pod kątem wyszukiwarek (SEO), aby klienci mogli Cię znaleźć."
-                    ))
-                    (service_card(
-                        html!{ "Hosting i Domena" },
-                        "Pomoc w wyborze i konfiguracji szybkiego, niezawodnego hostingu oraz rejestracji idealnej domeny."
-                    ))
+
+                    // ZMIANA TUTAJ: Karta: Optymalizacja i SEO
+                    a href="/oferta/seo" hx-get="/oferta/seo" hx-target="#content-area" hx-push-url="/oferta/seo"
+                      class="block bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1" {
+                        h3 class="text-xl font-bold text-slate-200 mb-3" { "Optymalizacja i SEO" }
+                        p class="text-slate-400" { "Popraw szybkość i pozycję w wyszukiwarkach, aby klienci mogli Cię łatwiej znaleźć." }
+                    }
+
+                    // ZMIANA TUTAJ: Karta: Hosting i Domena
+                    a href="/oferta/hosting" hx-get="/oferta/hosting" hx-target="#content-area" hx-push-url="/oferta/hosting"
+                      class="block bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1" {
+                        h3 class="text-xl font-bold text-slate-200 mb-3" { "Hosting i Domena" }
+                        p class="text-slate-400" { "Pomoc w wyborze szybkiego hostingu oraz rejestracji idealnej domeny dla Twojej firmy." }
+                    }
                 }
             }
+
             // --- SEKCJA: DLACZEGO WARTO? ---
             div class="mt-20" {
                 h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Co Otrzymujesz w Cenie?" }

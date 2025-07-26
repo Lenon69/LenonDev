@@ -1,8 +1,10 @@
 pub mod admin;
 pub mod blog;
 pub mod cookies;
+pub mod hosting;
 pub mod layout;
 pub mod maintenance;
 pub mod offer;
 pub mod privacy;
 pub mod sections;
+pub mod seo_optimization;

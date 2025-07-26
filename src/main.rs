@@ -13,12 +13,14 @@ use axum::routing::post;
 use axum::{Router, routing::get};
 use components::{layout, sections};
 use handlers::error::handler_404;
+use handlers::hosting::get_hosting_page;
 use handlers::htmx::ScrollParams;
 use handlers::maintenance::get_maintenance_page;
 use handlers::offer::get_offer_page;
 use handlers::privacy::get_privacy_policy_page;
 use handlers::projects::show_project;
 use handlers::seo::get_sitemap;
+use handlers::seo_optimization::get_seo_optimization_page;
 use handlers::{
     blog::{blog_index, show_article},
     contact::handle_contact_form,
@@ -90,6 +92,8 @@ async fn main() {
         .route("/content", get(get_main_content))
         .route("/oferta", get(get_offer_page))
         .route("/oferta/opieka", get(get_maintenance_page))
+        .route("/oferta/seo", get(get_seo_optimization_page)) // <-- DODAJ NOWĄ TRASĘ
+        .route("/oferta/hosting", get(get_hosting_page)) // <-- DODAJ NOWĄ TRASĘ
         .route("/polityka-prywatnosci", get(get_privacy_policy_page))
         .route("/blog", get(blog_index))
         .route("/uses", get(get_uses_content))
