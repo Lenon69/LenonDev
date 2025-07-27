@@ -91,3 +91,7 @@ article blockquote {
   font-weight: 900;
   src: url("/public/fonts/inter-v19-latin-900.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
+
+.text-shadow-strong {
+  text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.8);
+}
