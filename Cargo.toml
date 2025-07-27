@@ -24,6 +24,7 @@ tower-cookies = "0.11.0"
 tower-http = { version = "0.6.6", features = ["fs", "full"] }
 tower-sessions = "0.14.0"
 tracing = { version = "0.1.41", features = ["async-await"] }
+urlencoding = "2.1.3"
 
 
 [profile.release]

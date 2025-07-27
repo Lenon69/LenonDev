@@ -124,9 +124,24 @@ pub fn contact_section() -> Markup {
                 }
 
                 // --- FORMULARZ E-MAIL ---
-                div id="contact-form-response" {
+                div id="contact-form-response"
+                    x-data="{}"
+                    x-init="
+                        const prefill = localStorage.getItem('prefillMessage');
+                        if (prefill) {
+                            $nextTick(() => {
+                                const messageTextarea = document.getElementById('message');
+                                if (messageTextarea) {
+                                    messageTextarea.value = prefill;
+                                    messageTextarea.focus(); // Opcjonalnie: ustaw fokus na polu
+                                }
+                            });
+                            localStorage.removeItem('prefillMessage');
+                        }
+                    "
+                {
                     form
-                        hx-post="/contact"
+                        hx-post="/api/contact"
                         hx-target="#contact-form-response"
                         hx-swap="innerHTML"
                         class="space-y-4 text-left"
@@ -155,7 +170,7 @@ pub fn contact_section() -> Markup {
                                 type="submit"
                                 class="mt-2 inline-block bg-brand-purple hover:shadow-cyan-glow transition-all duration-300 text-white font-bold py-2 px-6 rounded-lg"
                             {
-                                "Wyślij e-mail" // Zmieniony tekst przycisku
+                                "Wyślij e-mail"
                             }
                         }
                     }

@@ -1,5 +1,6 @@
 // src/components/maintenance.rs
 use maud::{Markup, html};
+use urlencoding::encode;
 
 // Główny widok strony z pakietami opieki
 pub fn maintenance_page_view() -> Markup {
@@ -82,6 +83,14 @@ fn package_card(
     features: Vec<&str>,
     highlighted: bool,
 ) -> Markup {
+    let message = format!(
+        "Dzień dobry, jestem zainteresowany/a Pakietem Opieki nad Stroną: *{}*. Proszę o kontakt w celu omówienia szczegółów i dalszych kroków. Pozdrawiam!",
+        name
+    );
+
+    // Kodujemy wiadomość, aby była bezpieczna w URL
+    let whatsapp_url = format!("https://wa.me/48696619168?text={}", encode(&message));
+
     // Dynamiczne klasy dla wyróżnionego pakietu
     let border_class = if highlighted {
         "border-brand-cyan shadow-cyan-glow"
@@ -89,8 +98,14 @@ fn package_card(
         "border-slate-700/50"
     };
 
+    let ring_class = if highlighted {
+        "ring-2 ring-brand-cyan/50"
+    } else {
+        ""
+    };
+
     html! {
-        div class={"bg-slate-800/50 p-8 rounded-xl border transition-all duration-300 relative overflow-hidden " (border_class)} {
+        div x-data="{ package_message: '{PreEscaped(message)}' }" class={"bg-slate-800/50 p-8 rounded-xl border transition-all duration-300 relative overflow-hidden " (border_class) " " (ring_class)} {
             // Wyróżniający blask w tle
             @if highlighted {
                 div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-cyan/10 via-transparent to-brand-purple/10 -z-10" {}
@@ -114,7 +129,8 @@ fn package_card(
 
             // Przycisk
             div class="text-center mt-10" {
-                a href="/#kontakt" hx-get="/content?scroll_to=kontakt" hx-target="#content-area" hx-push-url="/" class={"w-full block text-center font-bold py-3 px-6 rounded-lg transition-all duration-300 " (if highlighted {"bg-brand-cyan text-brand-dark hover:opacity-90"} else {"bg-slate-700 hover:bg-slate-600 text-white"}) } {
+                a href=(whatsapp_url) target="_blank"
+                  class={"w-full block text-center font-bold py-3 px-6 rounded-lg transition-all duration-300 " (if highlighted {"bg-brand-cyan text-brand-dark hover:opacity-90"} else {"bg-slate-700 hover:bg-slate-600 text-white"}) } {
                     "Wybieram Pakiet"
                 }
             }
