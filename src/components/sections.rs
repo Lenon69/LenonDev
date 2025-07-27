@@ -6,6 +6,7 @@ pub fn about_section() -> Markup {
     html! {
         section id="o-mnie" class="relative bg-cover bg-center"
         style="background-image: url('/public/background.avif');"
+        fetchpriority="high"
          {
             div class="absolute inset-0 bg-brand-dark/75" {}
             div class="relative z-10 container mx-auto px-4 pt-36 md:pt-28 pb-20 lg:pb-32 text-center" {
