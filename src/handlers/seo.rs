@@ -18,10 +18,30 @@ pub async fn get_sitemap(State(state): State<AppState>) -> impl IntoResponse {
     let mut urls = Vec::new();
 
     // Dodaj statyczne strony
-    urls.push(format!("<url><loc>{}</loc></url>", base_url));
-    urls.push(format!("<url><loc>{}/oferta</loc></url>", base_url));
-    urls.push(format!("<url><loc>{}/blog</loc></url>", base_url));
-    urls.push(format!("<url><loc>{}/uses</loc></url>", base_url));
+    // --- POCZĄTEK ZMIAN ---
+    // Lista wszystkich statycznych ścieżek, które mają znaleźć się w sitemapie
+    let static_paths = vec![
+        "", // Strona główna
+        "/oferta",
+        "/blog",
+        "/uses",
+        "/polityka-prywatnosci",
+        "/oferta/prosta-strona-wizytowka",
+        "/oferta/landing-page",
+        "/oferta/blog-cms",
+        "/oferta/sklep-internetowy",
+        "/oferta/projekt-indywidualny",
+        "/oferta/aplikacja-webowa-crm",
+        "/oferta/opieka",
+        "/oferta/seo",
+        "/oferta/hosting",
+    ];
+
+    // Dodaj wszystkie statyczne strony do mapy
+    for path in static_paths {
+        urls.push(format!("<url><loc>{}{}</loc></url>", base_url, path));
+    }
+    // --- KONIEC ZMIAN ---
 
     // Pobierz dynamicznie artykuły
     if let Ok(articles) =

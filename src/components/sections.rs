@@ -18,7 +18,7 @@ pub fn about_section() -> Markup {
 
                     // --- SEKCJA TECHNOLOGII Z ZEWNĘTRZNYMI PLIKAMI SVG ---
                     div class="mt-12" {
-                        h3 class="text-lg font-semibold text-slate-300 mb-12" {{"Główny stack technologiczny:"} ;
+                        h3 class="text-lg font-semibold text-slate-300 mb-12 text-shadow-strong" {{"Główny stack technologiczny:"} ;
                         div class="flex flex-wrap justify-center items-center gap-3 lg:gap-4 mt-8" {
 
                             // Rust - Zastąpiliśmy wbudowane SVG tagiem <img>
