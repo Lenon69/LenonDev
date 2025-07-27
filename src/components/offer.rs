@@ -155,7 +155,7 @@ pub fn offer_page_view() -> Markup {
 }
 
 // Komponent pomocniczy do tworzenia kart z ofertą
-fn offer_card(id: &str, title: &str, description: Markup, price: &str) -> Markup {
+fn _offer_card(id: &str, title: &str, description: Markup, price: &str) -> Markup {
     html! {
         div id=(id) class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1 flex flex-col" {
             h3 class="text-xl font-bold text-brand-cyan mb-3" { (title) }

@@ -22,8 +22,6 @@ pub fn base_layout(
             head {
                 meta charset="UTF-8";
                 meta name="viewport" content="width=device-width, initial-scale=1.0";
-                link rel="preconnect" href="https://fonts.googleapis.com";
-                link rel="preconnect" href="https://fonts.gstatic.com" crossorigin;
                 script {
                     (maud::PreEscaped(r#"
                         const loadGtm = () => {
@@ -120,7 +118,6 @@ pub fn base_layout(
                     "#))
                 }
                 link rel="stylesheet" href="/public/style.css";
-                link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet";
                 style { "html { font-family: 'Inter', sans-serif; }" }
             }
             // --- NOWA, KLUCZOWA ZMIANA W TAGU BODY ---
