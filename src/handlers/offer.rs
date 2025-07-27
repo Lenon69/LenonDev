@@ -54,7 +54,7 @@ pub async fn get_offer_page(
             price_specification: PriceSpecification {
                 type_of: "PriceSpecification",
                 min_price: "12000",
-                max_price: "22000",
+                max_price: "28000",
                 price_currency: "PLN",
             },
         },

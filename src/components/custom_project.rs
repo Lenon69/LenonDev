@@ -19,22 +19,22 @@ pub fn custom_project_page_view() -> Markup {
                     (feature_card(
                         "Konsultacja i Planowanie",
                         "Zaczynamy od szczegółowej rozmowy o Twoim pomyśle. Definiujemy cele, funkcje i plan działania, aby mieć pewność, że idziemy w dobrym kierunku.",
-                        "palette"
+                        "💡"
                     ))
                     (feature_card(
                         "Prototypowanie i Design",
                         "Tworzymy interaktywne makiety (UX/UI), abyś mógł zobaczyć i przetestować wygląd oraz działanie aplikacji jeszcze przed napisaniem kodu.",
-                        "rocket"
+                        "📐"
                     ))
                     (feature_card(
                         "Development i Testy",
                         "Budujemy Twoją aplikację, regularnie informując Cię o postępach. Każdy element jest dokładnie testowany pod kątem wydajności i bezpieczeństwa.",
-                        "trending-up"
+                        "👨‍💻"
                     ))
                      (feature_card(
                         "Wdrożenie i Wsparcie",
                         "Pomagam we wdrożeniu gotowego produktu na serwer i oferuję wsparcie techniczne po zakończeniu projektu, aby zapewnić jego płynne działanie.",
-                        "device-mobile"
+                        "🚀"
                     ))
                 }
             }

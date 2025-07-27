@@ -19,22 +19,22 @@ pub fn web_app_page_view() -> Markup {
                     (feature_card(
                         "Systemy CRM",
                         "Zarządzaj relacjami z klientami, śledź sprzedaż i automatyzuj komunikację w jednym, dedykowanym narzędziu.",
-                        "palette"
+                        "👥"
                     ))
                     (feature_card(
                         "Platformy Rezerwacyjne",
                         "System do rezerwacji wizyt, terminów czy zasobów, zintegrowany z kalendarzem i płatnościami online.",
-                        "rocket"
+                        "🗓️"
                     ))
                     (feature_card(
                         "Narzędzia Analityczne",
                         "Dedykowane dashboardy i panele do wizualizacji danych, które pomogą Ci podejmować lepsze decyzje biznesowe.",
-                        "trending-up"
+                        "📈"
                     ))
                      (feature_card(
                         "Wewnętrzne Systemy Firmowe",
                         "Aplikacje do zarządzania projektami, dokumentami, zasobami ludzkimi – wszystko w jednym, bezpiecznym miejscu.",
-                        "device-mobile"
+                        "🏢"
                     ))
                 }
             }

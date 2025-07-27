@@ -45,7 +45,7 @@ pub fn offer_page_view() -> Markup {
                         "sklep-internetowy",
                         "Sklep Internetowy",
                         "Sprzedawaj swoje produkty online. Kompletne rozwiązanie e-commerce z płatnościami i zarządzaniem.",
-                        "15 000 - 22 000 zł"
+                        "14 000 - 28 000 zł"
                     ))
                     (service_link(
                         "projekt-indywidualny",

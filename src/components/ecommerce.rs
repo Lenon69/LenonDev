@@ -19,22 +19,22 @@ pub fn ecommerce_page_view() -> Markup {
                     (feature_card(
                         "Zarządzanie Produktami",
                         "Prosty panel do dodawania produktów, kategorii, wariantów i zarządzania stanem magazynowym.",
-                        "palette"
+                        "📦"
                     ))
                     (feature_card(
                         "Integracja Płatności",
                         "Bezpieczna integracja z popularnymi bramkami płatności (np. Stripe, Przelewy24), aby Twoi klienci mogli płacić szybko i wygodnie.",
-                        "rocket"
+                        "💳"
                     ))
                     (feature_card(
                         "Zarządzanie Zamówieniami",
                         "System do śledzenia i obsługi zamówień, od złożenia po wysyłkę.",
-                        "trending-up"
+                        "🚚"
                     ))
                      (feature_card(
                         "Niezawodność i Skalowalność",
                         "Sklep zbudowany na solidnych fundamentach technologii Rust jest gotowy na obsługę dużego ruchu i dalszy rozwój Twojego biznesu.",
-                        "device-mobile"
+                        "📈"
                     ))
                 }
             }
