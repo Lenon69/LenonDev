@@ -43,19 +43,19 @@ pub fn about_section() -> Markup {
 
                             // PostgreSQL
                             a href="https://www.postgresql.org/" target="_blank" class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 transition-colors" {
-                                img class="h-5 w-5" src="public/svg/postgresql.svg" alt="PostgreSQL logo";
+                                img class="h-5 w-5" src="/public/svg/postgresql.svg" alt="PostgreSQL logo";
                                 span { "PostgreSQL" }
                             }
 
                             // Tailwind CSS
                             a href="https://tailwindcss.com/" target="_blank" class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 transition-colors" {
-                                img class="h-5 w-5" src="public/svg/tailwind.svg" alt="Tailwind CSS logo";
+                                img class="h-5 w-5" src="/public/svg/tailwind.svg" alt="Tailwind CSS logo";
                                 span { "Tailwind CSS" }
                             }
 
                             // Alpine.js
                             a href="https://alpinejs.dev/" target="_blank" class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 transition-colors" {
-                                img class="h-5 w-5" src="public/svg/alpinejs.svg" alt="Alpine.js logo";
+                                img class="h-5 w-5" src="/public/svg/alpinejs.svg" alt="Alpine.js logo";
                                 span { "Alpine.js" }
                             }
                         }
@@ -345,8 +345,8 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                     div x-show="modalOpen"
                         class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[99] flex items-center justify-center p-4"
                         style="display: none;"
-                        "@touchstart"="handleTouchStart($event)"
-                        "@touchend"="handleTouchEnd($event)"
+                        "@touchstart.passive"="handleTouchStart($event)"
+                        "@touchend.passive"="handleTouchEnd($event)"
                     {
                         // Półprzezroczyste tło do zamykania modala
                         div class="absolute inset-0" "@click"="modalOpen = false" {}
