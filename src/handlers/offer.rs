@@ -6,8 +6,9 @@ use crate::components::{layout, offer};
 use axum::extract::{Query, State};
 use axum::http::Uri;
 use axum::{http::HeaderMap, response::Html};
+use maud::html;
 
-use super::htmx::ScrollParams;
+use crate::handlers::htmx::ScrollParams;
 
 // Handler, który serwuje stronę /oferta
 pub async fn get_offer_page(
@@ -130,23 +131,26 @@ pub async fn get_offer_page(
     let schema_json = serde_json::to_string(&schema).unwrap_or_default();
     // ------------------------------------
 
+    let page_title = "Oferta i Usługi - LenonDev";
     let content_fragment = offer::offer_page_view();
 
     // --- NOWA LOGIKA PRZEWIJANIA ---
-    let mut response_headers = HeaderMap::new();
-    if let Some(section_id) = params.scroll_to {
-        let trigger_value = format!("{{\"scrollToSection\": \"#{}\"}}", section_id);
-        if let Ok(header_value) = trigger_value.parse() {
-            response_headers.insert("HX-Trigger", header_value);
-        }
-    }
+    let response_headers = HeaderMap::new();
 
     if is_htmx_request {
-        return (response_headers, Html(content_fragment));
+        let htmx_response = html! {
+            title hx-swap-oob="true" { (page_title) }
+            // Dołączamy nagłówki triggera do samego fragmentu, jeśli są potrzebne
+            @if let Some(section_id) = params.scroll_to {
+                div hx-trigger=(format!("{{\"scrollToSection\": \"#{}\"}}", section_id)) {}
+            }
+            (content_fragment)
+        };
+        return (HeaderMap::new(), Html(htmx_response));
     }
 
     let full_page_html = Html(layout::base_layout(
-        "LenonDev - Oferta",
+        "Oferta i Usługi - LenonDev",
         content_fragment,
         Some(
             "Nowoczesne rozwiązania webowe, które pomogą Twojej firmie zaistnieć w internecie i osiągnąć sukces.",

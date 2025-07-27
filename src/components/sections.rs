@@ -141,7 +141,7 @@ pub fn contact_section() -> Markup {
                     "
                 {
                     form
-                        hx-post="/api/contact"
+                        hx-post="/contact"
                         hx-target="#contact-form-response"
                         hx-swap="innerHTML"
                         class="space-y-4 text-left"
