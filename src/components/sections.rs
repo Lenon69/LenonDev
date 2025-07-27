@@ -10,7 +10,7 @@ pub fn about_section() -> Markup {
          {
             div class="absolute inset-0 bg-brand-dark/75" {}
             div class="relative z-10 container mx-auto px-4 pt-36 md:pt-28 pb-20 lg:pb-32 text-center" {
-                h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-brand-cyan text-shadow-strong" { "Pasjonat Kodu i Nowoczesnych Technologii" }
+                h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-brand-cyan text-shadow-strong" { "Pasjonat Kodu i Nowoczesnych Technologii" }
                 div class="mt-8 max-w-3xl mx-auto text-slate-300 space-y-4 text-lg text-shadow-strong" {
                     p { "Witaj na LenonDev. Programowanie to nie tylko mój zawód, ale przede wszystkim pasja. Eksploruję świat nowoczesnego developmentu, skupiając się na wydajności, bezpieczeństwie i elegancji kodu, którą oferuje ekosystem Rusta." }
                     p { "Tworzę strony i aplikacje, w najnowszych technologiach, które są nie tylko super szybkie, ale także gotowe na wyzwania przyszłości." }
