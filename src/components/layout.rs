@@ -181,11 +181,11 @@ pub fn base_layout(
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
                         div class="text-slate-200 flex flex-wrap justify-center items-center gap-2 md:gap-4 mt-4 md:mt-0" {
-                        a href="/uses"   class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
-                        a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
-                        a href="/blog"   class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
-                        a href="/#projekty" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Projekty" }
-                        a href="/#kontakt" hx-get="/content?scroll_to=kontakt"  hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-1 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Kontakt" }
+                        a href="/uses"   class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
+                        a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
+                        a href="/blog"   class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
+                        a href="/#projekty" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Projekty" }
+                        a href="/#kontakt" hx-get="/content?scroll_to=kontakt"  hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Kontakt" }
                         }
                     }
                 }
