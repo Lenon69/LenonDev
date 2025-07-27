@@ -65,7 +65,7 @@ article blockquote {
   font-family: "Inter";
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/inter-v19-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("/public/fonts/inter-v19-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 /* inter-500 - latin */
 @font-face {
@@ -73,7 +73,7 @@ article blockquote {
   font-family: "Inter";
   font-style: normal;
   font-weight: 500;
-  src: url("../fonts/inter-v19-latin-500.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("/public/fonts/inter-v19-latin-500.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 /* inter-700 - latin */
 @font-face {
@@ -81,7 +81,7 @@ article blockquote {
   font-family: "Inter";
   font-style: normal;
   font-weight: 700;
-  src: url("../fonts/inter-v19-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("/public/fonts/inter-v19-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 /* inter-900 - latin */
 @font-face {
@@ -89,5 +89,5 @@ article blockquote {
   font-family: "Inter";
   font-style: normal;
   font-weight: 900;
-  src: url("../fonts/inter-v19-latin-900.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("/public/fonts/inter-v19-latin-900.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
