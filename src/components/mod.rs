@@ -1,10 +1,16 @@
 pub mod admin;
 pub mod blog;
+pub mod blog_cms;
 pub mod cookies;
+pub mod custom_project;
+pub mod ecommerce;
 pub mod hosting;
+pub mod landing_page;
 pub mod layout;
 pub mod maintenance;
 pub mod offer;
 pub mod privacy;
 pub mod sections;
 pub mod seo_optimization;
+pub mod simple_site;
+pub mod web_app;

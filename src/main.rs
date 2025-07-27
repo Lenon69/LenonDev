@@ -12,15 +12,21 @@ use axum::response::Html;
 use axum::routing::post;
 use axum::{Router, routing::get};
 use components::{layout, sections};
+use handlers::blog_cms::get_blog_cms_page;
+use handlers::custom_project::get_custom_project_page;
+use handlers::ecommerce::get_ecommerce_page;
 use handlers::error::handler_404;
 use handlers::hosting::get_hosting_page;
 use handlers::htmx::ScrollParams;
+use handlers::landing_page::get_landing_page;
 use handlers::maintenance::get_maintenance_page;
 use handlers::offer::get_offer_page;
 use handlers::privacy::get_privacy_policy_page;
 use handlers::projects::show_project;
 use handlers::seo::get_sitemap;
 use handlers::seo_optimization::get_seo_optimization_page;
+use handlers::simple_site::get_simple_site_page;
+use handlers::web_app::get_web_app_page;
 use handlers::{
     blog::{blog_index, show_article},
     contact::handle_contact_form,
@@ -91,9 +97,17 @@ async fn main() {
     let app_router = Router::new()
         .route("/content", get(get_main_content))
         .route("/oferta", get(get_offer_page))
+        // --- NOWE TRASY DLA USŁUG ---
         .route("/oferta/opieka", get(get_maintenance_page))
-        .route("/oferta/seo", get(get_seo_optimization_page)) // <-- DODAJ NOWĄ TRASĘ
-        .route("/oferta/hosting", get(get_hosting_page)) // <-- DODAJ NOWĄ TRASĘ
+        .route("/oferta/seo", get(get_seo_optimization_page))
+        .route("/oferta/hosting", get(get_hosting_page))
+        .route("/oferta/prosta-strona-wizytowka", get(get_simple_site_page))
+        .route("/oferta/landing-page", get(get_landing_page))
+        .route("/oferta/blog-cms", get(get_blog_cms_page))
+        .route("/oferta/sklep-internetowy", get(get_ecommerce_page))
+        .route("/oferta/projekt-indywidualny", get(get_custom_project_page))
+        .route("/oferta/aplikacja-webowa-crm", get(get_web_app_page))
+        // --- KONIEC NOWYCH TRAS ---
         .route("/polityka-prywatnosci", get(get_privacy_policy_page))
         .route("/blog", get(blog_index))
         .route("/uses", get(get_uses_content))

@@ -88,11 +88,6 @@ fn package_card(
     } else {
         "border-slate-700/50"
     };
-    let ring_class = if highlighted {
-        "ring-2 ring-brand-cyan/50"
-    } else {
-        ""
-    };
 
     html! {
         div class={"bg-slate-800/50 p-8 rounded-xl border transition-all duration-300 relative overflow-hidden " (border_class)} {

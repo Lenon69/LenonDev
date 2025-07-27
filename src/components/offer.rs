@@ -23,50 +23,41 @@ pub fn offer_page_view() -> Markup {
                 // Grid z kartami dla każdego typu strony
                 div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" {
                     // Karta: Strona Wizytówka
-                    (offer_card(
-                        "prosta-strona-wizytówka",
+                    (service_link(
+                        "prosta-strona-wizytowka",
                         "Prosta Strona Wizytówka",
-                        html! { "Idealna na start – profesjonalnie zaprezentuj swoją firmę, usługi i dane kontaktowe." },
+                        "Idealna na start – profesjonalnie zaprezentuj swoją firmę, usługi i dane kontaktowe.",
                         "1 500 - 6 000 zł"
                     ))
-                    // Karta: Landing Page
-                    (offer_card(
+                    (service_link(
                         "landing-page",
                         "Landing Page",
-                        html! {"Skupiona na jednym celu – idealna do kampanii marketingowych, promocji produktu lub zapisu na newsletter." },
+                        "Skupiona na jednym celu – idealna do kampanii marketingowych, promocji produktu lub zapisu na newsletter.",
                         "2 000 - 4 000 zł"
                     ))
-                    // Karta: Strona z Blogiem
-                    (offer_card(
-                        "strona-blog",
-                    "Strona z Blogiem / CMS",
-                    html! {
-                        "Dziel się wiedzą i buduj pozycję eksperta. Zobacz, jak to robię na moim "
-                        a href="/blog" class="text-brand-cyan hover:underline" { "blogu" }
-                        ". Prosty w obsłudze system do zarządzania treścią."
-                    },
-                    "5000 - 9 000 zł"
+                    (service_link(
+                        "blog-cms",
+                        "Strona z Blogiem / CMS",
+                        "Dziel się wiedzą i buduj pozycję eksperta. Prosty w obsłudze system do zarządzania treścią.",
+                        "5000 - 9 000 zł"
                     ))
-                    // Karta: Sklep Internetowy
-                    (offer_card(
+                    (service_link(
                         "sklep-internetowy",
                         "Sklep Internetowy",
-                        html! {"Sprzedawaj swoje produkty online. Kompletne rozwiązanie e-commerce z płatnościami i zarządzaniem." },
+                        "Sprzedawaj swoje produkty online. Kompletne rozwiązanie e-commerce z płatnościami i zarządzaniem.",
                         "15 000 - 22 000 zł"
                     ))
-                    // Karta: Projekt Indywidualny
-                    (offer_card(
+                    (service_link(
                         "projekt-indywidualny",
                         "Projekt Indywidualny",
-                        html! { "Masz unikalny pomysł? Stworzę dedykowaną aplikację webową idealnie dopasowaną do Twoich potrzeb." },
+                        "Masz unikalny pomysł? Stworzę dedykowaną aplikację webową idealnie dopasowaną do Twoich potrzeb.",
                         "od 5 000 zł"
                     ))
-                    // Karta: Aplikacja Webowa
-                    (offer_card(
-                        "aplikacja-webowa",
+                    (service_link(
+                        "aplikacja-webowa-crm",
                         "Aplikacja webowa (CRM)",
-                        html! {"Zaawansowana logika backendowa." },
-                        "od 15 000 zł - 50 0000+ zł"
+                        "Zaawansowana logika backendowa do automatyzacji procesów w Twojej firmie.",
+                        "od 15 000 zł - 90 000 zł+"
                     ))
                 }
             }
@@ -176,16 +167,6 @@ fn offer_card(id: &str, title: &str, description: Markup, price: &str) -> Markup
     }
 }
 
-// Komponent pomocniczy do tworzenia kart z usługami dodatkowymi
-fn service_card(title: Markup, description: &str) -> Markup {
-    html! {
-        div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1" {
-            h3 class="text-xl font-bold text-slate-200 mb-3" { (title) }
-            p class="text-slate-400" { (description) }
-        }
-    }
-}
-
 fn feature_card(icon: Markup, title: &str, description: &str) -> Markup {
     html! {
         div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 text-center transition-all duration-300 hover:border-brand-cyan/50 hover:shadow-cyan-glow hover:-translate-y-1" {
@@ -194,6 +175,21 @@ fn feature_card(icon: Markup, title: &str, description: &str) -> Markup {
             }
             h3 class="text-xl font-bold text-slate-100 mb-2" { (title) }
             p class="text-slate-400" { (description) }
+        }
+    }
+}
+
+// Nowa funkcja pomocnicza do tworzenia linków
+fn service_link(slug: &str, title: &str, description: &str, price: &str) -> Markup {
+    let link = format!("/oferta/{}", slug);
+    html! {
+        a href=(link) hx-get=(link) hx-target="#content-area" hx-push-url=(link)
+          class="group block bg-slate-800/50 hover:bg-slate-700/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-glow flex flex-col" {
+            h3 class="text-xl font-bold text-brand-cyan mb-3" { (title) }
+            p class="text-slate-400 flex-grow" { (description) }
+            div class="mt-6 pt-4 border-t border-slate-700" {
+                p class="text-lg font-bold text-slate-100 text-center" { (price) }
+            }
         }
     }
 }
