@@ -8,6 +8,7 @@ use axum::{
     http::{HeaderMap, Uri},
     response::Html,
 };
+use maud::html;
 
 pub async fn get_landing_page(
     uri: Uri,
@@ -15,18 +16,27 @@ pub async fn get_landing_page(
     State(state): State<AppState>,
 ) -> CacheValue {
     let cache_key = "page:/oferta/landing-page".to_string();
-    if let Some(cached_page) = state.cache.get(&cache_key) {
-        return cached_page;
+    let is_htmx_request = headers.contains_key("HX-Request");
+
+    if !is_htmx_request {
+        if let Some(cached_page) = state.cache.get(&cache_key) {
+            return cached_page;
+        }
     }
 
+    let page_title = "Landing Page | Strony Koncentrujące się na Konwersji - LenonDev";
     let content_fragment = landing_page::landing_page_view();
 
-    if headers.contains_key("HX-Request") {
-        return (HeaderMap::new(), Html(content_fragment));
+    if is_htmx_request {
+        let htmx_response = html! {
+            title hx-swap-oob="true" { (page_title) }
+            (content_fragment)
+        };
+        return (HeaderMap::new(), Html(htmx_response));
     }
 
     let full_page_html = Html(layout::base_layout(
-        "Landing Page - LenonDev",
+        page_title,
         content_fragment,
         Some("Strony typu landing page zaprojektowane w jednym celu: maksymalizacji konwersji."),
         None,
