@@ -175,6 +175,7 @@ pub fn base_layout(
                           hx-get="/content"
                           hx-target="#content-area"
                           hx-push-url="/"
+                          class="md:ml-8"
                         {
                             img
                                 class="h-16 w-auto transition-transform duration-300 hover:scale-110"
@@ -185,7 +186,7 @@ pub fn base_layout(
 
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
-                        div class="text-slate-200 flex flex-nowrap justify-center items-center gap-x-1 md:gap-x-4 mt-4 md:mt-0" {
+                        div class="nav-links-container text-slate-200 flex flex-nowrap justify-center items-center gap-x-1 md:gap-x-4 mt-4 md:mt-0" {
                         a href="/uses"   class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
                         a href="/oferta" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
                         a href="/blog"   class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }

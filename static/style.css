@@ -100,3 +100,16 @@ article blockquote {
   transform: translateY(1px);
   filter: brightness(0.9);
 }
+
+/* Custom responsive gaps for navigation links */
+@media (min-width: 375px) {
+  .nav-links-container {
+    column-gap: 0.5rem; /* 8px */
+  }
+}
+
+@media (min-width: 425px) {
+  .nav-links-container {
+    column-gap: 0.75rem; /* 12px */
+  }
+}
