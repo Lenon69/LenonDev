@@ -169,8 +169,7 @@ pub fn base_layout(
 
                 // Nagłówek i nawigacja
                 header id="main-header" class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50" {
-                    // Na małych ekranach (domyślnie) elementy będą w kolumnie, a na średnich (md:) i większych w rzędzie.
-                    nav class="container mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center" {
+                    nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col md:flex-row justify-between items-center" {
                         // Link z logo
                         a href="/"
                           hx-get="/content"
