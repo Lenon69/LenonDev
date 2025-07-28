@@ -98,14 +98,8 @@ fn package_card(
         "border-transparent"
     };
 
-    let ring_class = if highlighted {
-        "ring-2 ring-brand-cyan/50"
-    } else {
-        ""
-    };
-
     html! {
-        div class={"bg-slate-800/50 p-8 rounded-xl border transition-all duration-300 relative overflow-hidden hover:shadow-cyan-glow hover:-translate-y-1" (border_class) " " (ring_class)} {
+        div class={"bg-slate-800/50 p-8 rounded-xl border transition-all duration-300 relative overflow-hidden hover:shadow-cyan-glow hover:-translate-y-1" (border_class) } {
             // Wyróżniający blask w tle
             @if highlighted {
                 div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-cyan/10 via-transparent to-brand-purple/10 -z-10" {}
