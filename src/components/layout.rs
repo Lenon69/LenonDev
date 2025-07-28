@@ -179,7 +179,7 @@ pub fn base_layout(
                         {
                             img
                                 class="h-16 w-auto transition-transform duration-300 hover:scale-110"
-                                srcset="/public/fixed-logo-170w.avif 170w, /public/fixed-logo.avif 372w"
+                                srcset="/public/fixed-logo-170w.webp 170w, /public/fixed-logo.avif 372w"
                                 sizes="85px"
                                 src="/public/fixed-logo.avif"
                                 alt="LenonDev Logo" width="372" height="281";
