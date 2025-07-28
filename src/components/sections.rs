@@ -4,7 +4,7 @@ use maud::{Markup, html};
 
 pub fn about_section() -> Markup {
     html! {
-        section id="o-mnie" class="relative bg-cover bg-center"
+        section id="o-mnie" class="relative bg-cover bg-center min-h-screen"
         style="background-image: url('/public/background.avif');"
         fetchpriority="high"
          {
