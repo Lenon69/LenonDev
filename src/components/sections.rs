@@ -168,7 +168,7 @@ pub fn contact_section() -> Markup {
                         div class="text-right" {
                             button
                                 type="submit"
-                                class="mt-2 inline-block bg-brand-purple hover:shadow-cyan-glow transition-all duration-300 text-white font-bold py-2 px-6 rounded-lg"
+                                class="mt-2 inline-block bg-brand-purple hover:shadow-cyan-glow transition-all duration-300 text-brand-dark font-bold py-2 px-6 rounded-lg"
                             {
                                 "Wyślij e-mail"
                             }
@@ -314,6 +314,8 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                 ))
                 // Nasłuchujemy na klawisz Escape, aby zamknąć modal
                 "@keydown.escape.window"="modalOpen = false"
+                "@keydown.arrow-left.window"="if (modalOpen) prev()"
+                "@keydown.arrow-right.window"="if (modalOpen) next()"
             {
                 // --- Galeria na stronie (miniatury i główny obrazek) ---
                 div {
