@@ -95,7 +95,7 @@ fn package_card(
     let border_class = if highlighted {
         "border-brand-cyan shadow-cyan-glow"
     } else {
-        "border-slate-700/50"
+        "border-transparent"
     };
 
     let ring_class = if highlighted {
