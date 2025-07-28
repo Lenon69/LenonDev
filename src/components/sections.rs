@@ -87,7 +87,7 @@ pub fn projects_section(projects: Vec<Project>) -> Markup {
                             }
                             h3 class="text-xl font-bold text-brand-cyan" { (project.title) }
                             p class="text-slate-400 mt-2" { (project.description) }
-                            div class="mt-4 text-sm text-slate-500" {
+                            div class="mt-4 text-sm text-slate-300" {
                                 span class="font-semibold" { "Technologie:" }
                                 " " (project.technologies)
                             }
