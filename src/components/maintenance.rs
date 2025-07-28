@@ -112,7 +112,12 @@ fn package_card(
             }
 
             h3 class="text-2xl font-bold text-center text-white" { (name) }
+            div "text-center my-6" {
             p class="text-center text-4xl font-bold my-6 bg-gradient-to-r from-brand-cyan to-brand-green text-transparent bg-clip-text" { (price) }
+                p class="text-center text-4xl font-bold my-6 bg-gradient-to-r from-brand-cyan to-brand-green text-transparent bg-clip-text" { (price) }
+                p class="text-sm font-normal text-slate-400" { "miesięcznie" }
+
+            }
             p class="text-slate-400 text-sm text-center min-h-[40px]" { (description) }
 
             // Lista funkcji
