@@ -118,14 +118,23 @@ article blockquote {
   Dodaje przezroczysty obrys do tekstu, co może powstrzymać
   niektóre przeglądarki przed zmianą jego koloru.
 */
-p,
-h1,
-h2,
-h3,
-h4,
-span,
-li,
-a {
-  -webkit-text-stroke: 0.1px transparent;
-  text-stroke: 0.1px transparent;
+/* p, */
+/* h1, */
+/* h2, */
+/* h3, */
+/* h4, */
+/* span, */
+/* li, */
+/* a { */
+/* -webkit-text-stroke: 0.1px transparent; */
+/* text-stroke: 0.1px transparent; */
+/* } */
+
+/* 
+  Resetuje on style, które przeglądarka Samsung Internet
+  próbuje na siłę narzucić w trybie ciemnym.
+*/
+html {
+  background: initial !important;
+  filter: initial !important;
 }
