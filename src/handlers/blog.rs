@@ -109,12 +109,7 @@ pub async fn show_article(
                 .content
                 .split("---")
                 .filter(|s| !s.trim().is_empty())
-                .map(|section_md| {
-                    let parser = pulldown_cmark::Parser::new(section_md.trim());
-                    let mut html_output = String::new();
-                    pulldown_cmark::html::push_html(&mut html_output, parser);
-                    html_output
-                })
+                .map(|raw_html_section| raw_html_section.trim().to_string()) // Po prostu dzielimy treść na sekcje
                 .collect();
 
             let content_fragment = html! {
