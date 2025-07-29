@@ -107,6 +107,11 @@ pub fn base_layout(
                 script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" {}
                 style type="text/tailwindcss" {
                     (maud::PreEscaped(r#"
+                        :root {
+                            color-scheme: dark;
+                        }
+                        
+                        
                         @theme {
                             --color-brand-dark: #101014;
                             --color-brand-purple: #8b5cf6;
