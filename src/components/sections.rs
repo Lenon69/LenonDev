@@ -400,7 +400,7 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                             // Główny obraz
                             img x-bind:src="mainImage"
                                 alt="Powiększone zdjęcie projektu"
-                                class="max-h-[95vh] w-auto rounded-lg shadow-2xl select-none"; // `select-none` zapobiega przypadkowemu zaznaczaniu obrazu
+                                class="max-h-[99vh] w-auto rounded-lg shadow-2xl select-none"; // `select-none` zapobiega przypadkowemu zaznaczaniu obrazu
 
                             // Przycisk "Dalej" (prawa strzałka)
                             button
