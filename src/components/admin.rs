@@ -64,7 +64,7 @@ pub fn new_article_form() -> Markup {
                     }
                     // Pole Treść (jako textarea)
                     div {
-                        label for="content" class="block text-sm font-medium text-slate-300 mb-1" { "Treść (Markdown)" }
+                        label for="content" class="block text-sm font-medium text-slate-300 mb-1" { "Treść (HTML + TailwindCSS4)" }
                         textarea name="content" id="content" rows="12" required
                             class="block w-full bg-slate-800 border border-slate-700 rounded-md py-2 px-3 font-mono focus:outline-none focus:ring-purple-500 focus:border-purple-500" {}
                     }
@@ -204,7 +204,7 @@ pub fn edit_article_form(article: &Article) -> Markup {
                     }
                     // Pole Treść (jako textarea)
                     div {
-                        label for="content" class="block text-sm font-medium text-slate-300 mb-1" { "Treść (Markdown)" }
+                        label for="content" class="block text-sm font-medium text-slate-300 mb-1" { "Treść (HTML + TailwindCSS4)" }
                         textarea name="content" id="content" rows="12" required
                             class="block w-full bg-slate-800 border border-slate-700 rounded-md py-2 px-3 font-mono focus:outline-none focus:ring-purple-500 focus:border-purple-500" {
                             (article.content)
