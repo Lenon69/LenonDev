@@ -1,6 +1,8 @@
 // src/components/hosting.rs
 use maud::{Markup, html};
 
+use crate::components::cta::whatsapp_button;
+
 pub fn hosting_page_view() -> Markup {
     html! {
         div class="container mx-auto px-4 pb-16 lg:pb-24 pt-36 md:pt-28 animate-fade-in" {
@@ -30,6 +32,7 @@ pub fn hosting_page_view() -> Markup {
                 ))
             }
 
+            (whatsapp_button("Usługa - Hosting"))
             // Sekcja powrotu
             div class="text-center mt-20" {
                 a href="/oferta" hx-get="/oferta" hx-target="#content-area" hx-push-url="/oferta" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-3 px-8 rounded-lg" {

@@ -1,5 +1,8 @@
 // src/components/blog_cms.rs
-use crate::components::simple_site::{back_to_offer_button, feature_card};
+use crate::components::{
+    cta::whatsapp_button,
+    simple_site::{back_to_offer_button, feature_card},
+};
 use maud::{Markup, html};
 
 pub fn blog_cms_page_view() -> Markup {
@@ -39,6 +42,7 @@ pub fn blog_cms_page_view() -> Markup {
                 }
             }
 
+            (whatsapp_button("Strona z Blogiem / CMS"))
             (back_to_offer_button())
         }
     }

@@ -1,6 +1,8 @@
 // src/components/simple_site.rs
 use maud::{Markup, html};
 
+use crate::components::cta::whatsapp_button;
+
 pub fn simple_site_page_view() -> Markup {
     html! {
         div class="container mx-auto px-4 pb-16 lg:pb-24 pt-36 md:pt-28 animate-fade-in" {
@@ -40,6 +42,8 @@ pub fn simple_site_page_view() -> Markup {
                 }
             }
 
+            // Sekcja zakupu
+            (whatsapp_button("Prosta Strona Wizytówka"))
             // Sekcja powrotu
             (back_to_offer_button())
         }

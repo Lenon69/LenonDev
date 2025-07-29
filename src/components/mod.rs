@@ -2,6 +2,7 @@ pub mod admin;
 pub mod blog;
 pub mod blog_cms;
 pub mod cookies;
+pub mod cta;
 pub mod custom_project;
 pub mod ecommerce;
 pub mod hosting;

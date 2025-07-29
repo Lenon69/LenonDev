@@ -2,7 +2,10 @@
 use maud::{Markup, html};
 
 // UWAGA: Zaimportuj funkcje pomocnicze z innego pliku, aby uniknąć duplikacji
-use crate::components::simple_site::{back_to_offer_button, feature_card};
+use crate::components::{
+    cta::whatsapp_button,
+    simple_site::{back_to_offer_button, feature_card},
+};
 
 pub fn landing_page_view() -> Markup {
     html! {
@@ -41,6 +44,7 @@ pub fn landing_page_view() -> Markup {
                 }
             }
 
+            (whatsapp_button("Landing Page"))
             (back_to_offer_button())
         }
     }
