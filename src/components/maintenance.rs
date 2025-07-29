@@ -66,7 +66,7 @@ pub fn maintenance_page_view() -> Markup {
             }
 
             // Sekcja powrotu
-            div class="text-center mt-20" {
+            div class="text-center mt-16" {
                 a href="/oferta" hx-get="/oferta" hx-target="#content-area" hx-push-url="/oferta" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-3 px-8 rounded-lg" {
                     "← Wróć do Głównej Oferty"
                 }
