@@ -115,6 +115,21 @@ pub fn base_layout(
                             --shadow-cyan-glow: 0 0 15px rgba(45, 212, 191, 0.4), 0 0 25px rgba(45, 212, 191, 0.1);
                         }
 
+                        @layer utilities {
+                            .text-shadow-sm {
+                                text-shadow: 1px 1px 3px rgba(0,0,0,0.25);
+                            }
+                            .text-shadow {
+                                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                            }
+                            .text-shadow-md {
+                                text-shadow: 3px 3px 6px rgba(0,0,0,0.35);
+                            }
+                            .text-shadow-lg {
+                                text-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+                            }
+                        }
+                        
                         @source inline("hover:shadow-cyan-glow hover:-translate-y-1 group-hover:text-brand-cyan hover:bg-slate-800/80");
                     "#))
                 }
