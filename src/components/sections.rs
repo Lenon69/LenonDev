@@ -13,8 +13,8 @@ pub fn about_section() -> Markup {
                 h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-brand-cyan text-shadow-strong" {
                     "Lenon"
                     span class="text-brand-purple" { "Dev" }
-                    " – Nowoczesne strony internetowe tworzone z pasją"
-                    }
+                    span class="text-brand-green" { " – Nowoczesne strony internetowe tworzone z pasją" }
+                }
                    div class="mt-8 max-w-3xl mx-auto text-slate-300 space-y-4 text-lg text-shadow-strong" {
                     h2 { "LenonDev to moja osobista strona-wizytówka, która prezentuje moje podejście do tworzenia nowoczesnych, responsywnych stron internetowych. Jako hobbysta i miłośnik programowania, buduję wszystko od zera, wykorzystując najnowsze technologie: Rust, Axum, HTMX, PostgreSQL i Cloudinary. Strona odzwierciedla mój styl – futurystyczny, estetyczny i technologicznie zaawansowany – oraz stanowi fundament mojej marki." }
                     h2 { "Tworzę strony i aplikacje, w najnowszych technologiach, które są nie tylko super szybkie, ale także gotowe na wyzwania przyszłości." }
