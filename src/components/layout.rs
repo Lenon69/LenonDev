@@ -187,11 +187,11 @@ pub fn base_layout(
                         }
                         // Linki nawigacji - dodajemy margines górny na małych ekranach (mt-4) i resetujemy go na większych (md:mt-0)
                         div class="nav-links-container text-slate-200 flex flex-nowrap justify-center items-center gap-x-1 md:gap-x-4 mt-4 md:mt-0" {
-                            a href="/uses"   class="active:scale-95 active:text-brand-cyan cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-150 hover:shadow-cyan-glow" { "Uses" }
-                            a href="/oferta" class="active:scale-95 active:text-brand-cyan cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-150 hover:shadow-cyan-glow" { "Oferta" }
-                            a href="/blog"   class="active:scale-95 active:text-brand-cyan cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-150 hover:shadow-cyan-glow" { "Blog" }
-                            a href="/#projekty" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-150 hover:shadow-cyan-glow active:scale-95 active:text-brand-cyan" { "Projekty" }
-                            a href="/#kontakt" hx-get="/content?scroll_to=kontakt"  hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-150 hover:shadow-cyan-glow active:scale-95 active:text-brand-cyan" { "Kontakt" }
+                            a href="/uses"   class="active:scale-95 active:text-brand-cyan cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Uses" }
+                            a href="/oferta" class="active:scale-95 active:text-brand-cyan cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Oferta" }
+                            a href="/blog"   class="active:scale-95 active:text-brand-cyan cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow" { "Blog" }
+                            a href="/#projekty" hx-get="/content?scroll_to=projekty" hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow active:scale-95 active:text-brand-cyan" { "Projekty" }
+                            a href="/#kontakt" hx-get="/content?scroll_to=kontakt"  hx-target="#content-area" hx-push-url="/" class="cursor-pointer text-sm hover:text-brand-cyan px-2 py-2 rounded-md transition-all duration-300 hover:shadow-cyan-glow active:scale-95 active:text-brand-cyan" { "Kontakt" }
                         }
                     }
                 }
