@@ -3,7 +3,7 @@
   aby zapobiec "wymuszonemu" odwracaniu kolorów przez przeglądarki.
 */
 :root {
-  color-scheme: dark;
+  color-scheme: dark !important;
 }
 
 article h1,
@@ -137,4 +137,19 @@ article blockquote {
 html {
   background: initial !important;
   filter: initial !important;
+}
+
+html,
+body,
+main,
+section,
+div,
+header,
+footer,
+nav,
+article {
+  background-color: transparent !important;
+  background-image: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
 }
