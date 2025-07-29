@@ -65,7 +65,7 @@ pub fn feature_card(title: &str, description: &str, emoji: &str) -> Markup {
 
 pub fn back_to_offer_button() -> Markup {
     html! {
-        div class="text-center mt-20" {
+        div class="text-center mt-4" {
             a href="/oferta" hx-get="/oferta" hx-target="#content-area" hx-push-url="/oferta" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-3 px-8 rounded-lg" {
                 "← Wróć do Głównej Oferty"
             }
