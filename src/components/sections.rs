@@ -382,8 +382,7 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
                             }
                         }
 
-                        // Kontener na obraz i nawigację, który obsługuje gesty swipe
-                        div class="relative w-full max-w-6xl flex items-center justify-center" {
+                        // Kontener na obraz i nawigację, który obsługuje gesty swip                        div class="relative w-full max-w-[76rem] flex items-center justify-center" {
                             // Przycisk "Wstecz" (lewa strzałka)
                             button
                                 "@click.stop"="prev()"
