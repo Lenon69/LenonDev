@@ -110,6 +110,6 @@ article blockquote {
 
 @media (min-width: 425px) {
   .nav-links-container {
-    column-gap: 0.75rem; /* 12px */
+    column-gap: 1.25rem; /* 12px */
   }
 }

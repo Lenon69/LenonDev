@@ -175,7 +175,7 @@ pub fn base_layout(
                           hx-get="/content"
                           hx-target="#content-area"
                           hx-push-url="/"
-                          class="md:ml-8"
+                          class="md:ml-4"
                         {
                             img
                                 class="h-16 w-auto transition-transform duration-300 hover:scale-110"
