@@ -184,7 +184,7 @@ pub fn base_layout(
 
                 // Nagłówek i nawigacja
                 header id="main-header" class="bg-[#1A1A1E]/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50" {
-                    nav class="container mx-auto px-6 sm:px-8 lg:px-12 py-2 flex flex-col md:flex-row justify-between items-center" {
+                    nav class="container mx-auto px-6 sm:px-8 lg:px-12 py-1 lg:py-2 flex flex-col md:flex-row justify-between items-center" {
                         // Link z logo
                         a href="/"
                           hx-get="/content"
