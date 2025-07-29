@@ -54,7 +54,7 @@ pub fn base_layout(
                 // Cała zawartość <head> pozostaje bez zmian
                 title { (title) }
                 meta name="description" content=(meta_description);
-                meta name="keywords" content="tworzenie stron internetowych, strony internetowe na zamówienie, Rust web developer, Axum backend, HTMX frontend, szybkie strony, nowoczesne strony, programista Rust, portfolio programisty, responsywne strony, SEO strony, tani web developer, strony z HTMX, web design, strony dla firm, landing page, strona wizytówka, programowanie stron, zakup strony internetowej, strony pod SEO, profesjonalne strony internetowe, web development Rust, szybkie ładowanie stron, nowoczesne technologie webowe, strony internetowe Złoczew, Złoczew, Sieradz, Wieluń, tworzenie stron internetowych";
+                meta name="keywords" content="tworzenie stron internetowych, strony internetowe na zamówienie, Rust web developer, Axum backend, HTMX frontend, szybkie strony, nowoczesne strony, programista Rust, portfolio programisty, responsywne strony, SEO strony, tani web developer, strony z HTMX, web design, strony dla firm, landing page, strona wizytówka, programowanie stron, zakup strony internetowej, strony pod SEO, profesjonalne strony internetowe, web development Rust, szybkie ładowanie stron, nowoczesne technologie webowe, strony internetowe Złoczew, Złoczew, Sieradz, Wieluń, tworzenie stron internetowych, strona internetowa";
                 meta name="color-scheme" content="dark only";
 
 

@@ -129,7 +129,7 @@ pub async fn show_article(
                             }
                         }
                         div class="text-center mt-16" {
-                            a hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" { "← Wróć na bloga" }
+                            a href="/blog" hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" { "← Wróć na bloga" }
                         }
                     }
                 }
@@ -197,7 +197,7 @@ pub async fn show_article(
                 div class="container mx-auto px-4 pb-16 lg:pb-24 pt-36 md:pt-28" {
                     div class="text-center py-40" {
                         h1 class="text-2xl text-red-500" { "404 - Nie znaleziono artykułu" }
-                        a hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="mt-8 cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
+                        a href="/blog" hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="mt-8 cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
                             "← Wróć na bloga"
                         }
                     }

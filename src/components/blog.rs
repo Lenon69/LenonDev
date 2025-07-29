@@ -41,13 +41,15 @@ pub fn blog_index_view(articles: Vec<Article>, current_page: i64, total_pages: i
                     div class="flex justify-between items-center max-w-4xl mx-auto mt-16" {
                         // Przycisk "Poprzednia" (widoczny, jeśli nie jesteśmy na pierwszej stronie)
                         @if current_page > 1 {
-                            a hx-get=(format!("/blog?page={}", current_page - 1)) class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
+                            a
+                            href=(format!("/blog?page={}", current_page - 1))
+                            hx-get=(format!("/blog?page={}", current_page - 1)) class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
                                 "← Nowsze wpisy"
                             }
                         } @else {
-                            // Pusty div, aby utrzymać layout
-                            div {}
-                        }
+                            // Pusty div, aby utrzymać symetrię layoutu
+                            div class="py-2 px-6" {}
+                            }
 
                         // Informacja o bieżącej stronie
                         span class="text-slate-400" {
@@ -56,7 +58,9 @@ pub fn blog_index_view(articles: Vec<Article>, current_page: i64, total_pages: i
 
                         // Przycisk "Następna" (widoczny, jeśli nie jesteśmy na ostatniej stronie)
                         @if current_page < total_pages {
-                            a hx-get=(format!("/blog?page={}", current_page + 1)) class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
+                            a
+                            href=(format!("/blog?page={}", current_page + 1))
+                            hx-get=(format!("/blog?page={}", current_page + 1)) class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" {
                                 "Starsze wpisy →"
                             }
                         } @else {
