@@ -82,7 +82,12 @@ pub fn new_article_form() -> Markup {
 }
 
 /// Generuje widok głównego panelu admina z listą projektów i artykułów.
-pub fn dashboard_view(articles: Vec<Article>, projects: Vec<Project>) -> Markup {
+pub fn dashboard_view(
+    articles: Vec<Article>,
+    projects: Vec<Project>,
+    current_page: i64,
+    total_pages: i64,
+) -> Markup {
     admin_layout(
         "Admin Dashboard",
         html! {
@@ -173,6 +178,37 @@ pub fn dashboard_view(articles: Vec<Article>, projects: Vec<Project>) -> Markup 
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+
+                // --- NOWA SEKCJA: PAGINACJA ARTYKUŁÓW ---
+                @if total_pages > 1 {
+                    div class="flex justify-between items-center mt-6" {
+                        // Przycisk "Poprzednia"
+                        @if current_page > 1 {
+                            a href=(format!("/admin/dashboard?page={}", current_page - 1))
+                              class="inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-4 rounded-lg" {
+                                "← Poprzednia"
+                            }
+                        } @else {
+                            // Pusty element dla zachowania layoutu
+                            span {}
+                        }
+
+                        // Informacja o stronie
+                        span class="text-slate-400" {
+                            "Strona " (current_page) " z " (total_pages)
+                        }
+
+                        // Przycisk "Następna"
+                        @if current_page < total_pages {
+                            a href=(format!("/admin/dashboard?page={}", current_page + 1))
+                              class="inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-4 rounded-lg" {
+                                "Następna →"
+                            }
+                        } @else {
+                            span {}
                         }
                     }
                 }

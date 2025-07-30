@@ -4,7 +4,7 @@ use std::{fs, path};
 use crate::{
     AppState,
     components::{self},
-    models::{Article, Project, ProjectForm, ProjectImage, ProjectUpdateForm},
+    models::{Article, PaginationParams, Project, ProjectForm, ProjectImage, ProjectUpdateForm},
 };
 use axum::{
     Form, Router,
@@ -57,17 +57,36 @@ async fn logout(session: Session) -> impl IntoResponse {
     Redirect::to("/")
 }
 
-async fn dashboard(State(state): State<AppState>) -> Html<maud::Markup> {
-    // Pobieramy artykuły (bez zmian)
-    let articles = sqlx::query_as::<_, Article>("SELECT * FROM articles ORDER BY created_at DESC")
-        .fetch_all(&state.db_pool)
-        .await
-        .unwrap_or_else(|e| {
-            eprintln!("Błąd podczas pobierania artykułów: {}", e);
-            vec![]
-        });
+async fn dashboard(
+    State(state): State<AppState>,
+    axum::extract::Query(pagination): axum::extract::Query<PaginationParams>, // <-- DODAJ TO
+) -> Html<maud::Markup> {
+    let current_page = pagination.page;
+    const ITEMS_PER_PAGE: i64 = 10; // Ustawiamy 10 artykułów na stronę w panelu
 
-    // DODAJ TO: Pobieramy projekty
+    // Pobieramy łączną liczbę artykułów, aby obliczyć liczbę stron
+    let total_articles: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM articles")
+        .fetch_one(&state.db_pool)
+        .await
+        .unwrap_or(0);
+
+    let total_pages = (total_articles as f64 / ITEMS_PER_PAGE as f64).ceil() as i64;
+    let offset = (current_page - 1) * ITEMS_PER_PAGE;
+
+    // Pobieramy tylko artykuły dla bieżącej strony
+    let articles = sqlx::query_as::<_, Article>(
+        "SELECT * FROM articles ORDER BY created_at DESC LIMIT $1 OFFSET $2",
+    )
+    .bind(ITEMS_PER_PAGE)
+    .bind(offset)
+    .fetch_all(&state.db_pool)
+    .await
+    .unwrap_or_else(|e| {
+        eprintln!("Błąd podczas pobierania artykułów: {}", e);
+        vec![]
+    });
+
+    // Pobieramy projekty (bez zmian)
     let projects = sqlx::query_as::<_, crate::models::Project>(
         "SELECT id, title, slug, description, technologies, image_url, project_url FROM projects ORDER BY id DESC"
     )
@@ -78,8 +97,13 @@ async fn dashboard(State(state): State<AppState>) -> Html<maud::Markup> {
         vec![]
     });
 
-    // Przekazujemy oba zestawy danych do widoku
-    Html(components::admin::dashboard_view(articles, projects))
+    // Przekazujemy dane o paginacji do widoku
+    Html(components::admin::dashboard_view(
+        articles,
+        projects,
+        current_page,
+        total_pages,
+    ))
 }
 
 // Handler GET /admin/articles/new
