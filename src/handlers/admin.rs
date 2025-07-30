@@ -62,7 +62,7 @@ async fn dashboard(
     axum::extract::Query(pagination): axum::extract::Query<PaginationParams>, // <-- DODAJ TO
 ) -> Html<maud::Markup> {
     let current_page = pagination.page;
-    const ITEMS_PER_PAGE: i64 = 10; // Ustawiamy 10 artykułów na stronę w panelu
+    const ITEMS_PER_PAGE: i64 = 7; // Ustawiamy 10 artykułów na stronę w panelu
 
     // Pobieramy łączną liczbę artykułów, aby obliczyć liczbę stron
     let total_articles: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM articles")

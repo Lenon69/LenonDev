@@ -27,7 +27,6 @@ pub fn whatsapp_button(service_name: &str) -> Markup {
 }
 
 pub fn article_cta() -> Markup {
-    // Profesjonalny, gotowy tekst wiadomości
     let base_message = "Dzień dobry. Piszę w nawiązaniu do artykułu na Pańskiej stronie. Chciałbym/chciałabym omówić szczegóły potencjalnej współpracy. Proszę o kontakt.";
     let encoded_message = encode(base_message);
     let whatsapp_url = format!("https://wa.me/48696619168?text={}", encoded_message);
@@ -39,7 +38,6 @@ pub fn article_cta() -> Markup {
                     p class="text-3xl font-bold text-slate-100" { "💡 Masz Pomysł na Projekt?" }
                     p class="mt-4 text-lg text-slate-300" { "Porozmawiajmy o tym, jak technologia może pomóc Twojej firmie rosnąć." }
 
-                    // --- POPRAWIONA SKŁADNIA MAUD PONIŻEJ ---
                     div class="mt-8" {
                         div class="inline-flex items-center gap-3 bg-green-500/10 hover:bg-green-500/20 transition-colors duration-300 text-green-400 font-bold py-3 px-8 rounded-lg border border-green-500/30" {
                             svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {
