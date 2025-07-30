@@ -130,7 +130,6 @@ pub async fn show_article(
                         }
 
                         div class="h-px w-full bg-gradient-to-r from-transparent via-brand-purple/30 to-transparent my-12" {}
-
                         (cta::article_cta())
 
                         div class="text-center mt-16" {

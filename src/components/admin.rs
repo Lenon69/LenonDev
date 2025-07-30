@@ -93,9 +93,9 @@ pub fn dashboard_view(
         html! {
             div class="w-full max-w-6xl bg-slate-900 p-8 rounded-lg shadow-lg" {
                 // Nagłówek panelu
-                div class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4" {
+                    div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 border-b border-slate-700 pb-4" {
                     h1 class="text-3xl font-bold text-slate-100" { "Dashboard" }
-                    div class="flex items-center gap-4" {
+                    div class="flex flex-wrap items-center justify-center gap-4" {
                         a href="/admin/projects/new" class="inline-block bg-brand-cyan hover:opacity-80 text-brand-dark font-bold py-2 px-4 rounded-lg transition-opacity" {
                             "🚀 Dodaj nowy projekt"
                         }
