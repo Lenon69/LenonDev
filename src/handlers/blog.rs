@@ -2,7 +2,7 @@
 use crate::{
     AppState,
     appstate::CacheValue,
-    components::{blog, layout},
+    components::{blog, cta, layout},
     models::{Article, ArticleSchema, Author, ImageObject, PaginationParams, Publisher},
 };
 use axum::{
@@ -128,6 +128,12 @@ pub async fn show_article(
                                 div class="prose prose-invert prose-xl" { (PreEscaped(rendered_html)) }
                             }
                         }
+
+                        // --- NOWA SEKCJA CTA ---
+                        div class="h-px w-full bg-gradient-to-r from-transparent via-brand-purple/30 to-transparent my-12" {}
+                        (cta::article_cta())
+                        // ------------------------
+
                         div class="text-center mt-16" {
                             a href="/blog" hx-get="/blog" hx-target="#content-area" hx-push-url="/blog" class="cursor-pointer inline-block bg-slate-700 hover:bg-slate-600 transition-colors text-white font-bold py-2 px-6 rounded-lg" { "← Wróć na bloga" }
                         }
