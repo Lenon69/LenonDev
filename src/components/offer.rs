@@ -91,7 +91,7 @@ pub fn offer_page_view() -> Markup {
 
             // --- SEKCJA: DLACZEGO WARTO? ---
             div class="mt-20" {
-                h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Co Otrzymujesz w Cenie?" }
+                h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Co otrzymujesz w cenie?" }
                 div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" {
                     // Karta: Bezpieczeństwo i Szybkość
                     (feature_card(

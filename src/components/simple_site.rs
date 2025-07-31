@@ -17,7 +17,7 @@ pub fn simple_site_page_view() -> Markup {
 
             // Sekcja "Co Otrzymujesz?"
             div class="max-w-4xl mx-auto" {
-                h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Co Otrzymujesz w Pakiecie?" }
+                h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Co otrzymujesz w pakiecie?" }
                 div class="grid grid-cols-1 md:grid-cols-2 gap-8" {
                     (feature_card(
                         "Indywidualny Projekt Graficzny",

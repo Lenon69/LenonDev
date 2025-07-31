@@ -17,7 +17,7 @@ pub fn web_app_page_view() -> Markup {
             }
 
             div class="max-w-4xl mx-auto" {
-                h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Przykładowe Zastosowania" }
+                h2 class="text-3xl font-bold text-center text-brand-green mb-10" { "Przykładowe zastosowania" }
                 div class="grid grid-cols-1 md:grid-cols-2 gap-8" {
                     (feature_card(
                         "Systemy CRM",
