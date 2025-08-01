@@ -88,8 +88,8 @@ pub fn base_layout(
                 link rel="preload" href="/public/style.css" as="style";
                 link rel="preload" href="/public/background.avif" as="image" fetchpriority="high";
                 link rel="preload" href="/public/fixed-logo.avif" as="image";
-                link rel="preload" href="/public/projects/shop1-400w.avif" as="image";
-                link rel="preload" href="/public/projects/panel1-400w.avif" as="image";
+                link rel="preload" href="/public/projects/shop1.avif" as="image";
+                link rel="preload" href="/public/projects/panel1.avif" as="image";
 
                 // Favicon
                 link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png";
