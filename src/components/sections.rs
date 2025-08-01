@@ -175,7 +175,7 @@ pub fn contact_section() -> Markup {
                         div class="text-right" {
                             button
                                 type="submit"
-                                class="mt-2 inline-block bg-brand-purple hover:shadow-cyan-glow transition-all duration-300 text-brand-dark font-bold py-2 px-6 rounded-lg"
+                                class="mt-2 inline-block bg-brand-green hover:opacity-90 transition-all duration-300 text-white font-bold py-2 px-6 rounded-lg"
                             {
                                 "Wyślij e-mail"
                             }
