@@ -45,7 +45,6 @@ pub fn base_layout(
                             );
                         };
 
-                        // Nasłuchujemy na pierwszą interakcję użytkownika
                         ['scroll', 'mousemove', 'touchstart'].forEach(event => 
                             window.addEventListener(event, loadGtm, { once: true })
                         );
