@@ -3,10 +3,7 @@ use std::env;
 // src/components/layout.rs
 use maud::{DOCTYPE, Markup, PreEscaped, html};
 
-use crate::components::{
-    cookies,
-    footer::{self, footer_with_map},
-};
+use crate::components::{cookies, footer::footer_with_map};
 
 pub fn base_layout(
     title: &str,
@@ -23,6 +20,7 @@ pub fn base_layout(
         (DOCTYPE)
         html lang="pl" class="scroll-smooth" {
             head {
+
                 meta charset="UTF-8";
                 meta name="viewport" content="width=device-width, initial-scale=1.0";
                 meta name="supported-color-schemes" content="dark only";
@@ -53,6 +51,33 @@ pub fn base_layout(
                         );
                     "#))
                 }
+
+                script type="application/ld+json" {
+                    (maud::PreEscaped(r#"
+                        {
+                          "@context": "https://schema.org",
+                          "@type": "ProfessionalService",
+                          "name": "LenonDev",
+                          "image": "https://lenondev.com/public/og-image.avif",
+                          "@id": "https://lenondev.com",
+                          "url": "https://lenondev.com",
+                          "telephone": "+48 696 619 168",
+                          "address": {
+                            "@type": "PostalAddress",
+                            "streetAddress": "Twoja Ulica i numer",
+                            "addressLocality": "Złoczew",
+                            "postalCode": "98-270",
+                            "addressCountry": "PL"
+                          },
+                          "geo": {
+                            "@type": "GeoCoordinates",
+                            "latitude": 51.41144612042214,
+                            "longitude": 18.57216163082068
+                          }
+                        }
+                    "#))
+                }
+
 
                 // Cała zawartość <head> pozostaje bez zmian
                 title { (title) }
