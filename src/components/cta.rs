@@ -34,8 +34,8 @@ pub fn article_cta() -> Markup {
     html! {
         a href=(whatsapp_url) target="_blank" class="no-underline block" {
             div class="my-6 p-8 text-center border border-brand-cyan/20 bg-brand-dark rounded-xl shadow-cyan-glow transition-transform duration-300 hover:-translate-y-1 cursor-pointer" {
-                p class="text-3xl font-bold text-slate-100" { "💡 Masz Pomysł na Projekt?" }
-                p class="mt-4 text-lg text-slate-300" { "Porozmawiajmy o tym, jak technologia może pomóc Twojej firmie rosnąć." }
+                p class="text-3xl font-bold text-slate-100" { "💡 Masz pomysł na projekt?" }
+                p class="mt-4 text-lg text-slate-300" { "✅ Porozmawiajmy o tym, jak technologia może pomóc Twojej firmie rosnąć." }
                 div class="mt-8" {
                     div class="inline-flex items-center gap-3 bg-green-500/10 hover:bg-green-500/20 transition-colors duration-300 text-green-400 font-bold py-3 px-8 rounded-lg border border-green-500/30" {
                         svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {
