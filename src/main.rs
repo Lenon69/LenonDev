@@ -208,7 +208,10 @@ async fn warm_up_cache(state: AppState) {
     {
         for project in projects {
             let additional_images = sqlx::query_scalar::<_, String>(
-                "SELECT image_url FROM project_images WHERE project_id = $1 ORDER BY id",
+                "SELECT image_url
+                FROM project_images
+                WHERE project_id = $1
+                ORDER BY id",
             )
             .bind(project.id)
             .fetch_all(&state.db_pool)

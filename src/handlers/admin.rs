@@ -88,7 +88,9 @@ async fn dashboard(
 
     // Pobieramy projekty (bez zmian)
     let projects = sqlx::query_as::<_, crate::models::Project>(
-        "SELECT id, title, slug, description, technologies, image_url, project_url FROM projects ORDER BY id DESC"
+        "SELECT id, title, slug, description, technologies, image_url, project_url thumbnail_url
+        FROM projects
+        ORDER BY id DESC",
     )
     .fetch_all(&state.db_pool)
     .await
