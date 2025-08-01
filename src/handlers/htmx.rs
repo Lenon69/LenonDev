@@ -29,7 +29,7 @@ pub async fn get_main_content(
 
     // Pobieramy projekty, tak jak wcześniej
     let projects = sqlx::query_as::<_, Project>(
-        "SELECT id, title, slug, description, technologies, image_url, project_url, thumbnail_url
+        "SELECT id, title, slug, description, technologies, image_url, project_url
         FROM projects
         ORDER BY id ASC",
     )

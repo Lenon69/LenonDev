@@ -11,7 +11,6 @@ pub struct Project {
     pub technologies: String,
     pub image_url: Option<String>,
     pub project_url: Option<String>,
-    pub thumbnail_url: Option<String>,
 }
 
 #[derive(sqlx::FromRow, Serialize, Debug)]
