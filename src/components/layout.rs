@@ -3,7 +3,10 @@ use std::env;
 // src/components/layout.rs
 use maud::{DOCTYPE, Markup, PreEscaped, html};
 
-use crate::components::cookies;
+use crate::components::{
+    cookies,
+    footer::{self, footer_with_map},
+};
 
 pub fn base_layout(
     title: &str,
@@ -215,17 +218,10 @@ pub fn base_layout(
                 }
                 // Reszta strony (bez zmian)
                 main id="content-area" class="min-h-screen" { (content) }
-                footer class="relative" {
-                    div class="absolute top-0 h-px w-full bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent" {}
-                    div class="container mx-auto px-4 py-6 text-center text-slate-400 flex flex-col sm:flex-row justify-center items-center gap-x-4 gap-y-2" {
-                            a href="/admin/dashboard" class="hover:text-brand-cyan transition-colors" { p { "© 2025 LenonDev" } }
-                            span class="hidden sm:inline" { "|" }
-                            a href="/polityka-prywatnosci" class="hover:text-brand-cyan transition-colors" { "Polityka Cookies" }
-                        }
-                    }
+                (footer_with_map())
+
+
                 div id="modal-container" {}
-
-
                 (cookies::cookies_banner())
             }
         }

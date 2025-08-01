@@ -5,6 +5,7 @@ pub mod cookies;
 pub mod cta;
 pub mod custom_project;
 pub mod ecommerce;
+pub mod footer;
 pub mod hosting;
 pub mod landing_page;
 pub mod layout;
