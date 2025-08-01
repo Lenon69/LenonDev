@@ -267,7 +267,12 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
     if let Some(main_image) = &project.image_url {
         all_images.push(main_image.clone());
     }
-    all_images.extend(project.images.clone());
+
+    for image in &project.images {
+        if Some(image) != project.image_url.as_ref() {
+            all_images.push(image.clone());
+        }
+    }
     let all_images_json = serde_json::to_string(&all_images).unwrap_or_else(|_| "[]".to_string());
 
     html! {
