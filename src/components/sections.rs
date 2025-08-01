@@ -277,7 +277,6 @@ pub fn project_detail_page(project: ProjectWithImages) -> Markup {
 
     html! {
         div class="container mx-auto px-4 pb-16 lg:pb-24 pt-36 md:pt-28" {
-            // Nagłówek strony projektu
             div class="text-center mb-12" {
                 h1 class="text-4xl lg:text-6xl font-bold tracking-tighter bg-gradient-to-r from-brand-cyan to-brand-green text-transparent bg-clip-text py-4" {
                     (project.title)
