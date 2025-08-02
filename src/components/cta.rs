@@ -18,13 +18,12 @@ pub fn whatsapp_button(service_name: &str) -> Markup {
     html! {
         div class="text-center mt-16" {
             a href=(PreEscaped(&whatsapp_url)) target="_blank"
-              class="inline-block no-underline bg-brand-cyan hover:bg-teal-400 active:scale-95 text-slate-900 font-bold tracking-wide py-4 px-10 rounded-lg transition-all duration-150 mb-6 text-shadow-sm" {
+              class="inline-block no-underline bg-brand-green hover:opacity-90 active:scale-95 text-brand-dark font-bold tracking-wide py-4 px-10 rounded-lg transition-all duration-150 mb-6 text-shadow-sm" {
                 "Wybieram Ofertę"
             }
         }
     }
 }
-
 pub fn article_cta() -> Markup {
     // Profesjonalny, gotowy tekst wiadomości specjalnie dla czytelników bloga
     let base_message = "Dzień dobry. Piszę w nawiązaniu do artykułu na Pańskiej stronie. Chciałbym/chciałabym omówić szczegóły potencjalnej współpracy. Proszę o kontakt.";
