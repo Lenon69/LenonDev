@@ -183,12 +183,23 @@ fn feature_card(icon: Markup, title: &str, description: &str) -> Markup {
 fn service_link(slug: &str, title: &str, description: &str, price: &str) -> Markup {
     let link = format!("/oferta/{}", slug);
     html! {
+        // 1. Cała karta pozostaje klikalnym linkiem.
         a href=(link) hx-get=(link) hx-target="#content-area" hx-push-url=(link)
           class="group block bg-slate-800/50 hover:bg-slate-700/50 p-6 rounded-xl border border-slate-700/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-cyan-glow flex flex-col" {
+
+            // Tytuł i opis bez zmian.
             h3 class="text-xl font-bold text-brand-cyan mb-3" { (title) }
             p class="text-slate-400 flex-grow" { (description) }
-            div class="mt-6 pt-4 border-t border-slate-700" {
-                p class="text-lg font-bold text-slate-100 text-center" { (price) }
+
+            // 2. Sekcja dolna z ceną ORAZ przyciskiem.
+            div class="mt-6 pt-4 border-t border-slate-700 text-center" {
+                // Cena jest na swoim miejscu.
+                p class="text-lg font-bold text-slate-100 mb-4" { (price) }
+
+                // 3. Poniżej ceny dodajemy przycisk "Więcej".
+                div class="inline-block bg-brand-green text-brand-dark font-bold py-2 px-6 rounded-lg transition-all duration-300 group-hover:opacity-90" {
+                    "Więcej"
+                }
             }
         }
     }
