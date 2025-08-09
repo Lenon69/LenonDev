@@ -6,7 +6,7 @@ pub fn whatsapp_button(service_name: &str) -> Markup {
 
     // Profesjonalny, gotowy tekst wiadomości
     let message = format!(
-        "Dzień dobry, interesuje mnie usługa: {}. Proszę o informację o możliwym terminie rozpoczęcia współpracy.",
+        "Cześć, interesuje mnie usługa: {}. Proszę o informację o możliwym terminie rozpoczęcia współpracy.",
         service_name
     );
 
@@ -26,7 +26,7 @@ pub fn whatsapp_button(service_name: &str) -> Markup {
 }
 pub fn article_cta() -> Markup {
     // Profesjonalny, gotowy tekst wiadomości specjalnie dla czytelników bloga
-    let base_message = "Dzień dobry. Piszę w nawiązaniu do artykułu na Pańskiej stronie. Chciałbym/chciałabym omówić szczegóły potencjalnej współpracy. Proszę o kontakt.";
+    let base_message = "Cześć. Piszę w nawiązaniu do artykułu na Twojej stronie. Chciałbym/chciałabym omówić szczegóły potencjalnej współpracy. Proszę o kontakt.";
     let encoded_message = urlencoding::encode(base_message);
     let whatsapp_url = format!("https://wa.me/48696619168?text={}", encoded_message);
 

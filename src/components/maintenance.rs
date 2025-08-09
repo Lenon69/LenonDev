@@ -84,7 +84,7 @@ fn package_card(
     highlighted: bool,
 ) -> Markup {
     let message = format!(
-        "Dzień dobry, jestem zainteresowany/a Pakietem Opieki nad Stroną: *{}*. Proszę o kontakt w celu omówienia szczegółów i dalszych kroków. Pozdrawiam!",
+        "Cześć, jestem zainteresowany/a Pakietem Opieki nad Stroną: *{}*. Proszę o kontakt w celu omówienia szczegółów i dalszych kroków. Pozdrawiam!",
         name
     );
 
